@@ -27,7 +27,9 @@ public class MainActivity extends Activity {
         MySQLiteHelper db = new MySQLiteHelper(this);
 
         db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
-        db.addVegetable(new Vegetable("Brocolli", 300, "Een wortel is oranje en heel gezond!"));
+        db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
+        db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
+
 
 
     }
