@@ -6,7 +6,7 @@ package com.tomdoesburg.model;
 public class Vegetable {
     private int id;
     private String name;
-    private int cookingTime; //cooking time in minutes
+    private int cookingTime; //cooking time in seconds
     private String description;
 
     public Vegetable(){}
