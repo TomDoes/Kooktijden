@@ -8,8 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.tomdoesburg.model.Vegetable;
+
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -29,6 +33,10 @@ public class MainActivity extends Activity {
         db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
         db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
         db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
+
+        TextView test = (TextView)findViewById(R.id.testveld);
+
+        List<Vegetable>vegetables = db.getAllVegetables();
 
 
 

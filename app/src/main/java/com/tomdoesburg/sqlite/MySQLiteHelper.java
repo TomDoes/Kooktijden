@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.util.Log;
 
-import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 
 import java.util.LinkedList;
@@ -15,9 +14,10 @@ import java.util.List;
 
 
 /**
- * Created by Tom on 27/6/14.
- */
+* Created by Tom on 27/6/14.
+*/
 public class MySQLiteHelper extends SQLiteOpenHelper {
+
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
@@ -97,6 +97,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
+
     public List<Vegetable> getAllVegetables() {
         List<Vegetable> vegetables = new LinkedList<Vegetable>();
 
@@ -111,8 +112,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 vegetable = new Vegetable();
                 vegetable.setId(Integer.parseInt(cursor.getString(0)));
                 vegetable.setName(cursor.getString(1));
-                vegetable.setCookingTime(Integer.parseInt((cursor.getString(2))));
+                vegetable.setCookingTime(Integer.parseInt(cursor.getString(2)));
                 vegetable.setDescription(cursor.getString(3));
+
+                vegetables.add(vegetable);
             } while (cursor.moveToNext());
         }
 
@@ -129,7 +132,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
         values.put("name", vegetable.getName()); // get name
-        values.put("cooking_time", vegetable.getCookingTime()); // get cookingtime
+        values.put("cooking_time", Integer.toString(vegetable.getCookingTime())); // get cookingtime
         values.put("description", vegetable.getDescription());
 
         // 3. updating row
