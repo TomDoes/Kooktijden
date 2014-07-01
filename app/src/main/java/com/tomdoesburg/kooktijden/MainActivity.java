@@ -2,7 +2,9 @@ package com.tomdoesburg.kooktijden;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.tomdoesburg.model.Vegetable;
+import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 import java.util.List;
 
@@ -27,6 +29,16 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String cookertype = sharedPrefs.getString("cookertype", "noneSelected");
+        if (sharedPrefs.equals("noneSelected")) {
+            //no cookertype selected, prompt user to select one
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new CookerTypeFragment())
+                    .commit();
+        }
+        //TODO if 'cookertype' does contain a certain value, then set the correct interface for the user :)
 
         MySQLiteHelper db = new MySQLiteHelper(this);
 
@@ -79,4 +91,16 @@ public class MainActivity extends Activity {
         }
     }
 
+    public static class CookerTypeFragment extends Fragment {
+
+        public CookerTypeFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.first_start_cookers, container, false);
+            return rootView;
+        }
+    }
 }
