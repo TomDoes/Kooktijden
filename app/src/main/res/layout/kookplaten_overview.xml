@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat1pits" />
 
         <ImageButton
@@ -38,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat2pits" />
 
     </TableRow>
@@ -54,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat3pits" />
 
         <ImageButton
@@ -61,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat4pits" />
 
     </TableRow>
@@ -77,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat5pits" />
 
         <ImageButton
@@ -84,6 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="setKookplaatType"
             android:src="@drawable/kookplaat6pits" />
 
     </TableRow>
