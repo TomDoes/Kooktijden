@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -32,6 +32,8 @@ public class MainActivity extends Activity {
             default:
                 //no cooker type selected, set interface where user can select one
                 setContentView(R.layout.first_start_cookers);
+                ImageButton kookplaat1pits = (ImageButton)findViewById(R.id.kookplaat1pits);
+                ImageButton kookplaat2pits = (ImageButton)findViewById(R.id.kookplaat2pits);
         }
 
 
@@ -41,10 +43,7 @@ public class MainActivity extends Activity {
         db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
         db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
 
-        TextView test = (TextView) findViewById(R.id.testveld);
-
         List<Vegetable> vegetables = db.getAllVegetables();
-
 
     }
 

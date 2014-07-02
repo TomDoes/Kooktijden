@@ -9,6 +9,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tomdoesburg.kooktijden.MainActivity$CookerTypeFragment">
 
+    <!-- Created by Joost on 1/7/14. -->
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
