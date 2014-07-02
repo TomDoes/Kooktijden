@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.tomdoesburg.kooktijden.MainActivity$PlaceholderFragment">
+
+    <ProgressBar
+        android:id="@+id/kookplaat1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="125dip"
+        android:layout_height="125dip"
+        android:layout_margin="10dp"
+        android:indeterminate="false"
+        android:max="60"
+        android:progress="13"
+        android:progressDrawable="@drawable/customprogressbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/kookplaat1"
+        android:layout_alignTop="@+id/kookplaat1"
+        android:layout_alignRight="@+id/kookplaat1"
+        android:layout_alignBottom="@+id/kookplaat1"
+        android:gravity="center"
+        android:text="0:47" />
+
+    <ProgressBar
+        android:id="@+id/kookplaat2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="125dip"
+        android:layout_height="125dip"
+        android:layout_margin="10dp"
+        android:layout_below="@id/kookplaat1"
+        android:indeterminate="false"
+        android:max="60"
+        android:progress="50"
+        android:progressDrawable="@drawable/customprogressbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/kookplaat2"
+        android:layout_alignTop="@+id/kookplaat2"
+        android:layout_alignRight="@+id/kookplaat2"
+        android:layout_alignBottom="@+id/kookplaat2"
+        android:gravity="center"
+        android:text="0:10" />
+
+
+</RelativeLayout>

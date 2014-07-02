@@ -1,15 +1,11 @@
 package com.tomdoesburg.kooktijden;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tomdoesburg.model.Vegetable;
@@ -22,23 +18,23 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-
+        //set correct interface
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String cookertype = sharedPrefs.getString("cookertype", "noneSelected");
-        if (sharedPrefs.equals("noneSelected")) {
-            //no cookertype selected, prompt user to select one
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new CookerTypeFragment())
-                    .commit();
+        int cookertype = sharedPrefs.getInt("cookertype", 0);
+        switch(cookertype) {
+            case 1:
+                setContentView(R.layout.kookplaat1pits);
+                break;
+            case 2:
+                setContentView(R.layout.kookplaat2pits);
+                break;
+            default:
+                //no cooker type selected, set interface where user can select one
+                setContentView(R.layout.first_start_cookers);
         }
-        //TODO if 'cookertype' does contain a certain value, then set the correct interface for the user :)
+
+
 
         MySQLiteHelper db = new MySQLiteHelper(this);
 
@@ -75,32 +71,4 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
-
-    public static class CookerTypeFragment extends Fragment {
-
-        public CookerTypeFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.first_start_cookers, container, false);
-            return rootView;
-        }
-    }
 }
