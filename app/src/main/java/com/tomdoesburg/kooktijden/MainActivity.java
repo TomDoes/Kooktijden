@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
         //set correct interface
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         int cookertype = sharedPrefs.getInt("cookertype", 0);
-        switch(cookertype) {
+        switch (cookertype) {
             case 1:
                 setContentView(R.layout.kookplaat1pits);
                 break;
@@ -35,17 +35,15 @@ public class MainActivity extends Activity {
         }
 
 
-
         MySQLiteHelper db = new MySQLiteHelper(this);
 
         db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
         db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
         db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
 
-        TextView test = (TextView)findViewById(R.id.testveld);
+        TextView test = (TextView) findViewById(R.id.testveld);
 
-        List<Vegetable>vegetables = db.getAllVegetables();
-
+        List<Vegetable> vegetables = db.getAllVegetables();
 
 
     }
@@ -53,7 +51,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;

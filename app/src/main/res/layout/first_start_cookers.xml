@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.tomdoesburg.kooktijden.MainActivity$CookerTypeFragment">
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
         android:paddingBottom="30dp"
-        android:text="@string/select_cooker"/>
+        android:paddingTop="30dp"
+        android:text="@string/select_cooker" />
 
     <TableRow
         android:id="@+id/tablerow1"
@@ -24,17 +24,19 @@
         android:layout_below="@+id/text"
         android:gravity="center">
 
-    <ImageView
-        android:id="@+id/kookplaat1pits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/kookplaat1pits"/>
+        <ImageButton
+            android:id="@+id/kookplaat1pits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/kookplaat1pits" />
 
-    <ImageView
-        android:id="@+id/kookplaat2pits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/kookplaat2pits"/>
+        <ImageButton
+            android:id="@+id/kookplaat2pits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/kookplaat2pits" />
 
     </TableRow>
 
@@ -45,17 +47,19 @@
         android:layout_below="@+id/tablerow1"
         android:gravity="center">
 
-    <ImageView
-        android:id="@+id/kookplaat3pits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/kookplaat3pits"/>
+        <ImageButton
+            android:id="@+id/kookplaat3pits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/kookplaat3pits" />
 
-    <ImageView
-        android:id="@+id/kookplaat4pits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/kookplaat4pits"/>
+        <ImageButton
+            android:id="@+id/kookplaat4pits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/kookplaat4pits" />
 
     </TableRow>
 
@@ -66,17 +70,19 @@
         android:layout_below="@+id/tablerow2"
         android:gravity="center">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/kookplaat5pits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/kookplaat5pits"/>
+            android:background="@color/white"
+            android:src="@drawable/kookplaat5pits" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/kookplaat6pits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/kookplaat6pits"/>
+            android:background="@color/white"
+            android:src="@drawable/kookplaat6pits" />
 
     </TableRow>
 
