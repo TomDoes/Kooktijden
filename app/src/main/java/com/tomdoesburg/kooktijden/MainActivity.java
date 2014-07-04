@@ -1,5 +1,6 @@
 package com.tomdoesburg.kooktijden;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,18 +29,17 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         //set default preferences
-        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         setContentView(R.layout.swipert);
 
-        // ViewPager and its adapters use support library
-        // fragments, so use getSupportFragmentManager.
+        //ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
         //set the correct interface (if none set in preferences, this lets user choose one as default)
-        //setInterface(false);
+        setInterface(false);
 
         MySQLiteHelper db = new MySQLiteHelper(this);
 
@@ -67,6 +67,8 @@ public class MainActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, VegetableActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
