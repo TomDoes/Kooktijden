@@ -93,7 +93,7 @@ public class MainActivity extends FragmentActivity {
         }
 
         //TODO
-        //create a selection thingy to selectwhich vegetable to put on this timer
+        //create a selection thingy to select which vegetable to put on this timer
         //something to initialize a timer on a given kookplaat for a given vegetable (separate thread using handler?)
         //something to start the actual timer when the water starts boiling
         //be cool
