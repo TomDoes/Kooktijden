@@ -19,6 +19,7 @@
         android:indeterminate="false"
         android:max="60"
         android:progress="9"
+        android:onClick="setTimer"
         android:progressDrawable="@drawable/customprogressbar" />
 
     <TextView

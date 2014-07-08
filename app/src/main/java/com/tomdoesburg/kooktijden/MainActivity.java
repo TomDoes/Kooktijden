@@ -2,12 +2,12 @@ package com.tomdoesburg.kooktijden;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -72,60 +72,30 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //sets the correct cooker type (called from kookplaten_overview.xml)
-    public void setKookplaatType(View view){
 
-        //save cooker type in settings
-        int type;
-        switch(view.getId()) {
-            case R.id.kookplaat1pits:
-                type=1;
+    public void initTimer(View v) {
+
+        final ProgressBar kookplaat;
+        int id;
+
+        switch (v.getId()) {
+            case R.id.kookplaat1:
+                kookplaat = (ProgressBar) findViewById(R.id.kookplaat1);
                 break;
-            case R.id.kookplaat2pits:
-                type=2;
+            case R.id.kookplaat2:
+                kookplaat = (ProgressBar) findViewById(R.id.kookplaat2);
                 break;
-            case R.id.kookplaat3pits:
-                type=3;
-                break;
-            case R.id.kookplaat4pits:
-                type=4;
-                break;
-            case R.id.kookplaat5pits:
-                type=5;
-                break;
-            case R.id.kookplaat6pits:
-                type=6;
+            case R.id.kookplaat3:
+                kookplaat = (ProgressBar) findViewById(R.id.kookplaat3);
                 break;
             default:
-                throw new RuntimeException("Unknown button ID");
+                throw new RuntimeException("Unknown kookplaat ID");
         }
-        sharedPrefs.edit().putInt("aantalPitten",type).commit();
 
-        //set the correct interface
-        setInterface(false);
+        //TODO
+        //create a selection thingy to selectwhich vegetable to put on this timer
+        //something to initialize a timer on a given kookplaat for a given vegetable (separate thread using handler?)
+        //something to start the actual timer when the water starts boiling
     }
 
-    //sets the interface for a certain cooker
-    public void setInterface(boolean reset){
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int aantalPitten = sharedPrefs.getInt("aantalPitten", 0);
-
-        //reset current value, so that user must select new cooker type
-        if(reset){
-            aantalPitten = 0;
-        }
-
-        //interface switch
-        switch (aantalPitten) {
-            case 1:
-                setContentView(R.layout.kookplaat1pits);
-                break;
-            case 2:
-                setContentView(R.layout.kookplaat2pits);
-                break;
-            default:
-                //no cooker type selected, set interface where user can select one
-                setContentView(R.layout.kookplaten_overview);
-        }
-    }
 }
