@@ -18,7 +18,6 @@
         android:layout_height="125dip"
         android:layout_margin="10dp"
         android:indeterminate="false"
-        android:onClick="setTimer"
         android:progressDrawable="@drawable/customprogressbar" />
 
     <TextView
@@ -41,7 +40,6 @@
         android:layout_margin="10dp"
         android:layout_below="@id/kookplaat1"
         android:indeterminate="false"
-        android:onClick="setTimer"
         android:progressDrawable="@drawable/customprogressbar" />
 
     <TextView
