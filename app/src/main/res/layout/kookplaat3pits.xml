@@ -14,9 +14,9 @@
     <ProgressBar
         android:id="@+id/kookplaat1"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="125dip"
-        android:layout_height="125dip"
-        android:layout_margin="10dp"
+        android:layout_width="150dip"
+        android:layout_height="150dip"
+        android:padding="10dp"
         android:indeterminate="false"
         android:progressDrawable="@drawable/customprogressbar" />
 
@@ -35,9 +35,9 @@
     <ProgressBar
         android:id="@+id/kookplaat2"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="125dip"
-        android:layout_height="125dip"
-        android:layout_margin="10dp"
+        android:layout_width="150dip"
+        android:layout_height="150dip"
+        android:padding="10dp"
         android:layout_below="@id/kookplaat1"
         android:indeterminate="false"
         android:progressDrawable="@drawable/customprogressbar" />
@@ -57,9 +57,9 @@
     <ProgressBar
         android:id="@+id/kookplaat3"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="125dip"
-        android:layout_height="125dip"
-        android:layout_margin="10dp"
+        android:layout_width="150dip"
+        android:layout_height="150dip"
+        android:padding="10dp"
         android:layout_below="@id/kookplaat2"
         android:indeterminate="false"
         android:progressDrawable="@drawable/customprogressbar" />
@@ -75,6 +75,61 @@
         android:gravity="center"
         android:textSize="18sp"
         android:text="pick food" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat1Button1"
+        android:background="@drawable/brocolli"
+        android:layout_alignTop="@+id/kookplaat1"
+        android:layout_alignLeft="@+id/kookplaat1"
+        android:layout_alignStart="@+id/kookplaat1" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat2Button1"
+        android:background="@drawable/brocolli"
+        android:layout_below="@+id/kookplaat1"
+        android:layout_alignLeft="@+id/kookplaat1"
+        android:layout_alignStart="@+id/kookplaat1" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat2Button2"
+        android:background="@drawable/ic_action_alarms"
+        android:layout_below="@+id/kookplaat1"
+        android:layout_alignRight="@+id/kookplaat1"
+        android:layout_alignEnd="@+id/kookplaat1" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat3Button1"
+        android:layout_below="@+id/kookplaat2"
+        android:layout_alignRight="@+id/kookplaat1Button1"
+        android:layout_alignEnd="@+id/kookplaat1Button1"
+        android:background="@drawable/brocolli" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat1Button2"
+        android:background="@drawable/ic_action_alarms"
+        android:layout_toStartOf="@+id/kookplaat2"
+        android:layout_alignTop="@+id/kookplaat1"
+        android:layout_alignRight="@+id/kookplaat1"
+        android:layout_alignEnd="@+id/kookplaat1" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kookplaat3Button2"
+        android:background="@drawable/ic_action_alarms"
+        android:layout_below="@+id/kookplaat2"
+        android:layout_alignRight="@+id/kookplaat2"
+        android:layout_alignEnd="@+id/kookplaat2" />
 
 
 </RelativeLayout>
