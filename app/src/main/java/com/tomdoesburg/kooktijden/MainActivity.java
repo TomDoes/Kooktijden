@@ -1,9 +1,12 @@
 package com.tomdoesburg.kooktijden;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,11 +41,27 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
+
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         MySQLiteHelper db = new MySQLiteHelper(this);
 
-        db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
-        db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
-        db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
+        Log.d("database", "Created the database connection");
+        Log.d("database", "First start: " + (sharedPrefs.getBoolean("databaseLoaded",false)));
+
+        // Add vegetables only on first launch
+        if(!sharedPrefs.getBoolean("databaseLoaded",false)) {
+            //TODO work with db versions
+
+            Log.d("database", "adding stuff to the db");
+            db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
+            db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
+            db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
+
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putBoolean("databaseLoaded", true);
+            editor.commit();
+        }
 
         List<Vegetable> vegetables = db.getAllVegetables();
 
