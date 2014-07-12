@@ -42,3 +42,4 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return "OBJECT " + (position + 1);
     }
 }
+
