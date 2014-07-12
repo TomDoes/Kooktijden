@@ -16,6 +16,8 @@ public class MainActivity extends FragmentActivity {
 
     SharedPreferences sharedPrefs;
 
+
+    // Hoi dit is een testje
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
     MyFragmentPagerAdapter mFragmentPagerAdapter;
