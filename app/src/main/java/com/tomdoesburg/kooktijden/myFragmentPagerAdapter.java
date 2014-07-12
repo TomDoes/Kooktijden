@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
- * Created by Joost on 2-7-2014
+ * Created by Joost on 2-7-2014.
  */
 // Since this is an object collection, use a FragmentStatePagerAdapter, and NOT a FragmentPagerAdapter.
 public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -29,6 +29,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
         //if we get to this, something is wrong
         throw new IllegalArgumentException("no layout for this integer");
+        //henkasdf
     }
 
     @Override
