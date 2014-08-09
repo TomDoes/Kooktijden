@@ -2,6 +2,9 @@ package com.tomdoesburg.kooktijden;
 
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -11,6 +14,7 @@ import android.widget.TextView;
 public class TimerHelper {
 
     boolean timerRunning;
+    private boolean timeSet = false; //indicates a time has been chosen by user
 
     void init(final ProgressBar kookplaat, final TextView kookplaattext) {
 
@@ -25,6 +29,62 @@ public class TimerHelper {
             @Override
             public void onClick(View view) {
                 start(kookplaat, kookplaattext, timeSeconds);
+            }
+        });
+
+    }
+
+    //this init function requires 2 additional buttons for setting a custom timer or selecting from the vegetable database
+    void init(final ProgressBar kookplaat, final TextView kookplaattext,final ImageButton dbTimeButton, final ImageButton customTimeButton) {
+
+        //TODO
+        //create a selection thingy to select which vegetable to put on this timer
+        //int vegetableID = vegetablePicker();
+        //MySQLiteHelper db = new MySQLiteHelper(this);
+        //final int timeSeconds = db.getVegetable(vegetableID).getCookingTime();
+        final int timeSeconds = 10;
+
+        kookplaat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //show buttons
+                if(!timeSet) {
+                    //show timer buttons
+                    dbTimeButton.setVisibility(View.VISIBLE);
+                    customTimeButton.setVisibility(View.VISIBLE);
+                }else{
+                    start(kookplaat, kookplaattext, timeSeconds);
+                }
+
+            }
+        });
+
+        dbTimeButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //TODO
+                //functie om te kiezen uit database met kooktijden
+
+                dbTimeButton.setVisibility(View.INVISIBLE);
+                customTimeButton.setVisibility(View.INVISIBLE);
+
+                timeSet = true;
+                kookplaattext.setText("START");
+            }
+        });
+
+        customTimeButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //TODO
+                //functie zelf een kooktijd te kiezen
+
+                dbTimeButton.setVisibility(View.INVISIBLE);
+                customTimeButton.setVisibility(View.INVISIBLE);
+
+                timeSet = true;
+                kookplaattext.setText("START");
             }
         });
 
@@ -57,6 +117,7 @@ public class TimerHelper {
                     kookplaattext.setText("FINISHED");
                 }
                 timerRunning = false;
+                timeSet = false;
             }
         };
         if (!timerRunning) {
