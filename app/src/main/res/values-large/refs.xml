@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!--
@@ -7,6 +8,6 @@
     For more on layout aliases, see:
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
-    <item name="fragment_vegetable" type="layout">@layout/fragment_vegetable_grid</item>
+    <item name="activity_vegetable_list" type="layout">@layout/activity_vegetable_twopane</item>
 
 </resources>

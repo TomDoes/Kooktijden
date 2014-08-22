@@ -1,6 +1,7 @@
 package com.tomdoesburg.kooktijden;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
@@ -63,8 +65,6 @@ public class MainActivity extends FragmentActivity {
             editor.commit();
         }
 
-        List<Vegetable> vegetables = db.getAllVegetables();
-
     }
 
 
@@ -83,6 +83,8 @@ public class MainActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, VegetableActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

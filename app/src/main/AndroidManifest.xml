@@ -17,8 +17,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VegetableActivity"
+            android:name=".vegetables.VegetableActivity"
             android:label="@string/title_activity_vegetable" >
+        </activity>
+        <activity
+            android:name=".vegetables.VegetableDetailActivity"
+            android:label="@string/title_vegetable_detail"
+            android:parentActivityName=".vegetables.VegetableActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tomdoesburg.kooktijden.vegetables.VegetableActivity" />
         </activity>
     </application>
 

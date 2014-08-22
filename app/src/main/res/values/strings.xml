@@ -6,5 +6,7 @@
     <string name="select_cooker">Selecteer de kookplaat die het meest lijkt op jouw eigen.\nJe kunt je keuze later wijzigen via de instellingen.</string>
     <string name="title_activity_vegetable">vegetableActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_vegetable_list">Vegetables</string>
+    <string name="title_vegetable_detail">Vegetable Detail</string>
 
 </resources>
