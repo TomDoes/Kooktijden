@@ -56,9 +56,25 @@ public class MainActivity extends FragmentActivity {
             //TODO work with db versions
 
             Log.d("database", "adding stuff to the db");
-            db.addVegetable(new Vegetable("Wortel", 600, "Een wortel is oranje en heel gezond!"));
-            db.addVegetable(new Vegetable("Brocolli", 300, "Een brocolli is groen en heel gezond!"));
-            db.addVegetable(new Vegetable("Asperge", 300, "Een asperge is wit en heel gezond!"));
+            db.addVegetable(new Vegetable("Artichoke", "Artisjok", 25, 25, "", ""));
+            db.addVegetable(new Vegetable("Asparagus (whole)", "Asperges (heel)", 15, 15, "", ""));
+            db.addVegetable(new Vegetable("Beans", "Sperziebonen", 8, 8, "", ""));
+            db.addVegetable(new Vegetable("Beetroot", "Bieten", 40, 60, "", ""));
+            db.addVegetable(new Vegetable("Bok choy", "Paksoi / Chinese kool", 10, 10, "", ""));
+            db.addVegetable(new Vegetable("Broccoli", "Broccoli", 8, 8, "", ""));
+            db.addVegetable(new Vegetable("Brussels sprouts", "Spruitjes", 10, 10, "", ""));
+            db.addVegetable(new Vegetable("Cabbage", "Witte kool", 10, 15, "", ""));
+            db.addVegetable(new Vegetable("Carrots", "Wortels", 10, 10, "", ""));
+            db.addVegetable(new Vegetable("Cauliflower", "Bloemkool", 12, 12, "", ""));
+            db.addVegetable(new Vegetable("Corn on the cob", "Maiskolf", 20, 20, "", ""));
+            db.addVegetable(new Vegetable("Endive", "Witlof", 12, 15, "", ""));
+            db.addVegetable(new Vegetable("Leek", "Prei", 15, 15, "", ""));
+            db.addVegetable(new Vegetable("Peas", "Erwten", 5, 5, "", ""));
+            db.addVegetable(new Vegetable("Potatoes (halves)", "Aardappelen (halven)", 10, 15, "", ""));
+            db.addVegetable(new Vegetable("Potatoes (whole)", "Aardappelen (heel)", 15, 20, "", ""));
+            db.addVegetable(new Vegetable("Red cabbage (shredded)", "Rodekool (gesneden)", 15, 20, "", ""));
+            db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "", ""));
+            db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 20, 20, "", ""));
 
             SharedPreferences.Editor editor = sharedPrefs.edit();
             editor.putBoolean("databaseLoaded", true);

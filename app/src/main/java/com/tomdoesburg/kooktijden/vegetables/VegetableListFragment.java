@@ -82,7 +82,7 @@ public class VegetableListFragment extends ListFragment {
         List<Vegetable> vegetables = db.getAllVegetables();
 
         for (Vegetable v : vegetables) {
-            vegetableListItemList.add(new VegetableListItem(v.getName(), v.getId()));
+            vegetableListItemList.add(new VegetableListItem(v.getNameEN(), v.getId()));
         }
 
         setListAdapter(new VegetableListAdapter(getActivity(), vegetableListItemList));

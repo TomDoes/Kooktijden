@@ -26,11 +26,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_VEGETABLES = "vegetables";
 
     private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_COOKING_TIME = "cooking_time";
-    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_NAME_EN = "name_EN";
+    private static final String KEY_NAME_NL = "name_NL";
+    private static final String KEY_COOKING_TIME_MIN = "cooking_time_min";
+    private static final String KEY_COOKING_TIME_MAX = "cooking_time_max";
+    private static final String KEY_DESCRIPTION_EN = "description_EN";
+    private static final String KEY_DESCRIPTION_NL = "description_NL";
 
-    private static final String[] COLUMNS = {KEY_ID, KEY_NAME, KEY_COOKING_TIME, KEY_DESCRIPTION};
+
+    private static final String[] COLUMNS = {KEY_ID, KEY_NAME_EN, KEY_NAME_NL,  KEY_COOKING_TIME_MIN, KEY_COOKING_TIME_MAX, KEY_DESCRIPTION_EN, KEY_DESCRIPTION_NL};
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +44,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_VEGETABLE_TABLE = "CREATE TABLE vegetables (" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "name TEXT, " + "cooking_time INTEGER, " + "description TEXT)";
+        "name_EN TEXT, " + "name_NL TEXT, " + "cooking_time_min INTEGER, " + "cooking_time_max INTEGER, " +"description_EN TEXT, " +"description_NL TEXT)";
 
         db.execSQL(CREATE_VEGETABLE_TABLE);
 
@@ -61,9 +65,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, vegetable.getName());
-        values.put(KEY_COOKING_TIME, vegetable.getCookingTime());
-        values.put(KEY_DESCRIPTION, vegetable.getDescription());
+        values.put(KEY_NAME_EN, vegetable.getNameEN());
+        values.put(KEY_NAME_NL, vegetable.getNameNL());
+        values.put(KEY_COOKING_TIME_MIN, vegetable.getCookingTimeMin());
+        values.put(KEY_COOKING_TIME_MAX, vegetable.getCookingTimeMax());
+        values.put(KEY_DESCRIPTION_EN, vegetable.getDescriptionEN());
+        values.put(KEY_DESCRIPTION_NL, vegetable.getDescriptionNL());
 
         db.insert(TABLE_VEGETABLES, null, values);
 
@@ -88,9 +95,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         Vegetable vegetable = new Vegetable();
         vegetable.setId(Integer.parseInt(cursor.getString(0)));
-        vegetable.setName(cursor.getString(1));
-        vegetable.setCookingTime(Integer.parseInt(cursor.getString(2)));
-        vegetable.setDescription(cursor.getString(3));
+        vegetable.setNameEN(cursor.getString(1));
+        vegetable.setNameNL(cursor.getString(2));
+        vegetable.setCookingTimeMin(Integer.parseInt(cursor.getString(3)));
+        vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
+        vegetable.setDescriptionEN(cursor.getString(5));
+        vegetable.setDescriptionNL(cursor.getString(6));
+
 
         Log.d("getVegetable("+id+")", vegetable.toString());
         return vegetable;
@@ -111,9 +122,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             do {
                 vegetable = new Vegetable();
                 vegetable.setId(Integer.parseInt(cursor.getString(0)));
-                vegetable.setName(cursor.getString(1));
-                vegetable.setCookingTime(Integer.parseInt(cursor.getString(2)));
-                vegetable.setDescription(cursor.getString(3));
+                vegetable.setNameEN(cursor.getString(1));
+                vegetable.setNameNL(cursor.getString(2));
+                vegetable.setCookingTimeMin(Integer.parseInt(cursor.getString(3)));
+                vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
+                vegetable.setDescriptionEN(cursor.getString(5));
+                vegetable.setDescriptionNL(cursor.getString(6));
 
                 vegetables.add(vegetable);
             } while (cursor.moveToNext());
@@ -131,9 +145,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put("name", vegetable.getName()); // get name
-        values.put("cooking_time", Integer.toString(vegetable.getCookingTime())); // get cookingtime
-        values.put("description", vegetable.getDescription());
+        values.put("name_EN", vegetable.getNameEN()); // get name
+        values.put("name_NL", vegetable.getNameNL()); // get name
+        values.put("cooking_time_min", Integer.toString(vegetable.getCookingTimeMin())); // get cookingtime
+        values.put("cooking_time_max", Integer.toString(vegetable.getCookingTimeMax())); // get cookingtime
+        values.put("description_EN", vegetable.getDescriptionEN());
+        values.put("description_NL", vegetable.getDescriptionNL());
+
 
         // 3. updating row
         int i = db.update(TABLE_VEGETABLES, //table

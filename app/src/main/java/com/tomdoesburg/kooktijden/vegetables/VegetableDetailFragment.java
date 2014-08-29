@@ -52,7 +52,11 @@ public class VegetableDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_vegetable_detail, container, false);
 
         if (vegetable != null) {
-            ((TextView) rootView.findViewById(R.id.vegetable_detail)).setText(vegetable.getDescription());
+            if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
+                ((TextView) rootView.findViewById(R.id.vegetable_detail)).setText("Cooking time: " + vegetable.getCookingTimeMin() + " min.");
+            } else {
+                ((TextView) rootView.findViewById(R.id.vegetable_detail)).setText("Cooking time: " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
+            }
         }
 
         return rootView;

@@ -5,16 +5,24 @@ package com.tomdoesburg.model;
  */
 public class Vegetable {
     private int id;
-    private String name;
-    private int cookingTime; //cooking time in seconds
-    private String description;
+    private String nameEN;
+    private String nameNL;
+    private int cookingTimeMin;
+    private int cookingTimeMax;
+    private String descriptionEN;
+    private String descriptionNL;
 
-    public Vegetable(){}
+    public Vegetable() {
 
-    public Vegetable(String name, int cookingTime, String description) {
-        this.name = name;
-        this.cookingTime = cookingTime;
-        this.description = description;
+    }
+
+    public Vegetable(String nameEN, String nameNL, int cookingTimeMin, int cookingTimeMax, String descriptionEN, String descriptionNL) {
+        this.nameEN = nameEN;
+        this.nameNL = nameNL;
+        this.cookingTimeMin = cookingTimeMin;
+        this.cookingTimeMax = cookingTimeMax;
+        this.descriptionEN = descriptionEN;
+        this.descriptionNL = descriptionNL;
     }
 
     public int getId() {
@@ -25,35 +33,64 @@ public class Vegetable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEN() {
+        return nameEN;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEN(String nameEN) {
+        this.nameEN = nameEN;
     }
 
-    public int getCookingTime() {
-        return cookingTime;
+    public String getNameNL() {
+        return nameNL;
     }
 
-    public void setCookingTime(int cookingTime) {
-        this.cookingTime = cookingTime;
+    public void setNameNL(String nameNL) {
+        this.nameNL = nameNL;
     }
 
-    public String getDescription() {
-        return description;
+    public int getCookingTimeMin() {
+        return cookingTimeMin;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCookingTimeMin(int cookingTimeMin) {
+        this.cookingTimeMin = cookingTimeMin;
+    }
+
+    public int getCookingTimeMax() {
+        return cookingTimeMax;
+    }
+
+    public void setCookingTimeMax(int cookingTimeMax) {
+        this.cookingTimeMax = cookingTimeMax;
+    }
+
+    public String getDescriptionEN() {
+        return descriptionEN;
+    }
+
+    public void setDescriptionEN(String descriptionEN) {
+        this.descriptionEN = descriptionEN;
+    }
+
+    public String getDescriptionNL() {
+        return descriptionNL;
+    }
+
+    public void setDescriptionNL(String descriptionNL) {
+        this.descriptionNL = descriptionNL;
     }
 
     @Override
     public String toString() {
         return "Vegetable{" +
-                "name='" + name + '\'' +
-                ", cookingTime=" + cookingTime +
+                "id=" + id +
+                ", nameEN='" + nameEN + '\'' +
+                ", nameNL='" + nameNL + '\'' +
+                ", cookingTimeMin=" + cookingTimeMin +
+                ", cookingTimeMax=" + cookingTimeMax +
+                ", descriptionEN='" + descriptionEN + '\'' +
+                ", descriptionNL='" + descriptionNL + '\'' +
                 '}';
     }
 }
