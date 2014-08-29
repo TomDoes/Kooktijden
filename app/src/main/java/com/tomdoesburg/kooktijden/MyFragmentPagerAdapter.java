@@ -15,6 +15,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+
         Fragment fragment;
         switch(i){
             case 0:
@@ -29,7 +30,6 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
         }
         //if we get to this, something is wrong
         throw new IllegalArgumentException("no layout for this integer");
-        //henkasdf
     }
 
     @Override
@@ -41,5 +41,6 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         return "OBJECT " + (position + 1);
     }
+
 }
 

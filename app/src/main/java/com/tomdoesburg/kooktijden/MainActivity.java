@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
@@ -21,10 +23,6 @@ public class MainActivity extends FragmentActivity {
 
     SharedPreferences sharedPrefs;
 
-
-    // Hoi dit is een testje
-    // When requested, this adapter returns a DemoObjectFragment,
-    // representing an object in the collection.
     MyFragmentPagerAdapter mFragmentPagerAdapter;
     ViewPager mViewPager;
 
@@ -42,6 +40,22 @@ public class MainActivity extends FragmentActivity {
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
+
+        //clicking on the lock toggles the ability to swipe between fragments
+        ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
+        lockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
+                if(MyViewPager.swipingEnabled){
+                    MyViewPager.swipingEnabled = false;
+                    lockButton.setImageResource(R.drawable.lock_locked);
+                } else {
+                    MyViewPager.swipingEnabled = true;
+                    lockButton.setImageResource(R.drawable.lock_unlocked);
+                }
+            }
+        });
 
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
