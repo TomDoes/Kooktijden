@@ -1,10 +1,14 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import com.tomdoesburg.kooktijden.R;
 
@@ -25,7 +29,9 @@ public class VegetableDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     private Vegetable vegetable;
-
+    private TextView titleView;
+    private TextView timeView;
+    private TextView descriptionView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -52,11 +58,28 @@ public class VegetableDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_vegetable_detail, container, false);
 
         if (vegetable != null) {
+            titleView = ((TextView) rootView.findViewById(R.id.vegetable_detail_title));
+            timeView = ((TextView) rootView.findViewById(R.id.vegetable_detail_time));
+            descriptionView = ((TextView) rootView.findViewById(R.id.vegetable_detail_description));
+
+            Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
+            titleView.setTypeface(typeFace);
+            timeView.setTypeface(typeFace);
+            descriptionView.setTypeface(typeFace);
+
+            titleView.setText(vegetable.getNameEN());
+
             if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
-                ((TextView) rootView.findViewById(R.id.vegetable_detail)).setText("Cooking time: " + vegetable.getCookingTimeMin() + " min.");
+                timeView.setText("Cooking time: " + vegetable.getCookingTimeMin() + " min.");
             } else {
-                ((TextView) rootView.findViewById(R.id.vegetable_detail)).setText("Cooking time: " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
+                timeView.setText("Cooking time: " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
             }
+
+            descriptionView.setText(vegetable.getDescriptionEN());
+            ImageButton setTimerBtn = (ImageButton)rootView.findViewById(R.id.timer_button);
+            GradientDrawable circleShape = (GradientDrawable)setTimerBtn.getBackground();
+            circleShape.setColor(getResources().getColor(R.color.pink));
+
         }
 
         return rootView;

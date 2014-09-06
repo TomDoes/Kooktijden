@@ -17,4 +17,9 @@
     <color name="orange">#F18D05</color>
     <color name="orange_dark">#E54028</color>
     <color name="pink">#D70060</color>
+    <color name="teal">#009688</color>
+    <color name="listcolor0">#03c9a9</color>
+    <color name="listcolor1">#165DCD</color>
+    <color name="listcolor2">#FFA404</color>
+    <color name="listcolor3">#FF6904</color>
 </resources>

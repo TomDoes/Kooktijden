@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/circleImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circle"
+        android:textColor="@color/white"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="A"
+        android:layout_margin="8dp"
+        />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Large Text"
         android:id="@+id/vegetableTitle"
         android:autoText="false"
+        android:layout_toRightOf="@+id/circleImage"
         android:gravity="center_vertical"
-        android:layout_margin="@dimen/activity_horizontal_margin" />
-</LinearLayout>
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_alarms"
+        android:layout_margin="8dp"
+        />
+</RelativeLayout>
