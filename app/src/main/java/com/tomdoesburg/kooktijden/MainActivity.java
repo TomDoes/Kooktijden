@@ -49,10 +49,10 @@ public class MainActivity extends FragmentActivity {
                 ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
-                    lockButton.setImageResource(R.drawable.lock_locked);
+                    lockButton.setImageResource(R.drawable.brocolli);
                 } else {
                     MyViewPager.swipingEnabled = true;
-                    lockButton.setImageResource(R.drawable.lock_unlocked);
+                    lockButton.setImageResource(R.drawable.brocolli);
                 }
             }
         });
@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity {
             //TODO work with db versions
 
             Log.d("database", "adding stuff to the db");
-            db.addVegetable(new Vegetable("Artichoke", "Artisjok", 25, 25, "", ""));
+            db.addVegetable(new Vegetable("Artichoke", "Artisjok", 25, 25, "Artichokes look more like a Flower than a vegetable. To prepare an artichoke you have to cut of the stem and remove the tougher leaves until only the soft remain.", ""));
             db.addVegetable(new Vegetable("Asparagus (whole)", "Asperges (heel)", 15, 15, "", ""));
             db.addVegetable(new Vegetable("Beans", "Sperziebonen", 8, 8, "", ""));
             db.addVegetable(new Vegetable("Beetroot", "Bieten", 40, 60, "", ""));
