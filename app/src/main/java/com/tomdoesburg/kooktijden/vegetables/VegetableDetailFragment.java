@@ -63,7 +63,9 @@ public class VegetableDetailFragment extends Fragment {
             descriptionView = ((TextView) rootView.findViewById(R.id.vegetable_detail_description));
 
             Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
-            titleView.setTypeface(typeFace);
+            Typeface typeFaceLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+
+            titleView.setTypeface(typeFaceLight);
             timeView.setTypeface(typeFace);
             descriptionView.setTypeface(typeFace);
 
