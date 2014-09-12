@@ -24,40 +24,24 @@ public class TimerHelper {
     private boolean timeSet = false; //indicates a time has been chosen by user
     MediaPlayer mediaPlayer;
 
-    void init(final ProgressBar kookplaat, final TextView kookplaattext) {
+    //this init function requires 2 additional buttons for setting a custom timer or selecting from the vegetable database
+    void init(final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
 
-        //TODO
-        //create a selection thingy to select which vegetable to put on this timer
-        //int vegetableID = vegetablePicker();
-        //MySQLiteHelper db = new MySQLiteHelper(this);
-        //final int timeSeconds = db.getVegetable(vegetableID).getCookingTime();
         final int timeSeconds = 10;
 
-        kookplaat.setOnClickListener(new View.OnClickListener() {
+        progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start(kookplaat, kookplaattext, timeSeconds);
+                start(progress, text, timeSeconds);
             }
         });
 
-    }
-
-    //this init function requires 2 additional buttons for setting a custom timer or selecting from the vegetable database
-    void init(final ProgressBar kookplaat, final TextView kookplaattext,final Button plusButton, final Button minButton) {
-
-        //TODO
-        //create a selection thingy to select which vegetable to put on this timer
-        //int vegetableID = vegetablePicker();
-        //MySQLiteHelper db = new MySQLiteHelper(this);
-        //final int timeSeconds = db.getVegetable(vegetableID).getCookingTime();
-        final int timeSeconds = 10;
-
-        kookplaat.setOnClickListener(new View.OnClickListener() {
+        progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(kookplaat.getContext(), VegetableActivity.class);
-                kookplaat.getContext().startActivity(intent);
-                Activity activity = (Activity)kookplaat.getContext();
+                Intent intent = new Intent(progress.getContext(), VegetableActivity.class);
+                progress.getContext().startActivity(intent);
+                Activity activity = (Activity)progress.getContext();
                 activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
 
             }
@@ -73,7 +57,7 @@ public class TimerHelper {
                 minButton.setVisibility(View.INVISIBLE);
 
                 timeSet = true;
-                kookplaattext.setText("START");
+                text.setText("START");
             }
         });
 
@@ -87,16 +71,16 @@ public class TimerHelper {
                 minButton.setVisibility(View.INVISIBLE);
 
                 timeSet = true;
-                kookplaattext.setText("START");
+                text.setText("START");
             }
         });
 
     }
 
-    void start(final ProgressBar kookplaat, final TextView kookplaattext, final int timeSeconds) {
+    void start(final ProgressBar progress, final TextView text, final int timeSeconds) {
 
         //set the cooking time as max for the progressbar
-        kookplaat.setMax(timeSeconds);
+        progress.setMax(timeSeconds);
 
         CountDownTimer timer = new CountDownTimer(timeSeconds * 1000, 500) {
             // 500 means, onTick function will be called at every 500 milliseconds
@@ -106,21 +90,21 @@ public class TimerHelper {
                 //calculate and set progress
                 long seconds = leftTimeInMilliseconds / 1000;
                 int barVal = (timeSeconds) - ((int) (seconds / 60 * 100) + (int) (seconds % 60));
-                kookplaat.setProgress(barVal);
+                progress.setProgress(barVal);
 
                 // format the textview to show the easily readable format
-                kookplaattext.setText(String.format("%02d", seconds / 60) + ":" + String.format("%02d", seconds % 60));
+                text.setText(String.format("%02d", seconds / 60) + ":" + String.format("%02d", seconds % 60));
 
 
             }
 
             @Override
             public void onFinish() {
-                if (kookplaattext.getText().equals("00:00")) {
-                    kookplaattext.setText("Ready!");
-                    mediaPlayer = MediaPlayer.create(kookplaat.getContext(), R.raw.alarm);
+                if (text.getText().equals("00:00")) {
+                    text.setText("Ready!");
+                    mediaPlayer = MediaPlayer.create(progress.getContext(), R.raw.alarm);
                     mediaPlayer.start();
-                    Vibrator vibrator = (Vibrator) kookplaat.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    Vibrator vibrator = (Vibrator) progress.getContext().getSystemService(Context.VIBRATOR_SERVICE);
                     long[] pattern = {0, 500, 500};
                     // -1 vibrate once
                     // 0 vibrate indefinitely
