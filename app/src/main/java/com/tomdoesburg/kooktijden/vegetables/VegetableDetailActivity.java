@@ -1,5 +1,6 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,7 +23,6 @@ public class VegetableDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vegetable_detail);
-
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -61,8 +61,15 @@ public class VegetableDetailActivity extends Activity {
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             NavUtils.navigateUpTo(this, new Intent(this, VegetableActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
     }
 }

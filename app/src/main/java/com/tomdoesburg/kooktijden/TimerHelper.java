@@ -1,12 +1,14 @@
 package com.tomdoesburg.kooktijden;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 
 /**
  * Created by Joost on 11-7-2014.
@@ -48,14 +50,11 @@ public class TimerHelper {
             @Override
             public void onClick(View view) {
 
-                //show buttons
-                if(!timeSet) {
-                    //show timer buttons
-                    dbTimeButton.setVisibility(View.VISIBLE);
-                    customTimeButton.setVisibility(View.VISIBLE);
-                }else{
-                    start(kookplaat, kookplaattext, timeSeconds);
-                }
+                Intent intent = new Intent(kookplaat.getContext(), VegetableActivity.class);
+                kookplaat.getContext().startActivity(intent);
+                Activity activity = (Activity)kookplaat.getContext();
+                activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+
 
             }
         });

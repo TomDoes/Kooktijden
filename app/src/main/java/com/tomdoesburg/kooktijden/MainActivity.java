@@ -1,5 +1,6 @@
 package com.tomdoesburg.kooktijden;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,11 +27,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //set default preference
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
 
         setContentView(R.layout.swipert);
 
@@ -48,10 +46,10 @@ public class MainActivity extends FragmentActivity {
                 ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
-                    lockButton.setImageResource(R.drawable.brocolli);
+                    lockButton.setImageResource(R.drawable.lock_locked);
                 } else {
                     MyViewPager.swipingEnabled = true;
-                    lockButton.setImageResource(R.drawable.brocolli);
+                    lockButton.setImageResource(R.drawable.lock_unlocked);
                 }
             }
         });
@@ -112,8 +110,6 @@ public class MainActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, VegetableActivity.class);
-            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
