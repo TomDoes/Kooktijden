@@ -120,7 +120,10 @@ public class TimerHelper {
                     mediaPlayer = MediaPlayer.create(kookplaat.getContext(), R.raw.alarm);
                     mediaPlayer.start();
                     Vibrator vibrator = (Vibrator) kookplaat.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(2000);
+                    long[] pattern = {0, 500, 500};
+                    // -1 vibrate once
+                    // 0 vibrate indefinitely
+                    vibrator.vibrate(pattern, -1);
 
                 }
                 timerRunning = false;
