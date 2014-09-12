@@ -21,14 +21,7 @@ import android.widget.TextView;
 public class FragmentKookplaat1pits extends Fragment {
     public static final String ARG_OBJECT = "object";
 
-    //Buttons & view declaration
-    ProgressBar kookplaat1;
-    TextView kookplaat1text;
-    ImageButton kookplaat1Button1;  //button for setup of known vegetable time in database
-    ImageButton kookplaat1Button2; //button for setup of custom time
-
     //Timer related variables
-    TimerHelper timerHelper;
     int timeSeconds;
     boolean timerRunning;
 
@@ -44,16 +37,14 @@ public class FragmentKookplaat1pits extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //kookplaat 1
-        kookplaat1 = (ProgressBar) getView().findViewById(R.id.kookplaat1);
-        kookplaat1text = (TextView) getView().findViewById(R.id.kookplaat1text);
+        View kookplaat1view = getView().findViewById(R.id.kookplaat1);
+        ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
+        TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
+        Button kookplaat1_plus = (Button) kookplaat1view.findViewById(R.id.buttonTimerPlus);
+        Button kookplaat1_min = (Button) kookplaat1view.findViewById(R.id.buttonTimerMin);
 
-        //timer buttons (invisible initially)
-        kookplaat1Button1 = (ImageButton) getView().findViewById(R.id.kookplaat1Button1);
-        kookplaat1Button2 = (ImageButton) getView().findViewById(R.id.kookplaat1Button2);
-
-        TimerHelper timerHelper = new TimerHelper();
-        //timerHelper.init(kookplaat1, kookplaat1text);
-        timerHelper.init(kookplaat1,kookplaat1text,kookplaat1Button1,kookplaat1Button2); //uses new init function
+        TimerHelper timerHelper1 = new TimerHelper();
+        timerHelper1.init(kookplaat1_progress,kookplaat1_text,kookplaat1_plus,kookplaat1_min);
     }
 
 

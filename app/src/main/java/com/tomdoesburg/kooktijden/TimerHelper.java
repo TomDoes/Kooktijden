@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class TimerHelper {
     }
 
     //this init function requires 2 additional buttons for setting a custom timer or selecting from the vegetable database
-    void init(final ProgressBar kookplaat, final TextView kookplaattext,final ImageButton dbTimeButton, final ImageButton customTimeButton) {
+    void init(final ProgressBar kookplaat, final TextView kookplaattext,final Button plusButton, final Button minButton) {
 
         //TODO
         //create a selection thingy to select which vegetable to put on this timer
@@ -62,28 +63,28 @@ public class TimerHelper {
             }
         });
 
-        dbTimeButton.setOnClickListener(new View.OnClickListener(){
+        plusButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //TODO
-                //functie om te kiezen uit database met kooktijden
+                //increase time on timer
 
-                dbTimeButton.setVisibility(View.INVISIBLE);
-                customTimeButton.setVisibility(View.INVISIBLE);
+                plusButton.setVisibility(View.INVISIBLE);
+                minButton.setVisibility(View.INVISIBLE);
 
                 timeSet = true;
                 kookplaattext.setText("START");
             }
         });
 
-        customTimeButton.setOnClickListener(new View.OnClickListener(){
+        minButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //TODO
-                //functie zelf een kooktijd te kiezen
+                //reduce time on timer
 
-                dbTimeButton.setVisibility(View.INVISIBLE);
-                customTimeButton.setVisibility(View.INVISIBLE);
+                plusButton.setVisibility(View.INVISIBLE);
+                minButton.setVisibility(View.INVISIBLE);
 
                 timeSet = true;
                 kookplaattext.setText("START");
