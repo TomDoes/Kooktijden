@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tomdoesburg.kooktijden" >
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -33,6 +35,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tomdoesburg.kooktijden.vegetables.VegetableActivity" />
         </activity>
+        
     </application>
-
 </manifest>

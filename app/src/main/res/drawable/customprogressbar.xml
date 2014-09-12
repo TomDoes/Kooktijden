@@ -7,8 +7,8 @@
         <shape android:innerRadiusRatio="3"
             android:shape="ring"
             android:useLevel="false"
-            android:thicknessRatio="7.0">
-            <solid android:color="@color/yellow_dark" />
+            android:thicknessRatio="15.0">
+            <solid android:color="@color/listcolor0" />
         </shape>
     </item>
 
@@ -19,9 +19,9 @@
             <shape
                 android:innerRadiusRatio="3"
                 android:shape="ring"
-                android:thicknessRatio="7.0"
+                android:thicknessRatio="15.0"
                 android:useLevel="true">
-                <solid android:color="@color/orange_dark"/>
+                <solid android:color="@color/teal"/>
             </shape>
         </rotate>
     </item>

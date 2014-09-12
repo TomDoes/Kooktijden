@@ -1,8 +1,12 @@
 package com.tomdoesburg.kooktijden;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaActionSound;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -17,6 +21,7 @@ public class TimerHelper {
 
     boolean timerRunning;
     private boolean timeSet = false; //indicates a time has been chosen by user
+    MediaPlayer mediaPlayer;
 
     void init(final ProgressBar kookplaat, final TextView kookplaattext) {
 
@@ -49,12 +54,10 @@ public class TimerHelper {
         kookplaat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(kookplaat.getContext(), VegetableActivity.class);
                 kookplaat.getContext().startActivity(intent);
                 Activity activity = (Activity)kookplaat.getContext();
                 activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-
 
             }
         });
@@ -113,7 +116,12 @@ public class TimerHelper {
             @Override
             public void onFinish() {
                 if (kookplaattext.getText().equals("00:00")) {
-                    kookplaattext.setText("FINISHED");
+                    kookplaattext.setText("Ready!");
+                    mediaPlayer = MediaPlayer.create(kookplaat.getContext(), R.raw.alarm);
+                    mediaPlayer.start();
+                    Vibrator vibrator = (Vibrator) kookplaat.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(2000);
+
                 }
                 timerRunning = false;
                 timeSet = false;
