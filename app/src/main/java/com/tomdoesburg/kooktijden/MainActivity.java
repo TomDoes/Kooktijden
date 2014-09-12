@@ -1,6 +1,5 @@
 package com.tomdoesburg.kooktijden;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,8 +16,6 @@ import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
-import java.util.List;
-
 public class MainActivity extends FragmentActivity {
 
     SharedPreferences sharedPrefs;
@@ -33,6 +30,8 @@ public class MainActivity extends FragmentActivity {
         //set default preferences
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+
+
         setContentView(R.layout.swipert);
 
         // ViewPager and its adapters use support library
@@ -41,7 +40,7 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentPagerAdapter);
 
-        //clicking on the lock toggles the ability to swipe between fragments
+        //clicking the lock icon toggles the ability to swipe between fragments
         ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
