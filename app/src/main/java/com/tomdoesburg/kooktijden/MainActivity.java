@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //set default preferences
+        //set default preference
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 
