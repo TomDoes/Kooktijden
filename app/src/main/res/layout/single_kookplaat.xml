@@ -7,8 +7,8 @@
     <ProgressBar
         android:id="@+id/kookplaat"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="120dip"
-        android:layout_height="120dip"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
         android:padding="5dp"
         android:indeterminate="false"
         android:progressDrawable="@drawable/customprogressbar"/>
@@ -22,7 +22,7 @@
         android:layout_alignRight="@+id/kookplaat"
         android:layout_alignBottom="@+id/kookplaat"
         android:gravity="center"
-        android:textSize="13sp"
+        android:textSize="12dp"
         android:text="pick food" />
 
     <Button

@@ -30,6 +30,9 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
             case 3:
                 fragment = new FragmentKookplaat5pits();
                 return fragment;
+            case 4:
+                fragment = new FragmentKookplaat6pits();
+                return fragment;
         }
         //if we get to this, something is wrong
         throw new IllegalArgumentException("no layout for this integer");
@@ -37,7 +40,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     @Override
