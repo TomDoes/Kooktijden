@@ -19,19 +19,34 @@
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginRight="35dp"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/kookplaat1"/>
+            android:layout_toRightOf="@+id/kookplaat1"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
             android:layout_below="@+id/kookplaat2"/>
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/kookplaat2"
+            android:layout_alignBottom="@id/kookplaat3"/>
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 

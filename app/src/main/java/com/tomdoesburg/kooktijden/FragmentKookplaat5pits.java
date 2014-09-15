@@ -14,13 +14,13 @@ import android.widget.TextView;
  */
 // Instances of this class are fragments representing a single
 // object in our collection.
-public class FragmentKookplaat3pits extends Fragment {
+public class FragmentKookplaat5pits extends Fragment {
     public static final String ARG_OBJECT = "object";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // The last two arguments ensure LayoutParams are inflated properly.
-        View rootView = inflater.inflate(R.layout.kookplaat3pits, container, false);
+        View rootView = inflater.inflate(R.layout.kookplaat5pits, container, false);
         return rootView;
     }
 
@@ -59,5 +59,27 @@ public class FragmentKookplaat3pits extends Fragment {
 
         TimerHelper timerHelper3 = new TimerHelper();
         timerHelper3.init(kookplaat3_progress,kookplaat3_text,kookplaat3_plus,kookplaat3_min);
+
+
+        //kookplaat 4
+        View kookplaat4view = getView().findViewById(R.id.kookplaat4);
+        ProgressBar kookplaat4_progress = (ProgressBar) kookplaat4view.findViewById(R.id.kookplaat);
+        TextView kookplaat4_text = (TextView) kookplaat4view.findViewById(R.id.kookplaatText);
+        Button kookplaat4_plus = (Button) kookplaat4view.findViewById(R.id.buttonTimerPlus);
+        Button kookplaat4_min = (Button) kookplaat4view.findViewById(R.id.buttonTimerMin);
+
+        TimerHelper timerHelper4 = new TimerHelper();
+        timerHelper4.init(kookplaat4_progress,kookplaat4_text,kookplaat4_plus,kookplaat4_min);
+
+
+        //kookplaat 5
+        View kookplaat5view = getView().findViewById(R.id.kookplaat5);
+        ProgressBar kookplaat5_progress = (ProgressBar) kookplaat5view.findViewById(R.id.kookplaat);
+        TextView kookplaat5_text = (TextView) kookplaat5view.findViewById(R.id.kookplaatText);
+        Button kookplaat5_plus = (Button) kookplaat5view.findViewById(R.id.buttonTimerPlus);
+        Button kookplaat5_min = (Button) kookplaat5view.findViewById(R.id.buttonTimerMin);
+
+        TimerHelper timerHelper5 = new TimerHelper();
+        timerHelper5.init(kookplaat5_progress,kookplaat5_text,kookplaat5_plus,kookplaat5_min);
     }
 }

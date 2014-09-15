@@ -25,7 +25,10 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 fragment = new FragmentKookplaat2pits();
                 return fragment;
             case 2:
-                fragment = new FragmentKookplaat3pits();
+                fragment = new FragmentKookplaat4pits();
+                return fragment;
+            case 3:
+                fragment = new FragmentKookplaat5pits();
                 return fragment;
         }
         //if we get to this, something is wrong
@@ -34,7 +37,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override

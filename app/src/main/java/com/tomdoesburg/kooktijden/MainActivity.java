@@ -1,7 +1,5 @@
 package com.tomdoesburg.kooktijden;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
-import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -51,12 +48,15 @@ public class MainActivity extends FragmentActivity {
                 CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
+                    //sowieso aangepast
                     lockButton.setImageResource(R.drawable.lock_locked);
                     Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
                     indicator.startAnimation(anim);
                 } else {
                     MyViewPager.swipingEnabled = true;
-                    lockButton.setImageResource(R.drawable.brocolli);
+                    lockButton.setImageResource(R.drawable.lock_unlocked);
+                    Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
+                    indicator.startAnimation(anim);
                 }
             }
         });
