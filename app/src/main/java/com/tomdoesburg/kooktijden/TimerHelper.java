@@ -1,19 +1,13 @@
 package com.tomdoesburg.kooktijden;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaActionSound;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 
 /**
  * Created by Joost on 11-7-2014.
@@ -21,10 +15,8 @@ import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 public class TimerHelper {
 
     boolean timerRunning;
-    private boolean timeSet = false; //indicates a time has been chosen by user
     MediaPlayer mediaPlayer;
 
-    //this init function requires 2 additional buttons for setting a custom timer or selecting from the vegetable database
     void init(final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
 
         final int timeSeconds = 10;
@@ -32,17 +24,23 @@ public class TimerHelper {
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start(progress, text, timeSeconds);
-            }
-        });
 
-        progress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                plusButton.setVisibility(View.VISIBLE);
+                minButton.setVisibility(View.VISIBLE);
+
+                //start test-timer
+                start(progress,text,timeSeconds);
+
+                text.setText("START");
+
+                /*
+                TEMPORARILY DISABLED TO TEST TIMER FUNCTIONALITY
+
                 Intent intent = new Intent(progress.getContext(), VegetableActivity.class);
                 progress.getContext().startActivity(intent);
                 Activity activity = (Activity)progress.getContext();
                 activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+                */
 
             }
         });
@@ -52,12 +50,6 @@ public class TimerHelper {
             public void onClick(View v) {
                 //TODO
                 //increase time on timer
-
-                plusButton.setVisibility(View.INVISIBLE);
-                minButton.setVisibility(View.INVISIBLE);
-
-                timeSet = true;
-                text.setText("START");
             }
         });
 
@@ -66,12 +58,6 @@ public class TimerHelper {
             public void onClick(View v) {
                 //TODO
                 //reduce time on timer
-
-                plusButton.setVisibility(View.INVISIBLE);
-                minButton.setVisibility(View.INVISIBLE);
-
-                timeSet = true;
-                text.setText("START");
             }
         });
 
@@ -112,7 +98,6 @@ public class TimerHelper {
 
                 }
                 timerRunning = false;
-                timeSet = false;
             }
         };
         if (!timerRunning) {
