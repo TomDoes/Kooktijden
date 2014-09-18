@@ -5,6 +5,8 @@ import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,13 +19,16 @@ public class TimerHelper {
     boolean timerRunning;
     MediaPlayer mediaPlayer;
 
-    void init(final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
+    void init(final Context context, final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
 
         final int timeSeconds = 10;
 
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Animation anim = AnimationUtils.loadAnimation(context, R.anim.highlight_zoom);
+                progress.startAnimation(anim);
 
                 plusButton.setVisibility(View.VISIBLE);
                 minButton.setVisibility(View.VISIBLE);

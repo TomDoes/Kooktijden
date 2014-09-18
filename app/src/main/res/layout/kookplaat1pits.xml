@@ -12,6 +12,7 @@
     <!-- Created by Joost on 1/7/14. -->
 
     <RelativeLayout
+        android:id="@+id/rellayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
@@ -23,5 +24,13 @@
         android:layout_height="wrap_content"/>
 
     </RelativeLayout>
+
+    <include layout="@layout/plus_min_buttons"
+        android:id="@+id/plus_min_buttons"
+        android:layout_above="@id/rellayout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>

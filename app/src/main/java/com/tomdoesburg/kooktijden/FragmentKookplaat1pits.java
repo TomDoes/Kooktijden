@@ -5,10 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,13 +35,15 @@ public class FragmentKookplaat1pits extends Fragment {
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
+        View plusminbuttons = getView().findViewById(R.id.plus_min_buttons);
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
-        Button kookplaat1_plus = (Button) kookplaat1view.findViewById(R.id.buttonTimerPlus);
-        Button kookplaat1_min = (Button) kookplaat1view.findViewById(R.id.buttonTimerMin);
+        Button kookplaat_plus = (Button) plusminbuttons.findViewById(R.id.buttonTimerPlus);
+        Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
 
         TimerHelper timerHelper1 = new TimerHelper();
-        timerHelper1.init(kookplaat1_progress,kookplaat1_text,kookplaat1_plus,kookplaat1_min);
+        timerHelper1.init(getActivity().getApplicationContext(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
+
     }
 
 

@@ -11,6 +11,7 @@
     <!-- Created by Joost on 1/7/14. -->
 
     <RelativeLayout
+        android:id="@+id/rellayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
@@ -37,12 +38,14 @@
             android:id="@+id/kookplaat4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/kookplaat1"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/kookplaat1"
             android:layout_below="@id/kookplaat2"/>
 
@@ -50,10 +53,18 @@
             android:id="@+id/kookplaat6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/kookplaat2"
             android:layout_below="@id/kookplaat3"/>
 
-
     </RelativeLayout>
+
+    <include layout="@layout/plus_min_buttons"
+        android:id="@+id/plus_min_buttons"
+        android:layout_above="@id/rellayout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>
