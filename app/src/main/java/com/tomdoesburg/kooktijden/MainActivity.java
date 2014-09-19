@@ -1,7 +1,5 @@
 package com.tomdoesburg.kooktijden;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
-import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -27,44 +24,56 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //set default preference
-        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
 
         setContentView(R.layout.swipert);
 
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
+        final CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+
         //Set the pager with an adapter
-        ViewPager pager = (ViewPager)findViewById(R.id.pager);
+        final ViewPager pager = (ViewPager)findViewById(R.id.pager);
         pager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
 
-        //Bind the title indicator to the adapter
-        CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+        //Bind the indicator dots to the adapter
         indicator.setViewPager(pager);
 
+
         //clicking the lock icon toggles the ability to swipe between fragments
-        ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
-                CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
                     lockButton.setImageResource(R.drawable.lock_locked);
                     Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
                     indicator.startAnimation(anim);
+
+                    //save locked position in preferences (in case of restart)
+                    sharedPrefs.edit().putInt("kookplaatViewPos",pager.getCurrentItem()).commit();
                 } else {
                     MyViewPager.swipingEnabled = true;
-                    lockButton.setImageResource(R.drawable.brocolli);
+                    lockButton.setImageResource(R.drawable.lock_unlocked);
+                    Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
+                    indicator.startAnimation(anim);
+
+                    //remove locked position from preferences
+                    sharedPrefs.edit().remove("kookplaatViewPos").commit();
                 }
             }
         });
 
 
+        //if user has locked a view the last time, set that as the default
+        if(sharedPrefs.contains("kookplaatViewPos")){
+            pager.setCurrentItem(sharedPrefs.getInt("kookplaatViewPos",0));
+            MyViewPager.swipingEnabled = false;
+            lockButton.setImageResource(R.drawable.lock_locked);
+            Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
+            indicator.startAnimation(anim);
+        }
 
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         MySQLiteHelper db = new MySQLiteHelper(this);
 

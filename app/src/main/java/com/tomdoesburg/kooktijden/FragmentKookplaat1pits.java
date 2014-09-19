@@ -5,10 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,14 +18,7 @@ import android.widget.TextView;
 public class FragmentKookplaat1pits extends Fragment {
     public static final String ARG_OBJECT = "object";
 
-    //Buttons & view declaration
-    ProgressBar kookplaat1;
-    TextView kookplaat1text;
-    ImageButton kookplaat1Button1;  //button for setup of known vegetable time in database
-    ImageButton kookplaat1Button2; //button for setup of custom time
-
     //Timer related variables
-    TimerHelper timerHelper;
     int timeSeconds;
     boolean timerRunning;
 
@@ -44,16 +34,16 @@ public class FragmentKookplaat1pits extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //kookplaat 1
-        kookplaat1 = (ProgressBar) getView().findViewById(R.id.kookplaat1);
-        kookplaat1text = (TextView) getView().findViewById(R.id.kookplaat1text);
+        View kookplaat1view = getView().findViewById(R.id.kookplaat1);
+        View plusminbuttons = getView().findViewById(R.id.plus_min_buttons);
+        ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
+        TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
+        Button kookplaat_plus = (Button) plusminbuttons.findViewById(R.id.buttonTimerPlus);
+        Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
 
-        //timer buttons (invisible initially)
-        kookplaat1Button1 = (ImageButton) getView().findViewById(R.id.kookplaat1Button1);
-        kookplaat1Button2 = (ImageButton) getView().findViewById(R.id.kookplaat1Button2);
+        TimerHelper timerHelper1 = new TimerHelper();
+        timerHelper1.init(getActivity().getApplicationContext(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
 
-        TimerHelper timerHelper = new TimerHelper();
-        //timerHelper.init(kookplaat1, kookplaat1text);
-        timerHelper.init(kookplaat1,kookplaat1text,kookplaat1Button1,kookplaat1Button2); //uses new init function
     }
 
 

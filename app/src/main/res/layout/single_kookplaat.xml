@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/kookplaat"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/customprogressbar"/>
+
+    <TextView
+        android:id="@+id/kookplaatText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/kookplaat"
+        android:layout_alignTop="@+id/kookplaat"
+        android:layout_alignRight="@+id/kookplaat"
+        android:layout_alignBottom="@+id/kookplaat"
+        android:gravity="center"
+        android:textSize="12dp"
+        android:text="pick food" />
+
+</RelativeLayout>
