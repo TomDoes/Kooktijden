@@ -4,6 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat1pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
+
 /**
  * Created by Joost on 2-7-2014.
  */

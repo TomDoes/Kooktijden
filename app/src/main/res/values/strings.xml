@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Kooktijden</string>
     <string name="admob_id">123456789</string>
     <string name="action_settings">Instellingen</string>
@@ -9,5 +8,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_vegetable_list">Vegetables</string>
     <string name="title_vegetable_detail">Details</string>
-
+    <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>
+    <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>
+    <string name="banner_ad_unit_id_vegetable_list">ca-app-pub-6550849443292807/9484474579</string>
 </resources>

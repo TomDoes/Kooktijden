@@ -1,6 +1,8 @@
-package com.tomdoesburg.kooktijden;
+package com.tomdoesburg.kooktijden.kookplaten;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -10,6 +12,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 
 /**
  * Created by Joost on 11-7-2014.
@@ -30,22 +35,19 @@ public class TimerHelper {
                 Animation anim = AnimationUtils.loadAnimation(context, R.anim.highlight_zoom);
                 progress.startAnimation(anim);
 
-                plusButton.setVisibility(View.VISIBLE);
-                minButton.setVisibility(View.VISIBLE);
-
-                //start test-timer
-                start(progress,text,timeSeconds);
-
-                text.setText("START");
-
-                /*
-                TEMPORARILY DISABLED TO TEST TIMER FUNCTIONALITY
+//                plusButton.setVisibility(View.VISIBLE);
+//                minButton.setVisibility(View.VISIBLE);
+//
+//                //start test-timer
+//                start(progress,text,timeSeconds);
+//
+//                text.setText("START");
 
                 Intent intent = new Intent(progress.getContext(), VegetableActivity.class);
                 progress.getContext().startActivity(intent);
                 Activity activity = (Activity)progress.getContext();
                 activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-                */
+
 
             }
         });

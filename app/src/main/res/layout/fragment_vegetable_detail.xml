@@ -1,72 +1,87 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/vegetable_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tomdoesburg.kooktijden.vegetables.VegetableDetailFragment"
->
+    android:orientation="vertical"
+    tools:context="com.tomdoesburg.kooktijden.vegetables.VegetableDetailFragment">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/vegetable_detail_title"
+        <RelativeLayout
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:paddingTop="50dp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="50dp"
-            android:textColor="@color/white"
-            android:background="@color/teal"/>
-        <ImageButton
-            android:id="@+id/timer_button"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/vegetable_detail_title"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="-40dp"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_action_alarms_white"
-            android:background="@drawable/circle"/>
-        <TextView
-            android:id="@+id/vegetable_detail_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cooking time 15-20 min"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/vegetable_detail_title"
-            />
-        <TextView
-            android:id="@+id/vegetable_detail_description_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="0dp"
-            android:text="Description"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/vegetable_detail_time"
-            />
-        <TextView
-            android:id="@+id/vegetable_detail_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="0dp"
-            android:text="Description text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/vegetable_detail_description_title"
-            />
+            android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/vegetable_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/teal"
+                android:paddingBottom="50dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="50dp"
+                android:text="title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
 
-    </RelativeLayout>
-</ScrollView>
+            <ImageButton
+                android:id="@+id/timer_button"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/vegetable_detail_title"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="-40dp"
+                android:background="@drawable/circle"
+                android:src="@drawable/ic_action_alarms_white" />
+
+            <TextView
+                android:id="@+id/vegetable_detail_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vegetable_detail_title"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:text="Cooking time 15-20 min"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/vegetable_detail_description_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vegetable_detail_time"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="Description"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/vegetable_detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vegetable_detail_description_title"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="0dp"
+                android:text="Description text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_vegetable_details"></com.google.android.gms.ads.AdView>
+</LinearLayout>

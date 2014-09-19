@@ -1,4 +1,4 @@
-package com.tomdoesburg.kooktijden;
+package com.tomdoesburg.kooktijden.kookplaten;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.tomdoesburg.kooktijden.R;
 
 /**
  * Created by Joost on 2-7-2014.

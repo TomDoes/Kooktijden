@@ -1,6 +1,5 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;

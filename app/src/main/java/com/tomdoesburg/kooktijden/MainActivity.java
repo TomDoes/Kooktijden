@@ -13,6 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -73,6 +75,10 @@ public class MainActivity extends FragmentActivity {
             Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
             indicator.startAnimation(anim);
         }
+
+        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         MySQLiteHelper db = new MySQLiteHelper(this);

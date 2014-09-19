@@ -1,6 +1,5 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -13,6 +12,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.tomdoesburg.kooktijden.R;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -90,6 +92,10 @@ public class VegetableDetailFragment extends Fragment {
             setTimerBtn.startAnimation(btnAnimation);
             titleView.startAnimation(titleAnimation);
         }
+
+        AdView mAdView = (AdView)rootView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return rootView;
     }
