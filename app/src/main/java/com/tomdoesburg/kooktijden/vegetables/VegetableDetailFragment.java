@@ -8,6 +8,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.tomdoesburg.kooktijden.R;
@@ -82,6 +84,11 @@ public class VegetableDetailFragment extends Fragment {
             GradientDrawable circleShape = (GradientDrawable)setTimerBtn.getBackground();
             circleShape.setColor(getResources().getColor(R.color.pink));
 
+            Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_righ2left_slow);
+            Animation titleAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_down);
+
+            setTimerBtn.startAnimation(btnAnimation);
+            titleView.startAnimation(titleAnimation);
         }
 
         return rootView;
