@@ -98,11 +98,11 @@ public class VegetableDetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //get time from database
-                    int timeMinutes = vegetable.getCookingTimeMax();
+                    int vegId = vegetable.getId();
 
                     //return the result
                     Intent intent = new Intent();
-                    intent.putExtra("timeSeconds",timeMinutes*60);
+                    intent.putExtra("vegId",vegId);
                     getActivity().setResult(Activity.RESULT_OK, intent);
 
                     //finish the details activity

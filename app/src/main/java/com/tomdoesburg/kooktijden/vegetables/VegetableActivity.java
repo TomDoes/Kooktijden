@@ -114,13 +114,13 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
-                int timeSeconds = data.getIntExtra("timeSeconds",0);
+                int vegId = data.getIntExtra("vegId",0);
 
                 //pass that shit to the main activity!
 
                 //return the result
                 Intent intent = new Intent();
-                intent.putExtra("timeSeconds",timeSeconds);
+                intent.putExtra("vegId",vegId);
                 this.setResult(Activity.RESULT_OK,intent);
 
                 //finish the vegetable activity

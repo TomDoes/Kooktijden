@@ -153,9 +153,12 @@ public class MainActivity extends FragmentActivity {
         if(requestCode==9001){
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+
                 // The user picked a vegetable
-                int timeSeconds = data.getIntExtra("timeSeconds",0);
-                Log.d("Joost","yeaaaah! zoveel: "+timeSeconds);
+                int vegId = data.getIntExtra("vegId",0);
+
+                //MySQLiteHelper db = new MySQLiteHelper(this);
+                //Vegetable veg = db.getVegetable(vegId);
             }
         }
 

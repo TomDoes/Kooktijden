@@ -81,11 +81,11 @@ public class VegetableListAdapter extends ArrayAdapter {
             public void onClick(View v) {
                 //get time from database
                 MySQLiteHelper db = new MySQLiteHelper(context);
-                int timeMinutes = db.getVegetable(vegetableListItem.getId()).getCookingTimeMax();
+                int vegId = vegetableListItem.getId();
 
                 //return the result
                 Intent intent = new Intent();
-                intent.putExtra("timeSeconds",timeMinutes*60);
+                intent.putExtra("vegId",vegId);
                 ((Activity) context).setResult(Activity.RESULT_OK,intent);
 
                 //finish the vegetable activity
