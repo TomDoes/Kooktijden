@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
@@ -30,9 +32,37 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.swipert);
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //if (!sharedPrefs.getBoolean("firstStart",false)) {
+        if(true){
+            //the app is being launched for first time, show introduction
+
+            //create empty frame
+            final FrameLayout layout = new FrameLayout(this);
+            setContentView(layout);
+
+            //inflate our regular layout in the frame
+            View regular = getLayoutInflater().inflate(R.layout.swipert,null);
+            layout.addView(regular);
+
+            //inflate and add instructional overlay
+            final View instructional = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_main,null);
+            layout.addView(instructional);
+            Button instructions_close = (Button) instructional.findViewById(R.id.instructions_close);
+            instructions_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    layout.removeView(instructional);
+                }
+            });
+
+            sharedPrefs.edit().putBoolean("firstStart", false).commit();
+        } else {
+            setContentView(R.layout.swipert);
+        }
+
+
+
         final ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
         final CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 
@@ -114,9 +144,7 @@ public class MainActivity extends FragmentActivity {
             db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "", ""));
             db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 20, 20, "", ""));
 
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putBoolean("databaseLoaded", true);
-            editor.commit();
+            sharedPrefs.edit().putBoolean("databaseLoaded", true).commit();
         }
 
     }

@@ -4,6 +4,7 @@
     <color name="gray_lighter">#dcdcdc</color>
     <color name="gray_light">#808080</color>
     <color name="gray_dark">#616161</color>
+    <color name="gray_darker">#222222</color>
     <color name="black">#000000</color>
     <color name="yellow">#FACB47</color>
     <color name="yellow_dark">#D0D102</color>

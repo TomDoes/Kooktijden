@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:alpha="0.70">
+
+    <ImageView
+        android:id="@+id/lock_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="65dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/arrow_right"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lock_arrow"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Toggle the lock to set the current layout as default."
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/swipe_arrows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="175dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:src="@drawable/arrow_left"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:src="@drawable/arrow_right"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/swipe_arrows"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Swipe to change stove tops."
+        android:textColor="@color/white"/>
+
+
+    <Button
+        android:id="@+id/instructions_close"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Got it"
+        android:textColor="@color/white"
+        android:background="@color/gray_darker"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"/>
+
+</RelativeLayout>
