@@ -40,7 +40,6 @@ public class TimerHelper {
                 Intent intent = new Intent(activity, VegetableActivity.class);
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-
             }
 
             @Override

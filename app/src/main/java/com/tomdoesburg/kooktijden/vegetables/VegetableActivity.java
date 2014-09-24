@@ -3,12 +3,11 @@ package com.tomdoesburg.kooktijden.vegetables;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -22,12 +21,13 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vegetable_list);
+        View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list,null);
+        //setContentView(R.layout.activity_vegetable_list);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        if (findViewById(R.id.vegetable_detail_container) != null) {
+        if (view.findViewById(R.id.vegetable_detail_container) != null) {
 
             mTwoPane = true;
 
@@ -41,9 +41,11 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             }
         }
 
-        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdView mAdView = (AdView)view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        setContentView(view);
     }
 
 
