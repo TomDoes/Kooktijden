@@ -24,15 +24,35 @@ public class TimerHelper {
     boolean timerRunning;
     MediaPlayer mediaPlayer;
 
-    void init(final Context context, final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
+    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
 
         final int timeSeconds = 10;
+        final Animation anim = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(activity, VegetableActivity.class);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Animation anim = AnimationUtils.loadAnimation(context, R.anim.highlight_zoom);
                 progress.startAnimation(anim);
 
 //                plusButton.setVisibility(View.VISIBLE);
@@ -42,12 +62,6 @@ public class TimerHelper {
 //                start(progress,text,timeSeconds);
 //
 //                text.setText("START");
-
-                Intent intent = new Intent(progress.getContext(), VegetableActivity.class);
-                progress.getContext().startActivity(intent);
-                Activity activity = (Activity)progress.getContext();
-                activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-
 
             }
         });

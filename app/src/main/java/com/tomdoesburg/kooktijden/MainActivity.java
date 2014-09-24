@@ -19,6 +19,8 @@ import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
 
+;
+
 public class MainActivity extends FragmentActivity {
 
     SharedPreferences sharedPrefs;

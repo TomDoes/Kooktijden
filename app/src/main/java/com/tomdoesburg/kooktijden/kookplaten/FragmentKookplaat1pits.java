@@ -44,7 +44,7 @@ public class FragmentKookplaat1pits extends Fragment {
         Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
 
         TimerHelper timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity().getApplicationContext(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
 
     }
 

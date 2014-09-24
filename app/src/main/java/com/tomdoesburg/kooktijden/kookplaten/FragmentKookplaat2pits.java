@@ -39,7 +39,7 @@ public class FragmentKookplaat2pits extends Fragment {
         Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
 
         TimerHelper timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity().getApplicationContext(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
 
 
         //kookplaat 2
@@ -48,7 +48,7 @@ public class FragmentKookplaat2pits extends Fragment {
         TextView kookplaat2_text = (TextView) kookplaat2view.findViewById(R.id.kookplaatText);
 
         TimerHelper timerHelper2 = new TimerHelper();
-        timerHelper2.init(getActivity().getApplicationContext(),kookplaat2_progress,kookplaat2_text,kookplaat_plus,kookplaat_min);
+        timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,kookplaat_plus,kookplaat_min);
 
     }
 }
