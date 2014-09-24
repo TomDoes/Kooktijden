@@ -23,10 +23,14 @@ public class TimerHelper {
 
     boolean timerRunning;
     MediaPlayer mediaPlayer;
+    ProgressBar progress;
+    TextView text;
 
-    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
+    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton) {
 
-        final int timeSeconds = 10;
+        this.progress = progress;
+        this.text = text;
+
         final Animation anim = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
 
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -38,8 +42,9 @@ public class TimerHelper {
             @Override
             public void onAnimationEnd(Animation animation) {
                 Intent intent = new Intent(activity, VegetableActivity.class);
-                activity.startActivity(intent);
-                activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+                //activity.startActivity(intent);
+                activity.startActivityForResult(intent,9001);   //IT'S OVER NINE THOUSAND!
+                //activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
             }
 
             @Override
@@ -54,13 +59,11 @@ public class TimerHelper {
 
                 progress.startAnimation(anim);
 
-//                plusButton.setVisibility(View.VISIBLE);
-//                minButton.setVisibility(View.VISIBLE);
-//
-//                //start test-timer
-//                start(progress,text,timeSeconds);
-//
-//                text.setText("START");
+                //plusButton.setVisibility(View.VISIBLE);
+
+                //start test-timer
+                //start(progress,text,timeSeconds);
+                //text.setText("START");
 
             }
         });
@@ -69,21 +72,13 @@ public class TimerHelper {
             @Override
             public void onClick(View v) {
                 //TODO
-                //increase time on timer
-            }
-        });
-
-        minButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //TODO
-                //reduce time on timer
+                //increase time on timer with 30 seconds
             }
         });
 
     }
 
-    void start(final ProgressBar progress, final TextView text, final int timeSeconds) {
+    void start(final int timeSeconds) {
 
         //set the cooking time as max for the progressbar
         progress.setMax(timeSeconds);
@@ -124,5 +119,11 @@ public class TimerHelper {
             timer.start();
             timerRunning = true;
         }
+    }
+
+    void initKookplaat(int timeSeconds){
+        //set the cooking time as max for the progressbar
+        progress.setMax(timeSeconds);
+        text.setText("YEEAH!");
     }
 }

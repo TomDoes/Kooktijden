@@ -2,10 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:animateLayoutChanges="true"
     tools:context="com.tomdoesburg.kooktijden.MainActivity$PlaceholderFragment">
 
     <!-- Created by Joost on 1/7/14. -->
@@ -20,7 +17,8 @@
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat2"
@@ -32,23 +30,19 @@
             android:id="@+id/kookplaat3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/kookplaat2"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/kookplaat2"
-            android:layout_toRightOf="@+id/kookplaat3"/>
+            android:layout_alignBottom="@+id/kookplaat3"
+            android:layout_alignLeft="@+id/kookplaat2"/>
 
     </RelativeLayout>
 
     <include layout="@layout/plus_min_buttons"
-        android:id="@+id/plus_min_buttons"
-        android:layout_above="@id/rellayout"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"/>
+        android:id="@+id/plus_min_buttons"/>
 
 </RelativeLayout>

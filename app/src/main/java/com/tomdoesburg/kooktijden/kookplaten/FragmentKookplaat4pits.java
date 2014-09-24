@@ -32,14 +32,12 @@ public class FragmentKookplaat4pits extends Fragment {
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
-        View plusminbuttons = getView().findViewById(R.id.plus_min_buttons);
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
-        Button kookplaat_plus = (Button) plusminbuttons.findViewById(R.id.buttonTimerPlus);
-        Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
+        Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
 
         TimerHelper timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus);
 
 
         //kookplaat 2
@@ -48,7 +46,7 @@ public class FragmentKookplaat4pits extends Fragment {
         TextView kookplaat2_text = (TextView) kookplaat2view.findViewById(R.id.kookplaatText);
 
         TimerHelper timerHelper2 = new TimerHelper();
-        timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,kookplaat_plus,kookplaat_min);
+        timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,kookplaat_plus);
 
 
         //kookplaat 3
@@ -57,7 +55,7 @@ public class FragmentKookplaat4pits extends Fragment {
         TextView kookplaat3_text = (TextView) kookplaat3view.findViewById(R.id.kookplaatText);
 
         TimerHelper timerHelper3 = new TimerHelper();
-        timerHelper3.init(getActivity(),kookplaat3_progress,kookplaat3_text,kookplaat_plus,kookplaat_min);
+        timerHelper3.init(getActivity(),kookplaat3_progress,kookplaat3_text,kookplaat_plus);
 
 
         //kookplaat 4
@@ -66,7 +64,7 @@ public class FragmentKookplaat4pits extends Fragment {
         TextView kookplaat4_text = (TextView) kookplaat4view.findViewById(R.id.kookplaatText);
 
         TimerHelper timerHelper4 = new TimerHelper();
-        timerHelper4.init(getActivity(),kookplaat4_progress,kookplaat4_text,kookplaat_plus,kookplaat_min);
+        timerHelper4.init(getActivity(),kookplaat4_progress,kookplaat4_text,kookplaat_plus);
 
     }
 }

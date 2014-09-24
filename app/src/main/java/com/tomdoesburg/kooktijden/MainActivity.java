@@ -1,5 +1,6 @@
 package com.tomdoesburg.kooktijden;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -140,5 +141,25 @@ public class MainActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    // Call Back method to get the cooking time from the vegetable Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("Joost","onActivityResult started");
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        // check if the request code is same as what is passed here it is 9001
+        if(requestCode==9001){
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a vegetable
+                int timeSeconds = data.getIntExtra("timeSeconds",0);
+                Log.d("Joost","yeaaaah! zoveel: "+timeSeconds);
+            }
+        }
+
+    }
+
 
 }

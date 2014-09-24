@@ -99,9 +99,35 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 // for the selected item ID.
                 Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
                 detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
-                startActivity(detailIntent);
+                startActivityForResult(detailIntent, 123);
                 overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
             }
+    }
+
+    // Call Back method to get the cooking time from the details Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed here it is 9001
+        if(requestCode==123){
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a vegetable
+                int timeSeconds = data.getIntExtra("timeSeconds",0);
+
+                //pass that shit to the main activity!
+
+                //return the result
+                Intent intent = new Intent();
+                intent.putExtra("timeSeconds",timeSeconds);
+                this.setResult(Activity.RESULT_OK,intent);
+
+                //finish the vegetable activity
+                this.finish();
+            }
+        }
+
     }
 
     @Override
