@@ -1,6 +1,5 @@
 package com.tomdoesburg.kooktijden.kookplaten;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,10 +40,6 @@ public class FragmentKookplaat1pits extends Fragment {
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
         Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
-
-        Typeface typeFace = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Roboto-Light.ttf");
-        kookplaat1_text.setTypeface(typeFace);
-        kookplaat_plus.setTypeface(typeFace);
 
         TimerHelper timerHelper1 = new TimerHelper();
         timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus);

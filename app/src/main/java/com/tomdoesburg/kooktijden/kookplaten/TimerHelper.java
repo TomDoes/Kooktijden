@@ -3,6 +3,7 @@ package com.tomdoesburg.kooktijden.kookplaten;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -30,6 +31,10 @@ public class TimerHelper {
 
         this.progress = progress;
         this.text = text;
+
+        Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Roboto-Light.ttf");
+        text.setTypeface(typeFace);
+        plusButton.setTypeface(typeFace);
 
         final Animation anim = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
 
