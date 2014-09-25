@@ -1,6 +1,9 @@
 package com.tomdoesburg.kooktijden;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -165,5 +168,68 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    /////////////////////////////////////////////////////////////////////////
+    ///////////////////Service related, do not touch!////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
+        Log.i(TAG, "Registered broacast receiver");
+    }
+
+    //Service related
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(br);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    //Service related
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(br);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
+
+    /*
+
+    //Service related
+     @Override
+     public void onDestroy() {
+         //getActivity().stopService(new Intent(getActivity(), TimerService.class));
+        // Log.i(TAG, "Stopped service");
+        // super.onDestroy();
+     }
+     */
+    //Service related: br receives ticks from service
+    private BroadcastReceiver br = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent);
+        }
+    };
+
+    //Service related: processes ticks and updates GUI
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getIntExtra("countdown", 0);
+            Log.i(TAG, "received tick!");
+            //To do: forward tick action to all TimerHelper instances
+
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    ////////////End of service related stuff. You may now touch!/////////////
+    /////////////////////////////////////////////////////////////////////////
 
 }
