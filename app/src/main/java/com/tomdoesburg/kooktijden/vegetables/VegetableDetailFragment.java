@@ -33,6 +33,7 @@ public class VegetableDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
+    private String kookPlaatID = "";
     private Vegetable vegetable;
     private TextView titleView;
     private TextView timeView;
@@ -55,6 +56,9 @@ public class VegetableDetailFragment extends Fragment {
             // to load content from a content provider.
             MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
             vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
+        }
+        if(getArguments().containsKey("kookPlaatID")){
+            this.kookPlaatID = getArguments().getString("kookPlaatID");
         }
     }
 
@@ -103,6 +107,7 @@ public class VegetableDetailFragment extends Fragment {
                     //return the result
                     Intent intent = new Intent();
                     intent.putExtra("vegId",vegId);
+                    intent.putExtra("kookPlaatID",kookPlaatID);
                     getActivity().setResult(Activity.RESULT_OK, intent);
 
                     //finish the details activity

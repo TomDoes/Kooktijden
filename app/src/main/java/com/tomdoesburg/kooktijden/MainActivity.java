@@ -23,7 +23,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 ;
 
 public class MainActivity extends FragmentActivity {
-
+    private static final String TAG = "MAIN_ACTIVITY";
     SharedPreferences sharedPrefs;
 
     @Override
@@ -156,7 +156,8 @@ public class MainActivity extends FragmentActivity {
 
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
-
+                String kookplaatID = data.getStringExtra("kookPlaatID");
+                Log.v(TAG, kookplaatID + " was selected");
                 //MySQLiteHelper db = new MySQLiteHelper(this);
                 //Vegetable veg = db.getVegetable(vegId);
             }

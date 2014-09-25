@@ -22,13 +22,14 @@ import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
  */
 public class TimerHelper {
 
+    private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
     boolean timerRunning;
     MediaPlayer mediaPlayer;
     ProgressBar progress;
     TextView text;
 
-    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton) {
-
+    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final String kookPlaatID) {
+        this.kookPlaatID = kookPlaatID;
         this.progress = progress;
         this.text = text;
 
@@ -47,6 +48,7 @@ public class TimerHelper {
             @Override
             public void onAnimationEnd(Animation animation) {
                 Intent intent = new Intent(activity, VegetableActivity.class);
+                intent.putExtra("kookPlaatID",kookPlaatID);
                 //activity.startActivity(intent);
                 activity.startActivityForResult(intent,9001);   //IT'S OVER NINE THOUSAND!
                 //activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);

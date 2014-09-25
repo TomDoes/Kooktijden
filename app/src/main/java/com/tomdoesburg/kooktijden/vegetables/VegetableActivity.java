@@ -17,12 +17,22 @@ import com.tomdoesburg.kooktijden.R;
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
 
     private boolean mTwoPane;
+    private String kookPlaatID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list,null);
         //setContentView(R.layout.activity_vegetable_list);
+
+       //get intent which contains the ID of the kookPlaat we are using!
+        try {
+            Intent intent = getIntent();
+            this.kookPlaatID = intent.getStringExtra("kookPlaatID");
+        }catch(NullPointerException E){
+            //this should not happen ever, but better safe than sorry!
+        }
+
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -88,6 +98,8 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 // fragment transaction.
                 Bundle arguments = new Bundle();
                 arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID, id);
+                arguments.putString("kookPlaatID",this.kookPlaatID);
+
                 VegetableDetailFragment fragment = new VegetableDetailFragment();
                 fragment.setArguments(arguments);
                 getFragmentManager().beginTransaction()
@@ -99,6 +111,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 // for the selected item ID.
                 Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
                 detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
+                detailIntent.putExtra("kookPlaatID",this.kookPlaatID);
                 startActivityForResult(detailIntent, 123);
                 overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
             }
@@ -115,12 +128,13 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
-
+                this.kookPlaatID = data.getStringExtra("kookPlaatID");
                 //pass that shit to the main activity!
 
                 //return the result
                 Intent intent = new Intent();
                 intent.putExtra("vegId",vegId);
+                intent.putExtra("kookPlaatID",this.kookPlaatID);
                 this.setResult(Activity.RESULT_OK,intent);
 
                 //finish the vegetable activity
