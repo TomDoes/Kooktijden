@@ -65,6 +65,7 @@ public class VegetableListAdapter extends ArrayAdapter {
             holder = new ViewHolder();
             holder.vegetableName = (TextView)viewToUse.findViewById(R.id.vegetableTitle);
             holder.circleView = (TextView)viewToUse.findViewById(R.id.circleImage);
+            holder.circleView.setTypeface(typeFace);
             holder.timerButton = (ImageButton)viewToUse.findViewById(R.id.list_timer_button);
             viewToUse.setTag(holder);
         } else {

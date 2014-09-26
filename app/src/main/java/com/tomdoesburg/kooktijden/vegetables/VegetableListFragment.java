@@ -13,6 +13,8 @@ import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,12 +86,27 @@ public class VegetableListFragment extends ListFragment {
 
         MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
         List<Vegetable> vegetables = db.getAllVegetables();
+
         String language = Locale.getDefault().getDisplayLanguage();
         if(language.equals("Nederlands")) {
+            // Sort by name
+            Collections.sort(vegetables, new Comparator<Vegetable>() {
+                public int compare(Vegetable veg1, Vegetable veg2) {
+                    return veg1.getNameNL().compareToIgnoreCase(veg2.getNameNL());
+                }
+            });
+
             for (Vegetable v : vegetables) {
                 vegetableListItemList.add(new VegetableListItem(v.getNameNL(), v.getId()));
             }
         } else {
+            // Sort by name
+            Collections.sort(vegetables, new Comparator<Vegetable>() {
+                public int compare(Vegetable veg1, Vegetable veg2) {
+                    return veg1.getNameEN().compareToIgnoreCase(veg2.getNameEN());
+                }
+            });
+
             for (Vegetable v : vegetables) {
                 vegetableListItemList.add(new VegetableListItem(v.getNameEN(), v.getId()));
             }
