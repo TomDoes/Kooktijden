@@ -14,6 +14,7 @@ import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A list fragment representing a list of Vegetables. This fragment
@@ -83,10 +84,17 @@ public class VegetableListFragment extends ListFragment {
 
         MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
         List<Vegetable> vegetables = db.getAllVegetables();
-
-        for (Vegetable v : vegetables) {
-            vegetableListItemList.add(new VegetableListItem(v.getNameEN(), v.getId()));
+        String language = Locale.getDefault().getDisplayLanguage();
+        if(language.equals("Nederlands")) {
+            for (Vegetable v : vegetables) {
+                vegetableListItemList.add(new VegetableListItem(v.getNameNL(), v.getId()));
+            }
+        } else {
+            for (Vegetable v : vegetables) {
+                vegetableListItemList.add(new VegetableListItem(v.getNameEN(), v.getId()));
+            }
         }
+
 
         setListAdapter(new VegetableListAdapter(getActivity(), vegetableListItemList));
     }
