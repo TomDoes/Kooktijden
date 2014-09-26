@@ -15,20 +15,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
+import com.tomdoesburg.model.Vegetable;
 
 /**
  * Created by Joost on 11-7-2014.
  */
 public class TimerHelper {
 
+    private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
+    private Vegetable vegetable;
+    private int timeLeft;
+    private Activity activity;
     boolean timerRunning;
     MediaPlayer mediaPlayer;
     ProgressBar progress;
     TextView text;
 
-    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton) {
-
+    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final String kookPlaatID) {
+        this.activity = activity;
+        this.kookPlaatID = kookPlaatID;
         this.progress = progress;
         this.text = text;
 
@@ -47,6 +54,7 @@ public class TimerHelper {
             @Override
             public void onAnimationEnd(Animation animation) {
                 Intent intent = new Intent(activity, VegetableActivity.class);
+                intent.putExtra("kookPlaatID",kookPlaatID);
                 //activity.startActivity(intent);
                 activity.startActivityForResult(intent,9001);   //IT'S OVER NINE THOUSAND!
                 //activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
@@ -82,6 +90,17 @@ public class TimerHelper {
         });
 
     }
+
+    public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
+        Intent intent = new Intent(activity, TimerService.class);
+        intent.putExtra(this.kookPlaatID,this.vegetable.getCookingTimeMin()*60); //time in seconds
+        activity.startService(intent);
+    }
+
+    public void onTick(){ //this function will be called
+
+    }
+
 
     void start(final int timeSeconds) {
 

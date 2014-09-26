@@ -20,6 +20,8 @@ import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
+import java.util.Locale;
+
 /**
  * A fragment representing a single Vegetable detail screen.
  * This fragment is either contained in a {@link VegetableActivity}
@@ -33,6 +35,7 @@ public class VegetableDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
+    private String kookPlaatID = "";
     private Vegetable vegetable;
     private TextView titleView;
     private TextView timeView;
@@ -56,6 +59,9 @@ public class VegetableDetailFragment extends Fragment {
             MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
             vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
         }
+        if(getArguments().containsKey("kookPlaatID")){
+            this.kookPlaatID = getArguments().getString("kookPlaatID");
+        }
     }
 
     @Override
@@ -74,16 +80,22 @@ public class VegetableDetailFragment extends Fragment {
             titleView.setTypeface(typeFaceLight);
             timeView.setTypeface(typeFace);
             descriptionView.setTypeface(typeFace);
-
-            titleView.setText(vegetable.getNameEN());
-
-            if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
-                timeView.setText("Cooking time: " + vegetable.getCookingTimeMin() + " min.");
+            String language = Locale.getDefault().getDisplayLanguage();
+            if(language.equals("Nederlands")) {
+                titleView.setText(vegetable.getNameNL());
+                descriptionView.setText(vegetable.getDescriptionNL());
             } else {
-                timeView.setText("Cooking time: " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
+                titleView.setText(vegetable.getNameEN());
+                descriptionView.setText(vegetable.getDescriptionEN());
             }
 
-            descriptionView.setText(vegetable.getDescriptionEN());
+
+            if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
+                timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + " min.");
+            } else {
+                timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
+            }
+
             ImageButton setTimerBtn = (ImageButton)rootView.findViewById(R.id.timer_button);
             GradientDrawable circleShape = (GradientDrawable)setTimerBtn.getBackground();
             circleShape.setColor(getResources().getColor(R.color.pink));
@@ -103,6 +115,7 @@ public class VegetableDetailFragment extends Fragment {
                     //return the result
                     Intent intent = new Intent();
                     intent.putExtra("vegId",vegId);
+                    intent.putExtra("kookPlaatID",kookPlaatID);
                     getActivity().setResult(Activity.RESULT_OK, intent);
 
                     //finish the details activity
