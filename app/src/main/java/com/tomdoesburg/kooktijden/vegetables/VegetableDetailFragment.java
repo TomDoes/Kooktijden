@@ -100,12 +100,6 @@ public class VegetableDetailFragment extends Fragment {
             GradientDrawable circleShape = (GradientDrawable)setTimerBtn.getBackground();
             circleShape.setColor(getResources().getColor(R.color.pink));
 
-            Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_righ2left_slow);
-            Animation titleAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_down);
-
-            setTimerBtn.startAnimation(btnAnimation);
-            titleView.startAnimation(titleAnimation);
-
             setTimerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,5 +123,19 @@ public class VegetableDetailFragment extends Fragment {
         mAdView.loadAd(adRequest);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ImageButton setTimerBtn = (ImageButton)getActivity().findViewById(R.id.timer_button);
+        titleView = ((TextView) getActivity().findViewById(R.id.vegetable_detail_title));
+
+        Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_righ2left_slow);
+        Animation titleAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_down);
+
+        setTimerBtn.startAnimation(btnAnimation);
+        titleView.startAnimation(titleAnimation);
     }
 }
