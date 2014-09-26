@@ -1,5 +1,9 @@
 package com.tomdoesburg.kooktijden;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,8 +23,10 @@ import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class MainActivity extends FragmentActivity {
+;
 
+public class MainActivity extends FragmentActivity {
+    private static final String TAG = "MAIN_ACTIVITY";
     SharedPreferences sharedPrefs;
 
     @Override
@@ -138,5 +144,92 @@ public class MainActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    // Call Back method to get the cooking time from the vegetable Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("Joost","onActivityResult started");
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        // check if the request code is same as what is passed here it is 9001
+        if(requestCode==9001){
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+
+                // The user picked a vegetable
+                int vegId = data.getIntExtra("vegId",0);
+                String kookplaatID = data.getStringExtra("kookPlaatID");
+                Log.v(TAG, kookplaatID + " was selected");
+                //MySQLiteHelper db = new MySQLiteHelper(this);
+                //Vegetable veg = db.getVegetable(vegId);
+            }
+        }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    ///////////////////Service related, do not touch!////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
+        Log.i(TAG, "Registered broacast receiver");
+    }
+
+    //Service related
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(br);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    //Service related
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(br);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
+
+    /*
+
+    //Service related
+     @Override
+     public void onDestroy() {
+         //getActivity().stopService(new Intent(getActivity(), TimerService.class));
+        // Log.i(TAG, "Stopped service");
+        // super.onDestroy();
+     }
+     */
+    //Service related: br receives ticks from service
+    private BroadcastReceiver br = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent);
+        }
+    };
+
+    //Service related: processes ticks and updates GUI
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getIntExtra("countdown", 0);
+            Log.i(TAG, "received tick!");
+            //To do: forward tick action to all TimerHelper instances
+
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    ////////////End of service related stuff. You may now touch!/////////////
+    /////////////////////////////////////////////////////////////////////////
 
 }

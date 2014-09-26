@@ -17,6 +17,7 @@ import com.tomdoesburg.kooktijden.R;
  * more than a {@link VegetableDetailFragment}.
  */
 public class VegetableDetailActivity extends Activity {
+    private String kookPlaatID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,14 @@ public class VegetableDetailActivity extends Activity {
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //let's see if we can get the extra's sent with the intent that got us here
+        //get intent which contains the ID of the kookPlaat we are using!
+        try {
+            Intent intent = getIntent();
+            this.kookPlaatID = intent.getStringExtra("kookPlaatID");
+        }catch(NullPointerException E){
+            //this should not happen ever, but better safe than sorry!
+        }
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -40,6 +49,8 @@ public class VegetableDetailActivity extends Activity {
             Bundle arguments = new Bundle();
             arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID,
                     getIntent().getIntExtra(VegetableDetailFragment.ARG_ITEM_ID,-1));
+            arguments.putString("kookPlaatID",this.kookPlaatID);
+
             VegetableDetailFragment fragment = new VegetableDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
@@ -59,7 +70,10 @@ public class VegetableDetailActivity extends Activity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, VegetableActivity.class));
+            Intent intent =  new Intent(this, VegetableActivity.class);
+            intent.putExtra("kookPlaatID",this.kookPlaatID);
+
+            NavUtils.navigateUpTo(this,intent);
             overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
         }

@@ -3,12 +3,11 @@ package com.tomdoesburg.kooktijden.vegetables;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -18,16 +17,27 @@ import com.tomdoesburg.kooktijden.R;
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
 
     private boolean mTwoPane;
+    private String kookPlaatID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vegetable_list);
+        View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list,null);
+        //setContentView(R.layout.activity_vegetable_list);
+
+       //get intent which contains the ID of the kookPlaat we are using!
+        try {
+            Intent intent = getIntent();
+            this.kookPlaatID = intent.getStringExtra("kookPlaatID");
+        }catch(NullPointerException E){
+            //this should not happen ever, but better safe than sorry!
+        }
+
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        if (findViewById(R.id.vegetable_detail_container) != null) {
+        if (view.findViewById(R.id.vegetable_detail_container) != null) {
 
             mTwoPane = true;
 
@@ -41,9 +51,11 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             }
         }
 
-        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdView mAdView = (AdView)view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        setContentView(view);
     }
 
 
@@ -86,6 +98,8 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 // fragment transaction.
                 Bundle arguments = new Bundle();
                 arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID, id);
+                arguments.putString("kookPlaatID",this.kookPlaatID);
+
                 VegetableDetailFragment fragment = new VegetableDetailFragment();
                 fragment.setArguments(arguments);
                 getFragmentManager().beginTransaction()
@@ -97,9 +111,37 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 // for the selected item ID.
                 Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
                 detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
-                startActivity(detailIntent);
+                detailIntent.putExtra("kookPlaatID",this.kookPlaatID);
+                startActivityForResult(detailIntent, 123);
                 overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
             }
+    }
+
+    // Call Back method to get the cooking time from the details Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed here it is 9001
+        if(requestCode==123){
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a vegetable
+                int vegId = data.getIntExtra("vegId",0);
+                this.kookPlaatID = data.getStringExtra("kookPlaatID");
+                //pass that shit to the main activity!
+
+                //return the result
+                Intent intent = new Intent();
+                intent.putExtra("vegId",vegId);
+                intent.putExtra("kookPlaatID",this.kookPlaatID);
+                this.setResult(Activity.RESULT_OK,intent);
+
+                //finish the vegetable activity
+                this.finish();
+            }
+        }
+
     }
 
     @Override

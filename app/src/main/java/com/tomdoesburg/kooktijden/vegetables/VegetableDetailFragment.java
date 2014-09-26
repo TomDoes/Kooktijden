@@ -1,9 +1,11 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +13,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.tomdoesburg.kooktijden.R;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
+import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
@@ -34,10 +35,12 @@ public class VegetableDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
+    private String kookPlaatID = "";
     private Vegetable vegetable;
     private TextView titleView;
     private TextView timeView;
     private TextView descriptionView;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -55,6 +58,9 @@ public class VegetableDetailFragment extends Fragment {
             // to load content from a content provider.
             MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
             vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
+        }
+        if(getArguments().containsKey("kookPlaatID")){
+            this.kookPlaatID = getArguments().getString("kookPlaatID");
         }
     }
 
@@ -99,6 +105,23 @@ public class VegetableDetailFragment extends Fragment {
 
             setTimerBtn.startAnimation(btnAnimation);
             titleView.startAnimation(titleAnimation);
+
+            setTimerBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //get time from database
+                    int vegId = vegetable.getId();
+
+                    //return the result
+                    Intent intent = new Intent();
+                    intent.putExtra("vegId",vegId);
+                    intent.putExtra("kookPlaatID",kookPlaatID);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+
+                    //finish the details activity
+                    getActivity().finish();
+                }
+            });
         }
 
         AdView mAdView = (AdView)rootView.findViewById(R.id.adView);

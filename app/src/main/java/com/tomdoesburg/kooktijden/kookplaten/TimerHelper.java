@@ -3,6 +3,7 @@ package com.tomdoesburg.kooktijden.kookplaten;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -14,40 +15,68 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
+import com.tomdoesburg.model.Vegetable;
 
 /**
  * Created by Joost on 11-7-2014.
  */
 public class TimerHelper {
 
+    private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
+    private Vegetable vegetable;
+    private int timeLeft;
+    private Activity activity;
     boolean timerRunning;
     MediaPlayer mediaPlayer;
+    ProgressBar progress;
+    TextView text;
 
-    void init(final Context context, final ProgressBar progress, final TextView text,final Button plusButton, final Button minButton) {
+    void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final String kookPlaatID) {
+        this.activity = activity;
+        this.kookPlaatID = kookPlaatID;
+        this.progress = progress;
+        this.text = text;
 
-        final int timeSeconds = 10;
+        Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Roboto-Light.ttf");
+        text.setTypeface(typeFace);
+        plusButton.setTypeface(typeFace);
+
+        final Animation anim = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(activity, VegetableActivity.class);
+                intent.putExtra("kookPlaatID",kookPlaatID);
+                //activity.startActivity(intent);
+                activity.startActivityForResult(intent,9001);   //IT'S OVER NINE THOUSAND!
+                //activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Animation anim = AnimationUtils.loadAnimation(context, R.anim.highlight_zoom);
                 progress.startAnimation(anim);
 
-//                plusButton.setVisibility(View.VISIBLE);
-//                minButton.setVisibility(View.VISIBLE);
-//
-//                //start test-timer
-//                start(progress,text,timeSeconds);
-//
-//                text.setText("START");
+                //plusButton.setVisibility(View.VISIBLE);
 
-                Intent intent = new Intent(progress.getContext(), VegetableActivity.class);
-                progress.getContext().startActivity(intent);
-                Activity activity = (Activity)progress.getContext();
-                activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-
+                //start test-timer
+                //start(progress,text,timeSeconds);
+                //text.setText("START");
 
             }
         });
@@ -56,21 +85,24 @@ public class TimerHelper {
             @Override
             public void onClick(View v) {
                 //TODO
-                //increase time on timer
-            }
-        });
-
-        minButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //TODO
-                //reduce time on timer
+                //increase time on timer with 30 seconds
             }
         });
 
     }
 
-    void start(final ProgressBar progress, final TextView text, final int timeSeconds) {
+    public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
+        Intent intent = new Intent(activity, TimerService.class);
+        intent.putExtra(this.kookPlaatID,this.vegetable.getCookingTimeMin()*60); //time in seconds
+        activity.startService(intent);
+    }
+
+    public void onTick(){ //this function will be called
+
+    }
+
+
+    void start(final int timeSeconds) {
 
         //set the cooking time as max for the progressbar
         progress.setMax(timeSeconds);
@@ -111,5 +143,11 @@ public class TimerHelper {
             timer.start();
             timerRunning = true;
         }
+    }
+
+    void initKookplaat(int timeSeconds){
+        //set the cooking time as max for the progressbar
+        progress.setMax(timeSeconds);
+        text.setText("YEEAH!");
     }
 }

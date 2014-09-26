@@ -37,14 +37,12 @@ public class FragmentKookplaat1pits extends Fragment {
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
-        View plusminbuttons = getView().findViewById(R.id.plus_min_buttons);
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
-        Button kookplaat_plus = (Button) plusminbuttons.findViewById(R.id.buttonTimerPlus);
-        Button kookplaat_min = (Button) plusminbuttons.findViewById(R.id.buttonTimerMin);
+        Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
 
         TimerHelper timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity().getApplicationContext(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,kookplaat_min);
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,"kookPlaat1");
 
     }
 

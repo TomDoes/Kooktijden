@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/buttonTimerMin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:background="@android:color/transparent"
-        android:textColor="@color/gray_dark"
-        android:text="-1"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
         android:id="@+id/buttonTimerPlus"
@@ -21,6 +9,9 @@
         android:visibility="invisible"
         android:background="@android:color/transparent"
         android:textColor="@color/gray_dark"
-        android:text="+1"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:text="+30s"/>
 
-</LinearLayout>
+</merge>
