@@ -10,6 +10,7 @@
     <string name="pickfood">Kies groente</string>
     <string name="cookingTime">Kooktijd: </string>
     <string name="descriptionTitle">Beschrijving</string>
+    <string name="rate">Rate deze app</string>
 
     <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>

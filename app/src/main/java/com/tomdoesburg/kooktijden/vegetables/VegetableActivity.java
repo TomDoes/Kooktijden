@@ -22,14 +22,14 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list,null);
+        View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
         //setContentView(R.layout.activity_vegetable_list);
 
-       //get intent which contains the ID of the kookPlaat we are using!
+        //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
             this.kookPlaatID = intent.getStringExtra("kookPlaatID");
-        }catch(NullPointerException E){
+        } catch (NullPointerException E) {
             //this should not happen ever, but better safe than sorry!
         }
 
@@ -51,7 +51,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             }
         }
 
-        AdView mAdView = (AdView)view.findViewById(R.id.adView);
+        AdView mAdView = (AdView) view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -62,7 +62,6 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vegetable, menu);
         return true;
     }
 
@@ -92,50 +91,50 @@ public class VegetableActivity extends Activity implements VegetableListFragment
 //        getFragmentManager().beginTransaction()
 //                .add(R.id.container, new VegetableDetailFragment())
 //                .commit();
-            if (mTwoPane) {
-                // In two-pane mode, show the detail view in this activity by
-                // adding or replacing the detail fragment using a
-                // fragment transaction.
-                Bundle arguments = new Bundle();
-                arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID, id);
-                arguments.putString("kookPlaatID",this.kookPlaatID);
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+            arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID, id);
+            arguments.putString("kookPlaatID", this.kookPlaatID);
 
-                VegetableDetailFragment fragment = new VegetableDetailFragment();
-                fragment.setArguments(arguments);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.vegetable_detail_container, fragment)
-                        .commit();
+            VegetableDetailFragment fragment = new VegetableDetailFragment();
+            fragment.setArguments(arguments);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.vegetable_detail_container, fragment)
+                    .commit();
 
-            } else {
-                // In single-pane mode, simply start the detail activity
-                // for the selected item ID.
-                Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
-                detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
-                detailIntent.putExtra("kookPlaatID",this.kookPlaatID);
-                startActivityForResult(detailIntent, 123);
-                overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
-            }
+        } else {
+            // In single-pane mode, simply start the detail activity
+            // for the selected item ID.
+            Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
+            detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra("kookPlaatID", this.kookPlaatID);
+            startActivityForResult(detailIntent, 123);
+            overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+        }
     }
 
     // Call Back method to get the cooking time from the details Activity
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // check if the request code is same as what is passed here it is 9001
-        if(requestCode==123){
+        if (requestCode == 123) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
-                int vegId = data.getIntExtra("vegId",0);
+                int vegId = data.getIntExtra("vegId", 0);
                 this.kookPlaatID = data.getStringExtra("kookPlaatID");
                 //pass that shit to the main activity!
 
                 //return the result
                 Intent intent = new Intent();
-                intent.putExtra("vegId",vegId);
-                intent.putExtra("kookPlaatID",this.kookPlaatID);
-                this.setResult(Activity.RESULT_OK,intent);
+                intent.putExtra("vegId", vegId);
+                intent.putExtra("kookPlaatID", this.kookPlaatID);
+                this.setResult(Activity.RESULT_OK, intent);
 
                 //finish the vegetable activity
                 this.finish();

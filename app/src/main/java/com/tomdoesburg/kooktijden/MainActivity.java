@@ -23,7 +23,7 @@ import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
 
-;
+import org.codechimp.apprater.AppRater;
 
 public class MainActivity extends FragmentActivity {
     private static final String TAG = "MAIN_ACTIVITY";
@@ -32,6 +32,11 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Apprater
+        AppRater.setLightTheme();
+        AppRater.setNumDaysForRemindLater(7);
+        AppRater.app_launched(this);
 
         setContentView(R.layout.swipert);
 
@@ -121,7 +126,8 @@ public class MainActivity extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_rate) {
+            AppRater.rateNow(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
