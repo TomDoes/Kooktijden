@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,7 @@ import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
-
+    private final String TAG = "VegetableActivity";
     private boolean mTwoPane;
     private String kookPlaatID = "";
 
@@ -25,11 +26,11 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
         //setContentView(R.layout.activity_vegetable_list);
 
-        //get intent which contains the ID of the kookPlaat we are using!
+       //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
             this.kookPlaatID = intent.getStringExtra("kookPlaatID");
-        } catch (NullPointerException E) {
+        }catch(NullPointerException E){
             //this should not happen ever, but better safe than sorry!
         }
 
@@ -118,15 +119,15 @@ public class VegetableActivity extends Activity implements VegetableListFragment
 
     // Call Back method to get the cooking time from the details Activity
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
         // check if the request code is same as what is passed here it is 9001
-        if (requestCode == 123) {
+        if(requestCode==123){
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
-                int vegId = data.getIntExtra("vegId", 0);
+                int vegId = data.getIntExtra("vegId",0);
                 this.kookPlaatID = data.getStringExtra("kookPlaatID");
                 //pass that shit to the main activity!
 

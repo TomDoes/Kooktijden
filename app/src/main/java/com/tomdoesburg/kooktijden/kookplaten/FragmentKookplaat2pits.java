@@ -13,6 +13,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.model.Vegetable;
 
 /**
  * Created by Joost on 2-7-2014.
@@ -21,6 +22,10 @@ import com.tomdoesburg.kooktijden.R;
 // object in our collection.
 public class FragmentKookplaat2pits extends Fragment {
     public static final String ARG_OBJECT = "object";
+
+    //timerHelper instances
+    TimerHelper timerHelper1;
+    TimerHelper timerHelper2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class FragmentKookplaat2pits extends Fragment {
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
         Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
 
-        TimerHelper timerHelper1 = new TimerHelper();
+        timerHelper1 = new TimerHelper();
         timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,"kookPlaat1");
 
 
@@ -53,8 +58,25 @@ public class FragmentKookplaat2pits extends Fragment {
         ProgressBar kookplaat2_progress = (ProgressBar) kookplaat2view.findViewById(R.id.kookplaat);
         TextView kookplaat2_text = (TextView) kookplaat2view.findViewById(R.id.kookplaatText);
 
-        TimerHelper timerHelper2 = new TimerHelper();
+        timerHelper2 = new TimerHelper();
         timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,kookplaat_plus,"kookPlaat2");
 
     }
+
+    public void tick(){
+        timerHelper1.onTick();
+        timerHelper2.onTick();
+    }
+
+    public void setVegetable(int kookPlaat, Vegetable veg){
+        switch(kookPlaat){
+            case 1:
+                timerHelper1.setVegetable(veg);
+                break;
+            case 2:
+                timerHelper2.setVegetable(veg);
+                break;
+        }
+    }
+
 }

@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +21,11 @@ import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat1pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -26,7 +33,12 @@ import com.viewpagerindicator.CirclePageIndicator;
 import org.codechimp.apprater.AppRater;
 
 public class MainActivity extends FragmentActivity {
+
     private static final String TAG = "MAIN_ACTIVITY";
+    private ViewPager pager;
+    private MyFragmentPagerAdapter pagerAdapter;
+    private MySQLiteHelper db;
+
     SharedPreferences sharedPrefs;
 
     @Override
@@ -45,8 +57,9 @@ public class MainActivity extends FragmentActivity {
         final CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 
         //Set the pager with an adapter
-        final ViewPager pager = (ViewPager)findViewById(R.id.pager);
-        pager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
+        pager = (ViewPager)findViewById(R.id.pager);
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pagerAdapter);
 
         //Bind the indicator dots to the adapter
         indicator.setViewPager(pager);
@@ -92,7 +105,7 @@ public class MainActivity extends FragmentActivity {
         mAdView.loadAd(adRequest);
 
 
-        MySQLiteHelper db = new MySQLiteHelper(this);
+        db = new MySQLiteHelper(this);
 
         Log.d("database", "Created the database connection");
         Log.d("database", "First start: " + (sharedPrefs.getBoolean("databaseLoaded",false)));
@@ -147,12 +160,53 @@ public class MainActivity extends FragmentActivity {
 
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
-                String kookplaatID = data.getStringExtra("kookPlaatID");
-                Log.v(TAG, kookplaatID + " was selected");
+                String kookPlaatID = data.getStringExtra("kookPlaatID");
+                Log.v(TAG, kookPlaatID + " was selected");
+                setVegetable(vegId,kookPlaatID);
                 //MySQLiteHelper db = new MySQLiteHelper(this);
                 //Vegetable veg = db.getVegetable(vegId);
             }
         }
+
+    }
+
+    public void setVegetable(int vegID, String kookPlaatID){
+        int ID = 0;
+        if(kookPlaatID.equals("kookPlaat1")){
+            ID = 1;
+        }else if(kookPlaatID.equals("kookPlaat2")){
+            ID = 2;
+        }else if(kookPlaatID.equals("kookPlaat3")){
+            ID = 3;
+        }else if(kookPlaatID.equals("kookPlaat4")){
+            ID = 4;
+        }else if(kookPlaatID.equals("kookPlaat5")){
+            ID = 5;
+        }else if(kookPlaatID.equals("kookPlaat6")){
+            ID = 6;
+        }
+
+        Vegetable veg = db.getVegetable(vegID);
+
+        int curItem = pager.getCurrentItem();
+        switch(curItem){
+            case 0: FragmentKookplaat1pits k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                k1.setVegetable(ID,veg);
+                break;
+            case 1: FragmentKookplaat2pits k2 = (FragmentKookplaat2pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                k2.setVegetable(ID,veg);
+                break;
+            case 2: FragmentKookplaat4pits k4 = (FragmentKookplaat4pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                k4.setVegetable(ID,veg);
+                break;
+            case 3: FragmentKookplaat5pits k5 = (FragmentKookplaat5pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                k5.setVegetable(ID,veg);
+                break;
+            case 4: FragmentKookplaat6pits k6 = (FragmentKookplaat6pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                k6.setVegetable(ID,veg);
+                break;
+        }
+
 
     }
 
@@ -202,9 +256,12 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            lock();
             updateGUI(intent);
         }
     };
+
+    public void lock(){}
 
     //Service related: processes ticks and updates GUI
     private void updateGUI(Intent intent) {
@@ -212,6 +269,25 @@ public class MainActivity extends FragmentActivity {
             long millisUntilFinished = intent.getIntExtra("countdown", 0);
             Log.i(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
+
+            int curItem = pager.getCurrentItem();
+            switch(curItem){
+                case 0: FragmentKookplaat1pits k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                        k1.tick();
+                        break;
+                case 1: FragmentKookplaat2pits k2 = (FragmentKookplaat2pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                        k2.tick();
+                        break;
+                case 2: FragmentKookplaat4pits k4 = (FragmentKookplaat4pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                        k4.tick();
+                        break;
+                case 3: FragmentKookplaat5pits k5 = (FragmentKookplaat5pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                        k5.tick();
+                        break;
+                case 4: FragmentKookplaat6pits k6 = (FragmentKookplaat6pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
+                        k6.tick();
+                        break;
+            }
 
         }
     }

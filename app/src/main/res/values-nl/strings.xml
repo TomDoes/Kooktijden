@@ -3,6 +3,8 @@
     <string name="app_name">Kooktijden</string>
     <string name="admob_id">123456789</string>
     <string name="action_settings">Instellingen</string>
+    <string name="start">Start</string>
+    <string name="paused">Pauze</string>
     <string name="select_cooker">Selecteer de kookplaat die het meest lijkt op jouw eigen.\nJe kunt je keuze later wijzigen via de instellingen.</string>
     <string name="title_activity_vegetable">Groenten</string>
     <string name="title_vegetable_list">Groenten</string>

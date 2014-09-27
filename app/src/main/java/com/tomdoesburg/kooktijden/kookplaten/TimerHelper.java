@@ -26,18 +26,23 @@ public class TimerHelper {
 
     private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
     private Vegetable vegetable;
-    private int timeLeft;
+    private int cookingTime = 0; //cooking time in minutes
+    private int secondsLeft; //time left in seconds
     private Activity activity;
-    boolean timerRunning;
-    MediaPlayer mediaPlayer;
-    ProgressBar progress;
-    TextView text;
+
+    //booleans
+    private boolean vegetableSelected = false;
+    private boolean timerRunning = false;
+    private MediaPlayer mediaPlayer;
+    private ProgressBar progress;
+    private TextView text;
 
     void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final String kookPlaatID) {
         this.activity = activity;
         this.kookPlaatID = kookPlaatID;
         this.progress = progress;
         this.text = text;
+
 
         Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Roboto-Light.ttf");
         text.setTypeface(typeFace);
@@ -69,8 +74,15 @@ public class TimerHelper {
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                progress.startAnimation(anim);
+                if(!vegetableSelected) {
+                    progress.startAnimation(anim);
+                }
+                if(vegetableSelected && !timerRunning){
+                    startTimerService();
+                }else if(vegetableSelected && timerRunning){
+                    timerRunning = false;
+                    text.setText(activity.getString(R.string.paused));
+                }
 
                 //plusButton.setVisibility(View.VISIBLE);
 
@@ -91,63 +103,59 @@ public class TimerHelper {
 
     }
 
+    public void setVegetable(Vegetable veg){
+        this.timerRunning = false;
+        this.vegetable = veg;
+        this.cookingTime = veg.getCookingTimeMin();
+        this.secondsLeft = this.cookingTime*60;
+        this.vegetableSelected = true;
+        progress.setMax(this.cookingTime*60);
+        text.setText(activity.getString(R.string.start));
+    }
+
     public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
+
+        this.timerRunning = true;
         Intent intent = new Intent(activity, TimerService.class);
-        intent.putExtra(this.kookPlaatID,this.vegetable.getCookingTimeMin()*60); //time in seconds
+        intent.putExtra(this.kookPlaatID,this.secondsLeft);
         activity.startService(intent);
-    }
-
-    public void onTick(){ //this function will be called
 
     }
 
+    public void onTick(){ //this function will be called by the timerService via mainactivity
 
-    void start(final int timeSeconds) {
+        if(this.timerRunning) {
 
-        //set the cooking time as max for the progressbar
-        progress.setMax(timeSeconds);
+            this.secondsLeft--; //time in seconds
+            int barVal = (secondsLeft) - ((int) (secondsLeft / 60 * 100) + (int) (secondsLeft % 60));
+            progress.setProgress(barVal);
+            // format the textview to show the easily readable format
+            text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
-        CountDownTimer timer = new CountDownTimer(timeSeconds * 1000, 500) {
-            // 500 means, onTick function will be called at every 500 milliseconds
-
-            @Override
-            public void onTick(long leftTimeInMilliseconds) {
-                //calculate and set progress
-                long seconds = leftTimeInMilliseconds / 1000;
-                int barVal = (timeSeconds) - ((int) (seconds / 60 * 100) + (int) (seconds % 60));
-                progress.setProgress(barVal);
-
-                // format the textview to show the easily readable format
-                text.setText(String.format("%02d", seconds / 60) + ":" + String.format("%02d", seconds % 60));
-
-
+            if (this.secondsLeft == 0) { //stop timer
+                onTimerFinished();
             }
-
-            @Override
-            public void onFinish() {
-                if (text.getText().equals("00:00")) {
-                    text.setText("Ready!");
-                    mediaPlayer = MediaPlayer.create(progress.getContext(), R.raw.alarm);
-                    mediaPlayer.start();
-                    Vibrator vibrator = (Vibrator) progress.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    long[] pattern = {0, 500, 500};
-                    // -1 vibrate once
-                    // 0 vibrate indefinitely
-                    vibrator.vibrate(pattern, -1);
-
-                }
-                timerRunning = false;
-            }
-        };
-        if (!timerRunning) {
-            timer.start();
-            timerRunning = true;
+        } else {
+            Intent intent = new Intent(activity, TimerService.class);
+            intent.putExtra(this.kookPlaatID,this.secondsLeft);
+            activity.startService(intent);
         }
+
     }
 
-    void initKookplaat(int timeSeconds){
-        //set the cooking time as max for the progressbar
-        progress.setMax(timeSeconds);
-        text.setText("YEEAH!");
+    public void onTimerFinished(){
+
+        this.timerRunning = false;
+        //play sound
+        mediaPlayer = MediaPlayer.create(progress.getContext(), R.raw.alarm);
+        mediaPlayer.start();
+        //SHAKE IT!
+        Vibrator vibrator = (Vibrator) progress.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 500, 500};
+        // -1 vibrate once
+        // 0 vibrate indefinitely
+        vibrator.vibrate(pattern, -1);
+
     }
+
 }
