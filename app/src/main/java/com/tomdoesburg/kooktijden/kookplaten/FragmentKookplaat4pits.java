@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.R;
 
 /**
@@ -29,6 +32,11 @@ public class FragmentKookplaat4pits extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // analytics
+        Tracker t = ((KooktijdenApplication) getActivity().getApplication()).getTracker(KooktijdenApplication.TrackerName.APP_TRACKER);
+        t.setScreenName("Kookplaten");
+        t.send(new HitBuilders.AppViewBuilder().setCustomDimension(2, "4 pit").build());
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);

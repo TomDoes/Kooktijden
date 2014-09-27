@@ -16,6 +16,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.fitness.DataTypes;
+import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -67,6 +72,11 @@ public class VegetableDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        // analytics
+        Tracker t = ((KooktijdenApplication) getActivity().getApplication()).getTracker(KooktijdenApplication.TrackerName.APP_TRACKER);
+        t.setScreenName("Vegetable Detail");
+        t.send(new HitBuilders.AppViewBuilder().setCustomDimension(1, vegetable.getNameEN()).build());
+
         View rootView = inflater.inflate(R.layout.fragment_vegetable_detail, container, false);
 
         if (vegetable != null) {
