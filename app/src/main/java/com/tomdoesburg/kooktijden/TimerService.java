@@ -14,13 +14,23 @@ import android.util.Log;
 public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
+
+    public static boolean timer1Running = true;
+    public static boolean timer2Running = true;
+    public static boolean timer3Running = true;
+    public static boolean timer4Running = true;
+    public static boolean timer5Running = true;
+    public static boolean timer6Running = true;
+
+
     //time left before end of alarm in seconds
-    private int deadline1 = 0;
-    private int deadline2 = 0;
-    private int deadline3 = 0;
-    private int deadline4 = 0;
-    private int deadline5 = 0;
-    private int deadline6 = 0;
+    public static int deadline1 = 0;
+    public static int deadline2 = 0;
+    public static int deadline3 = 0;
+    public static int deadline4 = 0;
+    public static int deadline5 = 0;
+    public static int deadline6 = 0;
+
 
     public static final String TIMER_SERVICE = "com.tomdoesburg.kooktijden.TimerService";
     Intent bi = new Intent(TIMER_SERVICE);
@@ -49,20 +59,20 @@ public class TimerService extends Service {
         bi.putExtra("countdown", 1);
         sendBroadcast(bi);
 
-        if(deadline1 > 0){
+        if(deadline1 > 0 && timer1Running){
             deadline1 --;
         }
-        if(deadline2 > 0){
+        if(deadline2 > 0 && timer2Running){
             deadline2 --;
         }
-        if(deadline3 > 0){
+        if(deadline3 > 0 && timer3Running){
             deadline3 --;
         }
-        if(deadline4 > 0){
+        if(deadline4 > 0 && timer4Running){
             deadline4 --;
-        }if(deadline5 > 0){
+        }if(deadline5 > 0 && timer5Running){
             deadline5 --;
-        }if(deadline6 > 0){
+        }if(deadline6 > 0 && timer6Running){
             deadline6 --;
         }
 

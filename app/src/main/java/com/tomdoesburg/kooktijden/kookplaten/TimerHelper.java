@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
@@ -23,6 +24,7 @@ import com.tomdoesburg.model.Vegetable;
  * Created by Joost on 11-7-2014.
  */
 public class TimerHelper {
+
 
     private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
     private Vegetable vegetable;
@@ -43,7 +45,6 @@ public class TimerHelper {
         this.progress = progress;
         this.text = text;
 
-
         Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Roboto-Light.ttf");
         text.setTypeface(typeFace);
         plusButton.setTypeface(typeFace);
@@ -58,11 +59,7 @@ public class TimerHelper {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(activity, VegetableActivity.class);
-                intent.putExtra("kookPlaatID",kookPlaatID);
-                //activity.startActivity(intent);
-                activity.startActivityForResult(intent,9001);   //IT'S OVER NINE THOUSAND!
-                //activity.overridePendingTransition(R.anim.slide_right2left, R.anim.fade_out);
+                startVegetableActivity();
             }
 
             @Override
@@ -74,22 +71,14 @@ public class TimerHelper {
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!vegetableSelected) {
-                    progress.startAnimation(anim);
-                }
+                progress.startAnimation(anim); //calls startVegetableActivity(); after animation
+
                 if(vegetableSelected && !timerRunning){
                     startTimerService();
+                    ((MainActivity)activity).lock();
                 }else if(vegetableSelected && timerRunning){
-                    timerRunning = false;
-                    text.setText(activity.getString(R.string.paused));
+                    pauseTimer();
                 }
-
-                //plusButton.setVisibility(View.VISIBLE);
-
-                //start test-timer
-                //start(progress,text,timeSeconds);
-                //text.setText("START");
-
             }
         });
 
@@ -103,6 +92,14 @@ public class TimerHelper {
 
     }
 
+    public void startVegetableActivity(){
+        if(!vegetableSelected) {
+            Intent intent = new Intent(activity, VegetableActivity.class);
+            intent.putExtra("kookPlaatID", kookPlaatID);
+            activity.startActivityForResult(intent, 9001);   //IT'S OVER NINE THOUSAND!
+        }
+    }
+
     public void setVegetable(Vegetable veg){
         this.timerRunning = false;
         this.vegetable = veg;
@@ -113,13 +110,80 @@ public class TimerHelper {
         text.setText(activity.getString(R.string.start));
     }
 
+    public void pauseTimer(){
+        int kookPlaatnum = getKookPlaatNum();
+
+        switch(kookPlaatnum) {
+            case 1:
+                TimerService.timer1Running = false;
+                break;
+            case 2:
+                TimerService.timer2Running = false;
+                break;
+            case 3:
+                TimerService.timer3Running = false;
+                break;
+            case 4:
+                TimerService.timer4Running = false;
+                break;
+            case 5:
+                TimerService.timer5Running = false;
+                break;
+            case 6:
+                TimerService.timer6Running = false;
+                break;
+        }
+
+        timerRunning = false;
+        text.setText(activity.getString(R.string.paused));
+    }
+
     public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
+        int kookPlaatnum = getKookPlaatNum();
+
+        switch(kookPlaatnum) {
+            case 1:
+                TimerService.timer1Running = true;
+                break;
+            case 2:
+                TimerService.timer2Running = true;
+                break;
+            case 3:
+                TimerService.timer3Running = true;
+                break;
+            case 4:
+                TimerService.timer4Running = true;
+                break;
+            case 5:
+                TimerService.timer5Running = true;
+                break;
+            case 6:
+                TimerService.timer6Running = true;
+                break;
+         }
 
         this.timerRunning = true;
         Intent intent = new Intent(activity, TimerService.class);
         intent.putExtra(this.kookPlaatID,this.secondsLeft);
         activity.startService(intent);
 
+    }
+
+    public int getKookPlaatNum(){
+        if(this.kookPlaatID.endsWith("1")) {
+            return 1;
+        }else if(this.kookPlaatID.endsWith("2")){
+            return 2;
+        }else if(this.kookPlaatID.endsWith("3")){
+            return 3;
+        }else if(this.kookPlaatID.endsWith("4")){
+            return 4;
+        }else if(this.kookPlaatID.endsWith("5")){
+            return 5;
+        }else if(this.kookPlaatID.endsWith("6")){
+            return 6;
+        }
+        return -1;
     }
 
     public void onTick(){ //this function will be called by the timerService via mainactivity
@@ -135,10 +199,6 @@ public class TimerHelper {
             if (this.secondsLeft == 0) { //stop timer
                 onTimerFinished();
             }
-        } else {
-            Intent intent = new Intent(activity, TimerService.class);
-            intent.putExtra(this.kookPlaatID,this.secondsLeft);
-            activity.startService(intent);
         }
 
     }

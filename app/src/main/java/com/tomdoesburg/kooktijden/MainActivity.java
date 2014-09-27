@@ -38,6 +38,8 @@ public class MainActivity extends FragmentActivity {
     private ViewPager pager;
     private MyFragmentPagerAdapter pagerAdapter;
     private MySQLiteHelper db;
+    private ImageButton lockButton;
+    private CirclePageIndicator indicator;
 
     SharedPreferences sharedPrefs;
 
@@ -53,8 +55,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.swipert);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
-        final CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+        lockButton = (ImageButton) findViewById(R.id.lockButton);
+        indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 
         //Set the pager with an adapter
         pager = (ViewPager)findViewById(R.id.pager);
@@ -69,7 +71,7 @@ public class MainActivity extends FragmentActivity {
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageButton lockButton = (ImageButton) findViewById(R.id.lockButton);
+               lockButton = (ImageButton) findViewById(R.id.lockButton);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
                     lockButton.setImageResource(R.drawable.lock_locked);
@@ -191,19 +193,19 @@ public class MainActivity extends FragmentActivity {
         int curItem = pager.getCurrentItem();
         switch(curItem){
             case 0: FragmentKookplaat1pits k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k1.setVegetable(ID,veg);
+                k1.setVegetable(ID, veg);
                 break;
             case 1: FragmentKookplaat2pits k2 = (FragmentKookplaat2pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k2.setVegetable(ID,veg);
+                k2.setVegetable(ID, veg);
                 break;
             case 2: FragmentKookplaat4pits k4 = (FragmentKookplaat4pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k4.setVegetable(ID,veg);
+                k4.setVegetable(ID, veg);
                 break;
             case 3: FragmentKookplaat5pits k5 = (FragmentKookplaat5pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k5.setVegetable(ID,veg);
+                k5.setVegetable(ID, veg);
                 break;
             case 4: FragmentKookplaat6pits k6 = (FragmentKookplaat6pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k6.setVegetable(ID,veg);
+                k6.setVegetable(ID, veg);
                 break;
         }
 
@@ -246,9 +248,9 @@ public class MainActivity extends FragmentActivity {
     //Service related
      @Override
      public void onDestroy() {
-         //getActivity().stopService(new Intent(getActivity(), TimerService.class));
+         getActivity().stopService(new Intent(getActivity(), TimerService.class));
         // Log.i(TAG, "Stopped service");
-        // super.onDestroy();
+         super.onDestroy();
      }
      */
     //Service related: br receives ticks from service
@@ -256,12 +258,20 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            lock();
             updateGUI(intent);
         }
     };
 
-    public void lock(){}
+    public void lock(){
+        if(MyViewPager.swipingEnabled) {
+            MyViewPager.swipingEnabled = false;
+            lockButton.setImageResource(R.drawable.lock_locked);
+            Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
+            indicator.startAnimation(anim);
+            //save locked position in preferences (in case of restart)
+            sharedPrefs.edit().putInt("kookplaatViewPos", pager.getCurrentItem()).commit();
+        }
+    }
 
     //Service related: processes ticks and updates GUI
     private void updateGUI(Intent intent) {
