@@ -3,6 +3,8 @@
     <string name="app_name">Kooktijden</string>
     <string name="admob_id">123456789</string>
     <string name="action_settings">Instellingen</string>
+    <string name="start">Start</string>
+    <string name="paused">Pauze</string>
     <string name="select_cooker">Selecteer de kookplaat die het meest lijkt op jouw eigen.\nJe kunt je keuze later wijzigen via de instellingen.</string>
     <string name="title_activity_vegetable">Groenten</string>
     <string name="title_vegetable_list">Groenten</string>
@@ -10,6 +12,7 @@
     <string name="pickfood">Kies groente</string>
     <string name="cookingTime">Kooktijd: </string>
     <string name="descriptionTitle">Beschrijving</string>
+    <string name="rate">Rate deze app</string>
 
     <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>

@@ -8,11 +8,16 @@ import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,16 +85,36 @@ public class VegetableListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // analytics
+        Tracker t = ((KooktijdenApplication) getActivity().getApplication()).getTracker(KooktijdenApplication.TrackerName.APP_TRACKER);
+        t.setScreenName("Vegetable List");
+        t.send(new HitBuilders.AppViewBuilder().build());
+
         vegetableListItemList = new ArrayList();
 
         MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
         List<Vegetable> vegetables = db.getAllVegetables();
+
         String language = Locale.getDefault().getDisplayLanguage();
         if(language.equals("Nederlands")) {
+            // Sort by name
+            Collections.sort(vegetables, new Comparator<Vegetable>() {
+                public int compare(Vegetable veg1, Vegetable veg2) {
+                    return veg1.getNameNL().compareToIgnoreCase(veg2.getNameNL());
+                }
+            });
+
             for (Vegetable v : vegetables) {
                 vegetableListItemList.add(new VegetableListItem(v.getNameNL(), v.getId()));
             }
         } else {
+            // Sort by name
+            Collections.sort(vegetables, new Comparator<Vegetable>() {
+                public int compare(Vegetable veg1, Vegetable veg2) {
+                    return veg1.getNameEN().compareToIgnoreCase(veg2.getNameEN());
+                }
+            });
+
             for (Vegetable v : vegetables) {
                 vegetableListItemList.add(new VegetableListItem(v.getNameEN(), v.getId()));
             }

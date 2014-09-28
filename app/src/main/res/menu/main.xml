@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.tomdoesburg.kooktijden.MainActivity" >
     
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_rate"
+        android:title="@string/rate"
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>
