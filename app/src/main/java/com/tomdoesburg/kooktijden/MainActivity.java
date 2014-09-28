@@ -7,9 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.android.gms.ads.AdRequest;
@@ -52,9 +52,36 @@ public class MainActivity extends FragmentActivity {
         AppRater.setNumDaysForRemindLater(7);
         AppRater.app_launched(this);
 
-        setContentView(R.layout.swipert);
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPrefs.getBoolean("firstStart",true)) {
+            //the app is being launched for first time, show introduction
+
+            //create empty frame
+            final FrameLayout layout = new FrameLayout(this);
+            setContentView(layout);
+
+            //inflate our regular layout in the frame
+            View regular = getLayoutInflater().inflate(R.layout.swipert,null);
+            layout.addView(regular);
+
+            //inflate and add instructional overlay
+            final View instructional = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_main,null);
+            layout.addView(instructional);
+            Button instructions_close = (Button) instructional.findViewById(R.id.instructions_close);
+            instructions_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    layout.removeView(instructional);
+                }
+            });
+
+            sharedPrefs.edit().putBoolean("firstStart", false).commit();
+        } else {
+            setContentView(R.layout.swipert);
+        }
+
+
         lockButton = (ImageButton) findViewById(R.id.lockButton);
         indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 
@@ -320,12 +347,12 @@ public class MainActivity extends FragmentActivity {
         db.addVegetable(new Vegetable("Corn on the cob", "Maiskolf", 20, 20, "", ""));
         db.addVegetable(new Vegetable("Endive", "Witlof", 12, 15, "", ""));
         db.addVegetable(new Vegetable("Leek", "Prei", 15, 15, "", ""));
-        db.addVegetable(new Vegetable("Peas", "Erwten", 5, 5, "", ""));
-        db.addVegetable(new Vegetable("Potatoes (halves)", "Aardappelen (halven)", 10, 15, "", ""));
-        db.addVegetable(new Vegetable("Potatoes (whole)", "Aardappelen (heel)", 15, 20, "", ""));
-        db.addVegetable(new Vegetable("Red cabbage (shredded)", "Rodekool (gesneden)", 15, 20, "", ""));
-        db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "", ""));
-        db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 20, 20, "", ""));
+        db.addVegetable(new Vegetable("Peas", "Erwten", 5, 5, "Peas exist in loads of variants. The pea is a vegetable that grows inside a legume (a carpel which is folded around the peas). Peas are round or oval shaped. Most types don't need a lot of cooking, a good warm-up of approximately 5 minutes is enough.", "Erwten bestaan in veel verschillende varianten. Het is een groente die groeit binnenin een peul (een langwerpig vruchtblad dat dichtgevouwen om de erwten zit). Erwten zijn rond of ovaal van vorm. De meeste soorten hoeven niet lang te koken, vaak zo'n 5 minuten goed opwarmen al voldoende."));
+        db.addVegetable(new Vegetable("Potatoes (halves)", "Aardappelen (halven)", 10, 15, "Peal or wash the potatoes before cooking. Cutting the potatoes in halves decreases the cooking time substantially. Make sure you cut the potatoes in equally sized parts, else the parts will not cook through simultaneously. Submerge the potatoes in a pan filled with water. If desired, add a pinch of salt to the water.", "Schil of was de aardappelen voor je ze gaat koken. Door de aardappelen doormidden te snijden voor je ze gaat koken verkort je de kooktijd aanzienlijk. Zorg er hierbij wel voor dat je de aardappelen in delen van gelijke grootte snijd, anders zijn de delen niet gelijktijdig gaar. Doe de aardappelen in een pan met water en voeg eventueel een snufje zout toe."));
+        db.addVegetable(new Vegetable("Potatoes (whole)", "Aardappelen (heel)", 15, 20, "Peal or wash the potatoes before cooking. Submerge the potatoes in a pan filled with water. If desired, add a pinch of salt to the water.", "Schil of was de aardappelen voor je ze gaat koken. Doe de aardappelen in een pan met water en voeg eventueel een snufje zout toe."));
+        db.addVegetable(new Vegetable("Red cabbage (shredded)", "Rodekool (gesneden)", 15, 20, "Remove the outer leaves of the cabbage. Cut the cabbage into quarters and remove the hard stalk. Scrape or cut the leaves into thin strips and place them in a pan. Add a little water and salt to taste and bring to the boil.", "Verwijder de buitenste bladen van de kool. Snijd vervolgens de kool in vieren en verwijder de harde stronk. Schaaf of snijd dan de bladeren in dunne sliertjes en doe deze in de pan. Voeg een beetje water en zout toe en breng aan de kook."));
+        db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "Fresh spinach is very healthy and versatile. Rinse the spinach before use to remove any left-over grains of sand. Remove the thick petioles from the leaves. Place the spinach in a large pan with a small amount of water and a pinch of salt, and bring to the boil. Note: spinach shrinks tremendously during cooking!", "Verse spinazie is bijzonder gezond en veelzijdig. Spoel voor gebruik de spinazie goed af om eventuele zandkorrels te verwijderen. Haal de dikke bladstengels van de bladeren. Plaats de spinazie in een ruime pan met een klein laagje water en een snufje zout en breng het aan de kook. Let op: spinazie slinkt enorm tijdens het koken!"));
+        db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 15, 20, "Boiling sweet potatoes is almost the same process as that of the normal potato. Peel and wash the potatoes and cut them into uniform pieces. Place the pieces in a pan and add water so that the majority of the potatoes are submerged. Add a pinch of salt and bring to a boil. Make sure that the potatoes are cooked with the aid of a fork. If you can easily pierce the potatoes then they are done.", "Het koken van zoete aardappelen is bijna hetzelfde proces als dat van de normale aardappel. Schil of was de aardappels en snijd ze in gelijkmatige stukken. Plaats de delen in een pan en zet ze voor het grootste deel onder water. Doe hier een snufje zout bij en breng aan de kook. Controleer of de aardappels gaar zijn met behulp van een vork. De aardappels zijn gaar als je gemakkelijk in de aardappels kunt prikken."));
     }
 
 }
