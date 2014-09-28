@@ -54,7 +54,8 @@ public class MainActivity extends FragmentActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPrefs.getBoolean("firstStart",true)) {
+        Log.v("firstStart", "Is this the first time the app is launched? - "+sharedPrefs.getBoolean("firstStart",false));
+        if (!sharedPrefs.contains("firstStart")) {
             //the app is being launched for first time, show introduction
 
             //create empty frame
