@@ -75,14 +75,14 @@ public class TimerService extends Service {
         }if(deadline6 > 0 && timer6Running){
             deadline6 --;
         }
-
+        /*
         Log.v(TAG, "Deadline 1: " + deadline1);
         Log.v(TAG, "Deadline 2: " + deadline2);
         Log.v(TAG, "Deadline 3: " + deadline3);
         Log.v(TAG, "Deadline 4: " + deadline4);
         Log.v(TAG, "Deadline 5: " + deadline5);
         Log.v(TAG, "Deadline 6: " + deadline6);
-
+        */
         if(doneCounting()){
             killService();
         }

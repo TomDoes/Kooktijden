@@ -3,6 +3,7 @@ package com.tomdoesburg.kooktijden.vegetables;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -31,9 +32,8 @@ import java.util.Locale;
  * interface.
  */
 public class VegetableListFragment extends ListFragment {
-
+    private final String TAG = "VegetableListFragment";
     private List vegetableListItemList;
-
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -80,6 +80,7 @@ public class VegetableListFragment extends ListFragment {
      */
     public VegetableListFragment() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

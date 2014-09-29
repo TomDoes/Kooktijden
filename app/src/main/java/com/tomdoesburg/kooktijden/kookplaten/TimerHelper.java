@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -191,8 +192,10 @@ public class TimerHelper {
         if(this.timerRunning) {
 
             this.secondsLeft--; //time in seconds
-            int barVal = (secondsLeft) - ((int) (secondsLeft / 60 * 100) + (int) (secondsLeft % 60));
+            int barVal = this.cookingTime*60-secondsLeft;
             progress.setProgress(barVal);
+            //Log.v("progress", "Value " + barVal);
+
             // format the textview to show the easily readable format
             text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 

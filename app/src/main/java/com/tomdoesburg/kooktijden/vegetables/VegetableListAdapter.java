@@ -24,6 +24,7 @@ public class VegetableListAdapter extends ArrayAdapter {
 
     private Context context;
     private boolean useList = true;
+    private String kookPlaatID = "";
 
     public VegetableListAdapter(Context context, List vegetables) {
         super(context, android.R.layout.simple_list_item_1, vegetables);
@@ -87,6 +88,9 @@ public class VegetableListAdapter extends ArrayAdapter {
                 //return the result
                 Intent intent = new Intent();
                 intent.putExtra("vegId",vegId);
+                kookPlaatID = ((VegetableActivity)context).getKookPlaatID();
+                intent.putExtra("kookPlaatID",kookPlaatID);
+
                 ((Activity) context).setResult(Activity.RESULT_OK,intent);
 
                 //finish the vegetable activity

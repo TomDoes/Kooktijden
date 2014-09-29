@@ -27,15 +27,18 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         View view_veg_list = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
-        //setContentView(R.layout.activity_vegetable_list);
+
 
        //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
             this.kookPlaatID = intent.getStringExtra("kookPlaatID");
+            Log.v(TAG,this.kookPlaatID);
         }catch(NullPointerException E){
             //this should not happen ever, but better safe than sorry!
+            Log.v(TAG,E.toString());
         }
 
 
@@ -49,8 +52,14 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             if (savedInstanceState == null) {
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                VegetableListFragment frag = new VegetableListFragment();
+                Bundle args = new Bundle();
+                args.putString("kookPlaatID", this.kookPlaatID);
+                Log.v(TAG,"argument is " + this.kookPlaatID);
+                frag.setArguments(args);
+
                 fragmentTransaction
-                        .replace(R.id.container, new VegetableListFragment())
+                        .replace(R.id.container, frag)
                         .commit();
 
             }
@@ -90,6 +99,9 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         }
     }
 
+    public String getKookPlaatID(){
+        return this.kookPlaatID;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
