@@ -114,6 +114,12 @@ public class MainActivity extends FragmentActivity {
                     Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
                     indicator.startAnimation(anim);
 
+                    //ToDo: warning dialog to prevent accidental deleting of progress
+
+                    //RESETS ALL FRAGMENTKOOKPLAAT 1-6
+                    reset();
+                    //
+
                     //remove locked position from preferences
                     sharedPrefs.edit().remove("kookplaatViewPos").commit();
                 }
@@ -239,6 +245,19 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public void reset(){
+        //refresh all fragments
+        int curFragment = pager.getCurrentItem();
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pagerAdapter);
+        pager.setCurrentItem(curFragment);
+
+        //kill service
+        Intent intent = new Intent(this, TimerService.class);
+        intent.putExtra(TimerService.KILL_SERVICE,true);
+        startService(intent);
+    }
+
     /////////////////////////////////////////////////////////////////////////
     ///////////////////Service related, do not touch!////////////////////////
     /////////////////////////////////////////////////////////////////////////
@@ -346,7 +365,7 @@ public class MainActivity extends FragmentActivity {
         db.addVegetable(new Vegetable("Cauliflower", "Bloemkool", 12, 12, "Remove the leaves and stem of the cauliflower, then wash under running water. Submerge in salted water and boil the cauliflower.", "Verwijder de bladeren van de bloemkool en een stuk van de stronk. Was de bloemkool in zijn geheel met de stronk naar beneden gehouden. Zet de bloemkool in een pan met water met zout en breng aan de kook."));
         db.addVegetable(new Vegetable("Corn on the cob", "Maiskolf", 15, 25, "Remove the husks, clean the cob and cook in water without salt. The cooking time depends on the size and it's best not to overcook the corn. The corn is done if you can pop it from the cob using a fork. Serve with butter and salt.", "Verwijder het groene omhulsel en maak de maiskolf schoon en kook in ruim water zonder zout; dat maakt de korrels taai. Kleinere kolven zijn sneller gaar dan grotere, controleer regelmatig of de mais gaar is. De mais is gaar als je de korrels zonder veel moeite van de kolf kunt wippen met een vork. Serveer met een klontje boter en wat zout."));
         db.addVegetable(new Vegetable("Endive", "Witlof", 12, 15, "Pull of any brown outer leaves and clean the endive with water. The green tip is quite bitter and is many people prefer to remove it. Remove the stem, then cut the endive up and boil in water. ", "Trek eventuele bruine bladeren van de witlof af en spoel de stronk af. Daarna kan je een klein plakje van het bruine voetje weghalen. Van onderen kan je de harde kern weg snijden. Snijd de witlof in reepjes en leg deze in onder een laagje water in de pan, breng ze vervolgens aan de kook."));
-        db.addVegetable(new Vegetable("Leek", "Prei", 15, 15, "To prepare leeks, cut off and discard the dark green parts that are tough. Trim the leek's beard at the bottom. You'll often find dirt on the leek. The easiest way to clean leeks is to cut them into rings, and swirl them in water to remove the grit, then drain them well. Cook the rings in water with a pinch of salt.", "Voor je begint met prei koken, is het belangrijk dat je de prei goed wast. Vooral tussen de bladeren van de stengels zit vaak aarde. Snijd ook de wortel van de prei af. Vervolgens snijd je de prei in ringetjes die je ook goed moet wassen. Kook de ringetjes in een pan met een snufje zout."));
+        db.addVegetable(new Vegetable("Leek", "Prei", 15, 15, "To prepare leeks, cut off and discard the dark green parts that are tough. Trim the leek's beard at the bottom. You'll often find dirt on the leek. The easiest way to clean leeks is to cut them into rings, and swirl them in water to remove the grit, then drain them well. Cook the rings in water with a pinch of salt.", "Voor je begint met prei koken, is het belangrijk dat je de prei goed wast. Vooral tussen de bladeren van de stengels zit vaak aarde. Snijd ook de wortel en de donkergroene stukken van de prei af. Vervolgens snijd je de prei in ringetjes die je ook goed moet wassen. Kook de ringetjes in een pan met een snufje zout."));
         db.addVegetable(new Vegetable("Peas", "Erwten", 5, 5, "Peas exist in loads of variants. The pea is a vegetable that grows inside a legume (a carpel which is folded around the peas). Peas are round or oval shaped. Most types don't need a lot of cooking, a good warm-up of approximately 5 minutes is enough.", "Erwten bestaan in veel verschillende varianten. Het is een groente die groeit binnenin een peul (een langwerpig vruchtblad dat dichtgevouwen om de erwten zit). Erwten zijn rond of ovaal van vorm. De meeste soorten hoeven niet lang te koken, vaak zo'n 5 minuten goed opwarmen al voldoende."));
         db.addVegetable(new Vegetable("Potatoes (halves)", "Aardappelen (halven)", 10, 15, "Peal or wash the potatoes before cooking. Cutting the potatoes in halves decreases the cooking time substantially. Make sure you cut the potatoes in equally sized parts, else the parts will not cook through simultaneously. Submerge the potatoes in a pan filled with water. If desired, add a pinch of salt to the water.", "Schil of was de aardappelen voor je ze gaat koken. Door de aardappelen doormidden te snijden voor je ze gaat koken verkort je de kooktijd aanzienlijk. Zorg er hierbij wel voor dat je de aardappelen in delen van gelijke grootte snijd, anders zijn de delen niet gelijktijdig gaar. Doe de aardappelen in een pan met water en voeg eventueel een snufje zout toe."));
         db.addVegetable(new Vegetable("Potatoes (whole)", "Aardappelen (heel)", 15, 20, "Peal or wash the potatoes before cooking. Submerge the potatoes in a pan filled with water. If desired, add a pinch of salt to the water.", "Schil of was de aardappelen voor je ze gaat koken. Doe de aardappelen in een pan met water en voeg eventueel een snufje zout toe."));

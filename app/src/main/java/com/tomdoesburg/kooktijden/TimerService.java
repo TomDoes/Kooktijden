@@ -14,6 +14,7 @@ import android.util.Log;
 public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
+    public final static String KILL_SERVICE = "KILL_SERVICE";
 
     public static boolean timer1Running = true;
     public static boolean timer2Running = true;
@@ -152,6 +153,17 @@ public class TimerService extends Service {
         try {
             Bundle extras = intent.getExtras();
             deadline6 = extras.getInt("kookPlaat6");
+        }catch(NullPointerException e){
+            //do nothing
+        }
+
+        try{
+            Bundle extras = intent.getExtras();
+            boolean kill = extras.getBoolean(KILL_SERVICE);
+            if(kill){
+                killService();
+            }
+
         }catch(NullPointerException e){
             //do nothing
         }

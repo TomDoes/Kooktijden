@@ -17,7 +17,8 @@
         <meta-data android:name="com.google.android.gms.analytics.globalConfigResource" android:resource="@xml/global_tracker" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,8 @@
         <activity
             android:name=".vegetables.VegetableActivity"
             android:label="@string/title_activity_vegetable"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tomdoesburg.kooktijden.MainActivity" />
@@ -36,7 +38,8 @@
         <activity
             android:name=".vegetables.VegetableDetailActivity"
             android:label="@string/title_vegetable_detail"
-            android:parentActivityName=".vegetables.VegetableActivity" >
+            android:parentActivityName=".vegetables.VegetableActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tomdoesburg.kooktijden.vegetables.VegetableActivity" />
@@ -44,7 +47,8 @@
         <!--Include the AdActivity configChanges and theme. -->
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"
+            android:screenOrientation="portrait"/>
 
         <!--
         Because android:exported is set to "false",
