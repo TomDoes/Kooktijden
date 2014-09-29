@@ -54,8 +54,8 @@ public class MainActivity extends FragmentActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Log.v("firstStart", "Is this the first time the app is launched? - "+sharedPrefs.getBoolean("firstStart",false));
-        if (!sharedPrefs.contains("firstStart")) {
+        Log.v("firstStart", "Is this the first time the main is launched? - "+sharedPrefs.getBoolean("firstStart_pt1",false));
+        if (!sharedPrefs.contains("firstStart_pt1")) {
             //the app is being launched for first time, show introduction
 
             //create empty frame
@@ -74,10 +74,10 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void onClick(View v) {
                     layout.removeView(instructional);
+                    sharedPrefs.edit().putBoolean("firstStart_pt1", false).commit();
                 }
             });
 
-            sharedPrefs.edit().putBoolean("firstStart", false).commit();
         } else {
             setContentView(R.layout.swipert);
         }
@@ -179,7 +179,6 @@ public class MainActivity extends FragmentActivity {
     // Call Back method to get the cooking time from the vegetable Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        Log.d("Joost","onActivityResult started");
         super.onActivityResult(requestCode, resultCode, data);
 
 

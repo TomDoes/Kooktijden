@@ -20,8 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lock_arrow"
         android:layout_marginTop="10dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="Toggle the lock to set the current layout as default."
+        android:text="@string/instructional_pt1_lock"
         android:textColor="@color/white"/>
 
     <LinearLayout
@@ -29,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="175dp">
+        android:layout_marginTop="160dp">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,8 +50,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/swipe_arrows"
         android:layout_marginTop="10dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:text="Swipe to change stove tops."
+        android:text="@string/instructional_pt1_swipe"
         android:textColor="@color/white"/>
 
 

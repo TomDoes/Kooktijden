@@ -3,12 +3,16 @@ package com.tomdoesburg.kooktijden.vegetables;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -23,7 +27,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
+        View view_veg_list = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
         //setContentView(R.layout.activity_vegetable_list);
 
        //get intent which contains the ID of the kookPlaat we are using!
@@ -38,7 +42,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        if (view.findViewById(R.id.vegetable_detail_container) != null) {
+        if (view_veg_list.findViewById(R.id.vegetable_detail_container) != null) {
 
             mTwoPane = true;
 
@@ -52,11 +56,38 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             }
         }
 
-        AdView mAdView = (AdView) view.findViewById(R.id.adView);
+        AdView mAdView = (AdView) view_veg_list.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        setContentView(view);
+
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Log.v("firstStart", "Is this the first time the list is launched? - " + sharedPrefs.getBoolean("firstStart_pt2", false));
+        if (!sharedPrefs.contains("firstStart_pt2")) {
+            //the list is being launched for first time, show introduction
+
+            //create empty frame
+            final FrameLayout layout = new FrameLayout(this);
+            setContentView(layout);
+
+            //inflate our regular layout in the frame
+            layout.addView(view_veg_list);
+
+            //inflate and add instructional overlay
+            final View instructional = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_vegetable_list,null);
+            layout.addView(instructional);
+            Button instructions_close = (Button) instructional.findViewById(R.id.instructions_close);
+            instructions_close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    layout.removeView(instructional);
+                    sharedPrefs.edit().putBoolean("firstStart_pt2", false).commit();
+                }
+            });
+
+        } else {
+            setContentView(view_veg_list);
+        }
     }
 
 
