@@ -33,7 +33,7 @@ public class TimerHelper {
 
     //booleans
     private boolean vegetableSelected = false;
-    public static boolean timerRunning = false;
+    private boolean timerRunning = false;
     private MediaPlayer mediaPlayer;
     private ProgressBar progress;
     private TextView text;

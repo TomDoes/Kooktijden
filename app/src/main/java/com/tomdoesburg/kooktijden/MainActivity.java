@@ -26,7 +26,6 @@ import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
-import com.tomdoesburg.kooktijden.kookplaten.TimerHelper;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -148,7 +147,7 @@ public class MainActivity extends FragmentActivity {
 
                     //if there is a timer running, show a warning overlay
                     //if not, just unlock the layout
-                    if(TimerHelper.timerRunning){
+                    if(true){       //TODO only show this when a timer is running
                         layout.addView(unlockWarning);
                     } else {
                         proceed.performClick();

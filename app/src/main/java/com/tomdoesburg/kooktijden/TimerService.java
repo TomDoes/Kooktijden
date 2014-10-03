@@ -3,7 +3,6 @@ package com.tomdoesburg.kooktijden;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -175,4 +174,5 @@ public class TimerService extends Service {
     public IBinder onBind(Intent arg0) {
         return null;
     }
+
 }
