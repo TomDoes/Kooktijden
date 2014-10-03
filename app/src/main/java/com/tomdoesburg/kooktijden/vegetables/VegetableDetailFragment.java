@@ -16,10 +16,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.fitness.DataTypes;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
@@ -139,13 +137,33 @@ public class VegetableDetailFragment extends Fragment {
     public void onActivityCreated (Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ImageButton setTimerBtn = (ImageButton)getActivity().findViewById(R.id.timer_button);
+        final ImageButton setTimerBtn = (ImageButton)getActivity().findViewById(R.id.timer_button);
         titleView = ((TextView) getActivity().findViewById(R.id.vegetable_detail_title));
 
-        Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_righ2left_slow);
+        //final Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_right2left_slow);
+        final Animation btnAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_right2left);
         Animation titleAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_down);
 
-        setTimerBtn.startAnimation(btnAnimation);
+        //setTimerBtn.startAnimation(btnAnimation);
+        titleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setTimerBtn.setVisibility(View.VISIBLE);
+                setTimerBtn.startAnimation(btnAnimation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        titleView.setVisibility(View.VISIBLE);
         titleView.startAnimation(titleAnimation);
+
     }
 }

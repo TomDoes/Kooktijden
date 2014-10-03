@@ -26,6 +26,7 @@ import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
+import com.tomdoesburg.kooktijden.kookplaten.TimerHelper;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -43,6 +44,9 @@ public class MainActivity extends FragmentActivity {
 
     SharedPreferences sharedPrefs;
 
+    //create empty frame, needed for overlays
+    FrameLayout layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,17 +58,15 @@ public class MainActivity extends FragmentActivity {
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Log.v("firstStart", "Is this the first time the main is launched? - "+sharedPrefs.getBoolean("firstStart_pt1",false));
+        //create empty frame, needed for overlays
+        layout = new FrameLayout(this);
+
+        //inflate our regular layout in the frame
+        View regular = getLayoutInflater().inflate(R.layout.swipert,null);
+        layout.addView(regular);
+
         if (!sharedPrefs.contains("firstStart_pt1")) {
-            //the app is being launched for first time, show introduction
-
-            //create empty frame
-            final FrameLayout layout = new FrameLayout(this);
-            setContentView(layout);
-
-            //inflate our regular layout in the frame
-            View regular = getLayoutInflater().inflate(R.layout.swipert,null);
-            layout.addView(regular);
+            //the app is being launched for first time
 
             //inflate and add instructional overlay
             final View instructional = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_main,null);
@@ -78,9 +80,10 @@ public class MainActivity extends FragmentActivity {
                 }
             });
 
-        } else {
-            setContentView(R.layout.swipert);
         }
+
+        //show the view to the user
+        setContentView(layout);
 
 
         lockButton = (ImageButton) findViewById(R.id.lockButton);
@@ -99,7 +102,8 @@ public class MainActivity extends FragmentActivity {
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               lockButton = (ImageButton) findViewById(R.id.lockButton);
+
+                lockButton = (ImageButton) findViewById(R.id.lockButton);
                 if(MyViewPager.swipingEnabled){
                     MyViewPager.swipingEnabled = false;
                     lockButton.setImageResource(R.drawable.lock_locked);
@@ -109,20 +113,50 @@ public class MainActivity extends FragmentActivity {
                     //save locked position in preferences (in case of restart)
                     sharedPrefs.edit().putInt("kookplaatViewPos",pager.getCurrentItem()).commit();
                 } else {
-                    MyViewPager.swipingEnabled = true;
-                    lockButton.setImageResource(R.drawable.lock_unlocked);
-                    Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
-                    indicator.startAnimation(anim);
 
-                    //ToDo: warning dialog to prevent accidental deleting of progress
+                    //inflate our unlock warning layout
+                    final View unlockWarning = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_main_unlockwarning,null);
 
-                    //RESETS ALL FRAGMENTKOOKPLAAT 1-6
-                    reset();
-                    //
+                    Button proceed = (Button) unlockWarning.findViewById(R.id.unlock_proceed);
+                    final Button cancel = (Button) unlockWarning.findViewById(R.id.unlock_cancel);
 
-                    //remove locked position from preferences
-                    sharedPrefs.edit().remove("kookplaatViewPos").commit();
+                    proceed.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout.removeView(unlockWarning);
+
+                            //unlock the layout
+                            MyViewPager.swipingEnabled = true;
+                            lockButton.setImageResource(R.drawable.lock_unlocked);
+                            Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
+                            indicator.startAnimation(anim);
+
+                            //RESETS ALL FRAGMENTKOOKPLAAT 1-6
+                            reset();
+
+                            //remove locked position from preferences
+                            sharedPrefs.edit().remove("kookplaatViewPos").commit();
+                        }
+                    });
+
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout.removeView(unlockWarning);
+                        }
+                    });
+
+                    //if there is a timer running, show a warning overlay
+                    //if not, just unlock the layout
+                    if(TimerHelper.timerRunning){
+                        layout.addView(unlockWarning);
+                    } else {
+                        proceed.performClick();
+                    }
+
+
                 }
+
             }
         });
 

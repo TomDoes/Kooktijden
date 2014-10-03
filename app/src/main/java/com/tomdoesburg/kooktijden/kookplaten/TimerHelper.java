@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,28 +33,37 @@ public class TimerHelper {
 
     //booleans
     private boolean vegetableSelected = false;
-    private boolean timerRunning = false;
+    public static boolean timerRunning = false;
     private MediaPlayer mediaPlayer;
     private ProgressBar progress;
     private TextView text;
+    private Button plusButton;
+
+    //animations
+    private Animation highlight;
+    private Animation fade_in;
+    private Animation fade_out;
+
 
     void init(final Activity activity, final ProgressBar progress, final TextView text,final Button plusButton, final String kookPlaatID) {
         this.activity = activity;
-        this.kookPlaatID = kookPlaatID;
         this.progress = progress;
         this.text = text;
+        this.plusButton = plusButton;
+        this.kookPlaatID = kookPlaatID;
+
 
         Typeface typeFace = Typeface.createFromAsset(activity.getAssets(),"fonts/Roboto-Light.ttf");
         text.setTypeface(typeFace);
         plusButton.setTypeface(typeFace);
 
-        final Animation anim = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
+        highlight = AnimationUtils.loadAnimation(activity, R.anim.highlight_zoom);
+        fade_in = AnimationUtils.loadAnimation(activity, R.anim.fade_in);
+        fade_out = AnimationUtils.loadAnimation(activity, R.anim.fade_out);
 
-        anim.setAnimationListener(new Animation.AnimationListener() {
+        highlight.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -64,21 +71,21 @@ public class TimerHelper {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
 
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progress.startAnimation(anim); //calls startVegetableActivity(); after animation
+                progress.startAnimation(highlight); //calls startVegetableActivity(); after animation
 
                 if(vegetableSelected && !timerRunning){
                     startTimerService();
+                    plusButton.startAnimation(fade_in);
                     ((MainActivity)activity).lock();
                 }else if(vegetableSelected && timerRunning){
                     pauseTimer();
+                    plusButton.startAnimation(fade_out);
                 }
             }
         });
@@ -209,6 +216,7 @@ public class TimerHelper {
     public void onTimerFinished(){
 
         this.timerRunning = false;
+        this.plusButton.startAnimation(fade_out);
         //play sound
         mediaPlayer = MediaPlayer.create(progress.getContext(), R.raw.alarm);
         mediaPlayer.start();

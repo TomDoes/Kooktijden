@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:alpha="0.70">
+
+    <TextView
+        android:id="@+id/warningtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:gravity="center_horizontal"
+        android:text="@string/instructional_pt3_unlockwarning"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/swipe_arrows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp">
+
+        <Button
+            android:id="@+id/unlock_cancel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/instructional_pt3_cancel"
+            android:textColor="@color/white"
+            android:background="@color/gray_darker"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/unlock_proceed"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/instructional_pt3_continue"
+            android:textColor="@color/white"
+            android:background="@color/gray_darker"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -4,23 +4,23 @@
     android:fillAfter="true" >
 
     <scale
-        android:duration="200"
+        android:duration="150"
         android:fromXScale="1.0"
         android:fromYScale="1.0"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toXScale="0.25"
-        android:toYScale="0.25" >
+        android:toXScale="0.50"
+        android:toYScale="0.50" >
     </scale>
 
     <scale
-        android:duration="200"
+        android:duration="150"
         android:fromXScale="1"
         android:fromYScale="1"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toXScale="4"
-        android:toYScale="4" >
+        android:toXScale="2"
+        android:toYScale="2" >
     </scale>
 
 </set>

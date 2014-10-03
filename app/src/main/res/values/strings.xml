@@ -22,4 +22,7 @@
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>
     <string name="instructional_pt1_lock">Toggle the lock to set the current layout as default.</string>
     <string name="instructional_pt2_timericon">Clicking a timer icon initializes the vegetable\'s cooking time on the last selected stove top.</string>
+    <string name="instructional_pt3_unlockwarning">Confirm unlock.\n\nUnlocking the layout will reset all running timers.\nAre you sure?</string>
+    <string name="instructional_pt3_cancel">No, cancel.</string>
+    <string name="instructional_pt3_continue">Yes, i\'m sure.</string>
 </resources>
