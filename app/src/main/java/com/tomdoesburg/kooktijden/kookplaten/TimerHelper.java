@@ -26,7 +26,7 @@ import java.sql.Time;
  * Created by Joost on 11-7-2014.
  */
 public class TimerHelper {
-    private static String TAG = "TimerService";
+    private static String TAG = "TimerHelper";
 
     private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
     private Vegetable vegetable;

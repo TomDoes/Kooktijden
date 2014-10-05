@@ -113,6 +113,20 @@ public class TimerService extends Service {
     }
 
     public void killService(){
+        deadline1 = 0;
+        deadline2 = 0;
+        deadline3 = 0;
+        deadline4 = 0;
+        deadline5 = 0;
+        deadline6 = 0;
+
+        timer1Running = false;
+        timer2Running = false;
+        timer3Running = false;
+        timer4Running = false;
+        timer5Running = false;
+        timer6Running = false;
+
         this.stopSelf();
     }
 

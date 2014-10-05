@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity {
 
                     //if there is a timer running, show a warning overlay
                     //if not, just unlock the layout
-                    if(true){       //TODO only show this when a timer is running
+                    if(timerRunning()){       //TODO only show this when a timer is running
                         layout.addView(unlockWarning);
                     } else {
                         proceed.performClick();
@@ -193,6 +193,17 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public boolean timerRunning(){ //true is there is any running timer
+        if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
+                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
+            return true;
+        }else if (TimerService.deadline1 > 0 || TimerService.deadline2 > 0 || TimerService.deadline3 > 0
+                || TimerService.deadline4 > 0 || TimerService.deadline5 > 0 || TimerService.deadline6 > 0){
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -282,16 +293,31 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void reset(){
+        //kill service
+        TimerService.deadline1 = 0;
+        TimerService.deadline2 = 0;
+        TimerService.deadline3 = 0;
+        TimerService.deadline4 = 0;
+        TimerService.deadline5 = 0;
+        TimerService.deadline6 = 0;
+
+        TimerService.timer1Running = false;
+        TimerService.timer2Running = false;
+        TimerService.timer3Running = false;
+        TimerService.timer4Running = false;
+        TimerService.timer5Running = false;
+        TimerService.timer6Running = false;
+
+        Intent intent = new Intent(this, TimerService.class);
+        intent.putExtra(TimerService.KILL_SERVICE,true);
+        startService(intent);
+
         //refresh all fragments
         int curFragment = pager.getCurrentItem();
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(curFragment);
 
-        //kill service
-        Intent intent = new Intent(this, TimerService.class);
-        intent.putExtra(TimerService.KILL_SERVICE,true);
-        startService(intent);
     }
 
     /////////////////////////////////////////////////////////////////////////
