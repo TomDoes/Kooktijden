@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,11 +20,13 @@ import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 
+import java.sql.Time;
+
 /**
  * Created by Joost on 11-7-2014.
  */
 public class TimerHelper {
-
+    private static String TAG = "TimerService";
 
     private String kookPlaatID = ""; //can be kookPlaat1 up to kookPlaat6
     private Vegetable vegetable;
@@ -98,6 +101,8 @@ public class TimerHelper {
             }
         });
 
+        resumeExistingTimer();
+
     }
 
     public void startVegetableActivity(){
@@ -149,31 +154,52 @@ public class TimerHelper {
     public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
         int kookPlaatnum = getKookPlaatNum();
 
-        switch(kookPlaatnum) {
-            case 1:
-                TimerService.timer1Running = true;
-                break;
-            case 2:
-                TimerService.timer2Running = true;
-                break;
-            case 3:
-                TimerService.timer3Running = true;
-                break;
-            case 4:
-                TimerService.timer4Running = true;
-                break;
-            case 5:
-                TimerService.timer5Running = true;
-                break;
-            case 6:
-                TimerService.timer6Running = true;
-                break;
-         }
+        if(this.secondsLeft > 0) {
 
-        this.timerRunning = true;
-        Intent intent = new Intent(activity, TimerService.class);
-        intent.putExtra(this.kookPlaatID,this.secondsLeft);
-        activity.startService(intent);
+            switch (kookPlaatnum) {
+                case 1:
+                    TimerService.timer1Running = true;
+                    break;
+                case 2:
+                    TimerService.timer2Running = true;
+                    break;
+                case 3:
+                    TimerService.timer3Running = true;
+                    break;
+                case 4:
+                    TimerService.timer4Running = true;
+                    break;
+                case 5:
+                    TimerService.timer5Running = true;
+                    break;
+                case 6:
+                    TimerService.timer6Running = true;
+                    break;
+            }
+
+            this.timerRunning = true;
+            Intent intent = new Intent(activity, TimerService.class);
+            intent.putExtra(this.kookPlaatID, this.secondsLeft);
+            intent.putExtra("vegID", vegetable.getId());
+            activity.startService(intent);
+        }
+    }
+
+    public void resumeExistingTimer(){ //used when returning to app and timer still running
+        int kookPlaatNum = getKookPlaatNum();
+
+        if(getTimerDeadline(kookPlaatNum) > 0){ //there is a timer for this kookplaat active in a service!
+            //get vegetable ID from service and set vegetable in TimerHelper
+            int vegID = getVegID(kookPlaatNum);
+            Vegetable veg = ((MainActivity) activity).getVegetableFromDB(vegID);
+            setVegetable(veg);
+
+            this.timerRunning = isTimerRunning(kookPlaatNum);
+            //retrieve our deadline from service
+            this.secondsLeft = getTimerDeadline(kookPlaatNum);
+
+            onTick();
+        }
 
     }
 
@@ -194,14 +220,67 @@ public class TimerHelper {
         return -1;
     }
 
+    public int getTimerDeadline(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.deadline1;
+
+            case 2: return TimerService.deadline2;
+
+            case 3: return TimerService.deadline3;
+
+            case 4: return TimerService.deadline4;
+
+            case 5: return TimerService.deadline5;
+
+            case 6: return TimerService.deadline6;
+
+        }
+        return 0;
+    }
+
+    public int getVegID(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.vegID1;
+
+            case 2: return TimerService.vegID2;
+
+            case 3: return TimerService.vegID3;
+
+            case 4: return TimerService.vegID4;
+
+            case 5: return TimerService.vegID5;
+
+            case 6: return TimerService.vegID6;
+
+        }
+        return 0;
+    }
+
+    public boolean isTimerRunning(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.timer1Running;
+
+            case 2: return TimerService.timer2Running;
+
+            case 3: return TimerService.timer3Running;
+
+            case 4: return TimerService.timer4Running;
+
+            case 5: return TimerService.timer5Running;
+
+            case 6: return TimerService.timer6Running;
+        }
+        return false;
+    }
+
     public void onTick(){ //this function will be called by the timerService via mainactivity
 
         if(this.timerRunning) {
 
-            this.secondsLeft--; //time in seconds
+            //this.secondsLeft--; //time in seconds
+            this.secondsLeft = getTimerDeadline(getKookPlaatNum());
             int barVal = this.cookingTime*60-secondsLeft;
             progress.setProgress(barVal);
-            //Log.v("progress", "Value " + barVal);
 
             // format the textview to show the easily readable format
             text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));

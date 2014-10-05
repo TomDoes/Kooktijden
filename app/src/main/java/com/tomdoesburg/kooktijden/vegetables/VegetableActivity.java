@@ -31,7 +31,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         View view_veg_list = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
 
 
-       //get intent which contains the ID of the kookPlaat we are using!
+        //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
             this.kookPlaatID = intent.getStringExtra("kookPlaatID");
