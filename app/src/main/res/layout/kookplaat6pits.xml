@@ -56,7 +56,4 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/plus_min_buttons"
-        android:id="@+id/plus_min_buttons"/>
-
 </RelativeLayout>

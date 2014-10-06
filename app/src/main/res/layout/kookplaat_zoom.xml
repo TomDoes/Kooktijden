@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:animateLayoutChanges="true"
+    tools:context="com.tomdoesburg.kooktijden.MainActivity$PlaceholderFragment">
+
+    <!-- Created by Joost on 6/10/14. -->
+
+    <RelativeLayout
+        android:id="@+id/rellayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners_zoom"
+        android:layout_centerInParent="true">
+
+        <include layout="@layout/single_kookplaat_zoom"
+            android:id="@+id/kookplaat1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/rellayout"
+        android:layout_marginBottom="10dp">
+
+    <ImageButton
+        android:id="@+id/buttonTimerPause"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_pause"
+        android:textColor="@color/gray_dark"
+        android:onClick=""
+        android:text="+30s"/>
+
+    <ImageButton
+        android:id="@+id/buttonTimerStop"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_stop"
+        android:textColor="@color/gray_dark"
+        android:text="+30s"/>
+
+    <Button
+        android:id="@+id/buttonTimerPlus"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/gray_dark"
+        android:text="+30s"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/vegetableName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/buttonRow"
+        android:layout_marginBottom="20dp"
+        android:text="vegetable name"/>
+
+
+</RelativeLayout>
