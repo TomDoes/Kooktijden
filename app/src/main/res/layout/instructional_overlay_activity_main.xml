@@ -62,7 +62,7 @@
         android:id="@+id/instructions_close"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Got it"
+        android:text="@string/instructional_understand"
         android:textColor="@color/white"
         android:background="@color/gray_darker"
         android:layout_centerHorizontal="true"

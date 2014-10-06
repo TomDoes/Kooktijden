@@ -2,11 +2,9 @@ package com.tomdoesburg.kooktijden.kookplaten;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -51,10 +49,9 @@ public class FragmentKookplaat1pits extends Fragment {
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
-        Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
 
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,"kookPlaat1");
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,"kookPlaat1");
 
     }
 

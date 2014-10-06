@@ -2,11 +2,9 @@ package com.tomdoesburg.kooktijden.kookplaten;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -52,10 +50,9 @@ public class FragmentKookplaat6pits extends Fragment {
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
         ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
         TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
-        Button kookplaat_plus = (Button) view.findViewById(R.id.buttonTimerPlus);
 
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,kookplaat_plus,"kookPlaat1");
+        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,"kookPlaat1");
 
 
         //kookplaat 2
@@ -64,7 +61,7 @@ public class FragmentKookplaat6pits extends Fragment {
         TextView kookplaat2_text = (TextView) kookplaat2view.findViewById(R.id.kookplaatText);
 
         timerHelper2 = new TimerHelper();
-        timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,kookplaat_plus,"kookPlaat2");
+        timerHelper2.init(getActivity(),kookplaat2_progress,kookplaat2_text,"kookPlaat2");
 
 
         //kookplaat 3
@@ -73,7 +70,7 @@ public class FragmentKookplaat6pits extends Fragment {
         TextView kookplaat3_text = (TextView) kookplaat3view.findViewById(R.id.kookplaatText);
 
         timerHelper3 = new TimerHelper();
-        timerHelper3.init(getActivity(),kookplaat3_progress,kookplaat3_text,kookplaat_plus,"kookPlaat3");
+        timerHelper3.init(getActivity(),kookplaat3_progress,kookplaat3_text,"kookPlaat3");
 
 
         //kookplaat 4
@@ -82,7 +79,7 @@ public class FragmentKookplaat6pits extends Fragment {
         TextView kookplaat4_text = (TextView) kookplaat4view.findViewById(R.id.kookplaatText);
 
         timerHelper4 = new TimerHelper();
-        timerHelper4.init(getActivity(),kookplaat4_progress,kookplaat4_text,kookplaat_plus,"kookPlaat4");
+        timerHelper4.init(getActivity(),kookplaat4_progress,kookplaat4_text,"kookPlaat4");
 
 
         //kookplaat 5
@@ -91,7 +88,7 @@ public class FragmentKookplaat6pits extends Fragment {
         TextView kookplaat5_text = (TextView) kookplaat5view.findViewById(R.id.kookplaatText);
 
         timerHelper5 = new TimerHelper();
-        timerHelper5.init(getActivity(),kookplaat5_progress,kookplaat5_text,kookplaat_plus,"kookPlaat5");
+        timerHelper5.init(getActivity(),kookplaat5_progress,kookplaat5_text,"kookPlaat5");
 
 
         //kookplaat 6
@@ -100,7 +97,7 @@ public class FragmentKookplaat6pits extends Fragment {
         TextView kookplaat6_text = (TextView) kookplaat6view.findViewById(R.id.kookplaatText);
 
         timerHelper6 = new TimerHelper();
-        timerHelper6.init(getActivity(),kookplaat6_progress,kookplaat6_text,kookplaat_plus,"kookPlaat6");
+        timerHelper6.init(getActivity(),kookplaat6_progress,kookplaat6_text,"kookPlaat6");
     }
 
     public void tick(){
