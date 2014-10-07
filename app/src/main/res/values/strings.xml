@@ -9,6 +9,7 @@
     <string name="title_activity_vegetable">Vegetables</string>
     <string name="title_vegetable_list">Vegetables</string>
     <string name="title_vegetable_detail">Details</string>
+    <string name="title_zoomed_kookplaat">Details</string>
     <string name="pickfood">Pick food</string>
     <string name="cookingTime">Cooking time: </string>
     <string name="descriptionTitle">Description</string>

@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity {
 
                     //if there is a timer running, show a warning overlay
                     //if not, just unlock the layout
-                    if(timerRunning()){       //TODO only show this when a timer is running
+                    if(timerRunning()){
                         layout.addView(unlockWarning);
                     } else {
                         proceed.performClick();

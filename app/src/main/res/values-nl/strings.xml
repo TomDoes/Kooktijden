@@ -9,6 +9,7 @@
     <string name="title_activity_vegetable">Groenten</string>
     <string name="title_vegetable_list">Groenten</string>
     <string name="title_vegetable_detail">Details</string>
+    <string name="title_zoomed_kookplaat">Details</string>
     <string name="pickfood">Kies groente</string>
     <string name="cookingTime">Kooktijd: </string>
     <string name="descriptionTitle">Beschrijving</string>

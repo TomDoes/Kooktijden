@@ -79,7 +79,14 @@ public class TimerHelper {
                     startTimerService();
                     ((MainActivity)activity).lock();
                 }else if(vegetableSelected && timerRunning){
-                    pauseTimer();
+
+                    //pauseTimer();
+
+                    //open a zoomed-in view of the selected kookplaat
+                    Intent intent = new Intent(activity, ActivityZoomedKookplaat.class);
+                    intent.putExtra("kookPlaatID", kookPlaatID);
+                    intent.putExtra("vegetableID", getVegID(getKookPlaatNum()));
+                    activity.startActivity(intent);
                 }
             }
         });

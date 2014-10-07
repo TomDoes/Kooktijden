@@ -44,6 +44,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tomdoesburg.kooktijden.vegetables.VegetableActivity" />
         </activity>
+        <activity
+            android:name=".kookplaten.ActivityZoomedKookplaat"
+            android:label="@string/title_zoomed_kookplaat"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tomdoesburg.kooktijden.MainActivity" />
+        </activity>
         <!--Include the AdActivity configChanges and theme. -->
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
