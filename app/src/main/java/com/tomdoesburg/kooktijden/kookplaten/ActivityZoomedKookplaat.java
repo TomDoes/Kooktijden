@@ -73,6 +73,9 @@ public class ActivityZoomedKookplaat extends Activity{
                 //set icon according to state
                 //pause.setImageResource(R.drawable.icon_play);
                 //pause.setImageResource(R.drawable.icon_pause);
+
+                //go back to previous activity
+                finish();
             }
         });
 
@@ -82,6 +85,8 @@ public class ActivityZoomedKookplaat extends Activity{
                 //stop the timer on this stove
                 //TODO stop the timer on this stove
 
+                //go back to previous activity
+                finish();
             }
         });
 
@@ -90,6 +95,9 @@ public class ActivityZoomedKookplaat extends Activity{
             public void onClick(View v) {
                 //increase remaining time of this stove with 30 seconds
                 //TODO increase remaining time of this stove with 30 seconds
+
+                //go back to previous activity
+                finish();
             }
         });
 
