@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -59,7 +60,8 @@ public class TimerHelper {
 
         highlight.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -67,7 +69,8 @@ public class TimerHelper {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
 
         progress.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +190,6 @@ public class TimerHelper {
             this.timerRunning = isTimerRunning(kookPlaatNum);
             //retrieve our deadline from service
             this.secondsLeft = getTimerDeadline(kookPlaatNum);
-
             onTick();
         }
 
@@ -269,21 +271,22 @@ public class TimerHelper {
 
             //this.secondsLeft--; //time in seconds
             this.secondsLeft = getTimerDeadline(getKookPlaatNum());
-            int barVal = this.cookingTime*60-secondsLeft;
+            int barVal = progress.getMax()-secondsLeft;
             progress.setProgress(barVal);
 
             // format the textview to show the easily readable format
             text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
-            if (this.secondsLeft == 0) { //stop timer
-                onTimerFinished();
+            if (this.secondsLeft == 0) {
+                    //stop timer
+                    onTimerFinished();
+                }
             }
-        }
 
     }
 
     public void onTimerFinished(){
-
+        Log.v(TAG, "timer finished");
         this.timerRunning = false;
         //play sound
         mediaPlayer = MediaPlayer.create(progress.getContext(), R.raw.alarm);

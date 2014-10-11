@@ -44,7 +44,7 @@
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/icon_stop"
+        android:src="@drawable/ic_action_discard"
         android:textColor="@color/gray_dark"
         android:text="+30s"/>
 

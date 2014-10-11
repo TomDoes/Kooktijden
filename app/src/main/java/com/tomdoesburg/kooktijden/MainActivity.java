@@ -231,7 +231,6 @@ public class MainActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-
         // check if the request code is same as what is passed here it is 9001
         if(requestCode==9001){
             // Make sure the request was successful

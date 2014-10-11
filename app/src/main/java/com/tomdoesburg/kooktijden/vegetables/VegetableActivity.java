@@ -179,7 +179,6 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 intent.putExtra("vegId", vegId);
                 intent.putExtra("kookPlaatID", this.kookPlaatID);
                 this.setResult(Activity.RESULT_OK, intent);
-
                 //finish the vegetable activity
                 this.finish();
             }
