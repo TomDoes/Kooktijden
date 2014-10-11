@@ -15,12 +15,12 @@ public class TimerService extends Service {
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE";
 
-    public static boolean timer1Running = true;
-    public static boolean timer2Running = true;
-    public static boolean timer3Running = true;
-    public static boolean timer4Running = true;
-    public static boolean timer5Running = true;
-    public static boolean timer6Running = true;
+    public static boolean timer1Running = false;
+    public static boolean timer2Running = false;
+    public static boolean timer3Running = false;
+    public static boolean timer4Running = false;
+    public static boolean timer5Running = false;
+    public static boolean timer6Running = false;
 
 
     //time left before end of alarm in seconds
@@ -147,6 +147,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer1Running = true;
                 deadline1 = deadline;
                 vegID1 = vegID;
             }
@@ -161,6 +162,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer2Running = true;
                 deadline2 = deadline;
                 vegID2 = vegID;
             }
@@ -174,6 +176,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer3Running = true;
                 deadline3 = deadline;
                 vegID3 = vegID;
             }
@@ -188,6 +191,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer4Running = true;
                 deadline4 = deadline;
                 vegID4 = vegID;
             }
@@ -201,6 +205,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer5Running = true;
                 deadline5 = deadline;
                 vegID5 = vegID;
             }
@@ -214,6 +219,7 @@ public class TimerService extends Service {
             int vegID = extras.getInt("vegID");
 
             if(deadline > 0) {
+                timer6Running = true;
                 deadline6 = deadline;
                 vegID6 = vegID;
             }

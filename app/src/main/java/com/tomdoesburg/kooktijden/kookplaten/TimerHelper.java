@@ -294,7 +294,6 @@ public class TimerHelper {
                     onTimerFinished();
                 }
             }
-
     }
 
     public void onTimerFinished(){
