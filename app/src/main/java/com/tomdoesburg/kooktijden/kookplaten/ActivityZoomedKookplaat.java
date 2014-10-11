@@ -303,7 +303,6 @@ public class ActivityZoomedKookplaat extends Activity{
         }
 
         timerRunning = false;
-        text.setText(this.getString(R.string.paused));
     }
 
     public int getKookPlaatNum(){

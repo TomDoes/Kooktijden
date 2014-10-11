@@ -190,6 +190,18 @@ public class TimerHelper {
             this.timerRunning = isTimerRunning(kookPlaatNum);
             //retrieve our deadline from service
             this.secondsLeft = getTimerDeadline(kookPlaatNum);
+
+            if(!timerRunning){ //paused state
+                //this.secondsLeft--; //time in seconds
+                this.secondsLeft = getTimerDeadline(getKookPlaatNum());
+                int barVal = progress.getMax()-secondsLeft;
+                progress.setProgress(barVal);
+
+                // format the textview to show the easily readable format
+                text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
+            }
+
+
             onTick();
         }
 
