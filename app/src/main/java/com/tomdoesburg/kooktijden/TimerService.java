@@ -11,9 +11,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.os.PowerManager.WakeLock;
 
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -31,6 +33,11 @@ public class TimerService extends Service {
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
     public static final int notificationID = 1;
     public static int timerReadyID = 2;
+
+    //used to keep the service running when phone goes to sleep
+    private PowerManager powerManager;
+    private WakeLock wakeLock;
+
 
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
@@ -198,6 +205,7 @@ public class TimerService extends Service {
     public void onDestroy() {
         hideNotification(this.notificationID);
         timerHandler.removeCallbacks(timerRunnable);
+        wakeLock.release();
         Log.i(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
     }
@@ -205,6 +213,10 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"TimerService");
+        wakeLock.acquire();
+
         try {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat1");
