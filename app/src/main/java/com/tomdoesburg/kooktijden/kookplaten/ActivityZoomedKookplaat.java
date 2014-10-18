@@ -127,17 +127,23 @@ public class ActivityZoomedKookplaat extends Activity{
             @Override
             public void onClick(View v) {
                 //increase remaining time of this stove with 30 seconds
-                //TODO increase remaining time of this stove with 30 seconds
                 addTime();
             }
         });
 
-
+        int kookPlaatNum = getKookPlaatNum();
         //set pause button image (pause when timer is not running and play when running)
-        this.timerRunning = isTimerRunning(getKookPlaatNum());
+        this.timerRunning = isTimerRunning(kookPlaatNum);
         Log.v(TAG, "timerRunning = " + timerRunning);
         //set current time
-        this.secondsLeft = getTimerDeadline(getKookPlaatNum());
+        this.secondsLeft = getTimerDeadline(kookPlaatNum);
+
+        //update progressbar max value
+        int additionalTime = getAdditionalTime(kookPlaatNum);
+        if(additionalTime > 0){
+            progress.setMax(this.cookingTime *60 + additionalTime);
+        }
+
         int barVal = progress.getMax()-secondsLeft;
         progress.setProgress(barVal);
         // format the textview to show the easily readable format
@@ -254,22 +260,36 @@ public class ActivityZoomedKookplaat extends Activity{
         switch(kookPlaatnum) {
             case 1:
                 TimerService.deadline1 += 30;
+                TimerService.deadline1Add += 30;
                 break;
             case 2:
                 TimerService.deadline2 += 30;
+                TimerService.deadline2Add += 30;
                 break;
             case 3:
                 TimerService.deadline3 += 30;
+                TimerService.deadline3Add += 30;
                 break;
             case 4:
                 TimerService.deadline4 += 30;
+                TimerService.deadline4Add += 30;
                 break;
             case 5:
                 TimerService.deadline5 += 30;
+                TimerService.deadline5Add += 30;
                 break;
             case 6:
                 TimerService.deadline6 += 30;
+                TimerService.deadline6Add += 30;
                 break;
+        }
+
+        //update the max value on the progress bar
+        int curMax = progress.getMax();
+        this.secondsLeft = getTimerDeadline(getKookPlaatNum());
+
+        if(this.secondsLeft > curMax){
+            progress.setMax(curMax + 30);
         }
 
     }
@@ -277,15 +297,9 @@ public class ActivityZoomedKookplaat extends Activity{
     public void onTick(){
         //TODO complete function!
         if(this.timerRunning) {
-
-            //this.secondsLeft--; //time in seconds
+            //get time left in seconds
             this.secondsLeft = getTimerDeadline(getKookPlaatNum());
-            /*TODO: store and adjust progressbar max value, probably in TimerService
-            if(this.secondsLeft > progress.getMax()){ //may be the case if additional time is added
-                progress.setMax(this.secondsLeft); //upgrade the max time
-            }
-            */
-
+            //update progress bar value
             int barVal = progress.getMax()-secondsLeft;
             progress.setProgress(barVal);
 
@@ -361,6 +375,25 @@ public class ActivityZoomedKookplaat extends Activity{
         }
         return 0;
     }
+
+    public int getAdditionalTime(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.deadline1Add;
+
+            case 2: return TimerService.deadline2Add;
+
+            case 3: return TimerService.deadline3Add;
+
+            case 4: return TimerService.deadline4Add;
+
+            case 5: return TimerService.deadline5Add;
+
+            case 6: return TimerService.deadline6Add;
+
+        }
+        return 0;
+    }
+
     public boolean isTimerRunning(int kookPlaatNum){
         switch(kookPlaatNum){
             case 1: return TimerService.timer1Running;

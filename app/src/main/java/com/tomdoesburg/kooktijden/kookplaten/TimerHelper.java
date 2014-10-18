@@ -190,6 +190,11 @@ public class TimerHelper {
             this.timerRunning = isTimerRunning(kookPlaatNum);
             //retrieve our deadline from service
             this.secondsLeft = getTimerDeadline(kookPlaatNum);
+            //set new max value for the progress bar
+            int additionalTime = getAdditionalTime(kookPlaatNum);
+            if(additionalTime > 0){
+                progress.setMax(this.cookingTime + additionalTime);
+            }
 
             if(!timerRunning){ //paused state
                 //this.secondsLeft--; //time in seconds
@@ -242,6 +247,24 @@ public class TimerHelper {
         return 0;
     }
 
+    public int getAdditionalTime(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.deadline1Add;
+
+            case 2: return TimerService.deadline2Add;
+
+            case 3: return TimerService.deadline3Add;
+
+            case 4: return TimerService.deadline4Add;
+
+            case 5: return TimerService.deadline5Add;
+
+            case 6: return TimerService.deadline6Add;
+
+        }
+        return 0;
+    }
+
     public int getVegID(int kookPlaatNum){
         switch(kookPlaatNum){
             case 1: return TimerService.vegID1;
@@ -280,9 +303,16 @@ public class TimerHelper {
     public void onTick(){ //this function will be called by the timerService via mainactivity
 
         if(this.timerRunning) {
+            int kookPlaatNum = getKookPlaatNum();
+
+            //update progressbar max value
+            int additionalTime = getAdditionalTime(kookPlaatNum);
+            if(additionalTime > 0){
+                progress.setMax(this.cookingTime *60 + additionalTime);
+            }
 
             //this.secondsLeft--; //time in seconds
-            this.secondsLeft = getTimerDeadline(getKookPlaatNum());
+            this.secondsLeft = getTimerDeadline(kookPlaatNum);
             int barVal = progress.getMax()-secondsLeft;
             progress.setProgress(barVal);
 

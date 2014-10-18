@@ -59,6 +59,8 @@ public class FragmentKookplaat1pits extends Fragment {
         timerHelper1.onTick();
     }
 
+
+
     public void setVegetable(int kookPlaat, Vegetable veg){
         switch(kookPlaat){
             case 1:

@@ -48,6 +48,14 @@ public class TimerService extends Service {
     public static int deadline5 = 0;
     public static int deadline6 = 0;
 
+    //additional time (set by using the +30 button)
+    public static int deadline1Add = 0;
+    public static int deadline2Add = 0;
+    public static int deadline3Add = 0;
+    public static int deadline4Add = 0;
+    public static int deadline5Add = 0;
+    public static int deadline6Add = 0;
+
     //selected vegetable (comes in handy when returning to app)
     public static int vegID1;
     public static int vegID2;
@@ -169,6 +177,13 @@ public class TimerService extends Service {
         deadline5 = 0;
         deadline6 = 0;
 
+        deadline1Add = 0;
+        deadline2Add = 0;
+        deadline3Add = 0;
+        deadline4Add = 0;
+        deadline5Add = 0;
+        deadline6Add = 0;
+
         timer1Running = false;
         timer2Running = false;
         timer3Running = false;
@@ -198,6 +213,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer1Running = true;
                 deadline1 = deadline;
+                deadline1Add = 0;
                 vegID1 = vegID;
             }
 
@@ -213,6 +229,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer2Running = true;
                 deadline2 = deadline;
+                deadline2Add = 0;
                 vegID2 = vegID;
             }
         }catch(NullPointerException e){
@@ -227,6 +244,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer3Running = true;
                 deadline3 = deadline;
+                deadline3Add = 0;
                 vegID3 = vegID;
             }
 
@@ -242,6 +260,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer4Running = true;
                 deadline4 = deadline;
+                deadline4Add = 0;
                 vegID4 = vegID;
             }
         }catch(NullPointerException e){
@@ -256,6 +275,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer5Running = true;
                 deadline5 = deadline;
+                deadline5Add = 0;
                 vegID5 = vegID;
             }
         }catch(NullPointerException e){
@@ -270,6 +290,7 @@ public class TimerService extends Service {
             if(deadline > 0) {
                 timer6Running = true;
                 deadline6 = deadline;
+                deadline6Add = 0;
                 vegID6 = vegID;
             }
         }catch(NullPointerException e){
