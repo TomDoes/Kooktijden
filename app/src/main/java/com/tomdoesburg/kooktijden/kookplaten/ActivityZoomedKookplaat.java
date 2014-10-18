@@ -37,7 +37,7 @@ public class ActivityZoomedKookplaat extends Activity{
     private ImageButton stop;
     private Button plus;
     private TextView vegetableName;
-    private View kookplaat1;
+    //private View kookplaat1;
     private ProgressBar progress;
     private TextView text;
     private int cookingTime = 0; //cooking time in minutes
@@ -61,9 +61,9 @@ public class ActivityZoomedKookplaat extends Activity{
         this.cookingTime = db.getVegetable(vegID).getCookingTimeMin();
 
         //init progress bar and kookplaat
-        this.kookplaat1 = view.findViewById(R.id.kookplaat1);
-        this.progress = (ProgressBar) kookplaat1.findViewById(R.id.kookplaat);
-        this.text = (TextView) kookplaat1.findViewById(R.id.kookplaatText);
+        //this.kookplaat1 = view.findViewById(R.id.kookplaat1);
+        this.progress = (ProgressBar) view.findViewById(R.id.kookplaat1);
+        this.text = (TextView) view.findViewById(R.id.kookplaatText);
         this.text.setText("");
         this.progress.setMax(this.cookingTime*60);
 
