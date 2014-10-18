@@ -1,8 +1,11 @@
 package com.tomdoesburg.kooktijden.kookplaten;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
@@ -43,6 +46,9 @@ public class ActivityZoomedKookplaat extends Activity{
     private TextView text;
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
+
+    final Context context = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +122,8 @@ public class ActivityZoomedKookplaat extends Activity{
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //stop the timer on this stove
-                stopTimer();
-                //go back to previous activity
-                finish();
+
+                createStopDialog();
             }
         });
 
@@ -153,6 +157,42 @@ public class ActivityZoomedKookplaat extends Activity{
             pause.setImageResource(R.drawable.icon_pause);
         }else{
             pause.setImageResource(R.drawable.icon_play);
+        }
+    }
+
+    private void createStopDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage(R.string.stop_timer).setTitle(R.string.stop_timer_title);
+
+        builder.setPositiveButton(R.string.stop, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                stopTimer();
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        builder.create();
+
+        AlertDialog alertDialog = builder.show();
+
+        int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
+        int alertTitle = getResources().getIdentifier("alertTitle", "id", "android");
+        TextView titleText = (TextView) alertDialog.findViewById(alertTitle);
+        View titleDivider = alertDialog.findViewById(titleDividerId);
+        if (titleDivider != null) {
+            titleDivider.setBackgroundColor(getResources().getColor(R.color.teal));
+        }
+        if (titleText != null) {
+            titleText.setTextColor(getResources().getColor(R.color.teal));
         }
     }
 

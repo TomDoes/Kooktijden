@@ -28,4 +28,8 @@
     <string name="instructional_pt3_unlockwarning">Bevestig ontgrendeling.\n\nHet ontgrendelen van de layout zal\nalle bestaande timers resetten.\nWeet je het zeker?</string>
     <string name="instructional_pt3_cancel">Nee, annuleer.</string>
     <string name="instructional_pt3_continue">Ja, ontgrendel.</string>
+    <string name="stop">Ja, verwijder timer</string>
+    <string name="cancel">Nee, annuleer</string>
+    <string name="stop_timer_title">Stop timer</string>
+    <string name="stop_timer">Weet je zeker dat je deze timer wil stoppen?</string>
 </resources>
