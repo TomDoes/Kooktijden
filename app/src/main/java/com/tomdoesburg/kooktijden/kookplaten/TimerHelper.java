@@ -78,13 +78,12 @@ public class TimerHelper {
             public void onClick(View view) {
                 progress.startAnimation(highlight); //calls startVegetableActivity(); after animation
 
-                if(vegetableSelected && !timerRunning){
+                if(vegetableSelected && !timerRunning && secondsLeft > 0) {
                     startTimerService();
-                    ((MainActivity)activity).lock();
-                }else if(vegetableSelected && timerRunning){
+                    ((MainActivity) activity).lock();
 
-                    //pauseTimer();
-
+               // }else if(vegetableSelected && timerRunning){
+                }else if(vegetableSelected){
                     //open a zoomed-in view of the selected kookplaat
                     Intent intent = new Intent(activity, ActivityZoomedKookplaat.class);
                     intent.putExtra("kookPlaatID", kookPlaatID);

@@ -118,4 +118,5 @@ public class FragmentKookplaat5pits extends Fragment {
                 break;
         }
     }
+
 }

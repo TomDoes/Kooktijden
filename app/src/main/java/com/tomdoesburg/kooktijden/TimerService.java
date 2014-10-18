@@ -29,6 +29,9 @@ public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE";
+    public final static String TIMER_DONE = "TIMER_DONE";
+    public final static String VEGID = "VEGID";
+
     private MediaPlayer mediaPlayer;
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
     public static final int notificationID = 1;
@@ -143,14 +146,6 @@ public class TimerService extends Service {
                 onTimerFinished();
             }
         }
-        /*
-        Log.v(TAG, "Deadline 1: " + deadline1);
-        Log.v(TAG, "Deadline 2: " + deadline2);
-        Log.v(TAG, "Deadline 3: " + deadline3);
-        Log.v(TAG, "Deadline 4: " + deadline4);
-        Log.v(TAG, "Deadline 5: " + deadline5);
-        Log.v(TAG, "Deadline 6: " + deadline6);
-        */
 
         if(!runningOnForeground && timerActive()){
             showNotification(this.notificationID);

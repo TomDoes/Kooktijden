@@ -294,6 +294,12 @@ public class ActivityZoomedKookplaat extends Activity{
     }
 
     public void addTime(){
+
+        //if timer has ended we still should be able to add 30 seconds and continue running
+        if(this.secondsLeft == 0 && !timerRunning){
+            pause.setImageResource(R.drawable.icon_play);
+        }
+
         int kookPlaatnum = getKookPlaatNum();
         this.secondsLeft += 30;
 
@@ -332,6 +338,8 @@ public class ActivityZoomedKookplaat extends Activity{
             progress.setMax(curMax + 30);
         }
 
+        //set text
+        text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
     }
 
     public void onTick(){
