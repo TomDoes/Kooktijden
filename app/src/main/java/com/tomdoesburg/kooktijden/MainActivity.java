@@ -1,5 +1,6 @@
 package com.tomdoesburg.kooktijden;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -196,6 +197,9 @@ public class MainActivity extends FragmentActivity {
             editor.putBoolean("databaseLoaded", true);
             editor.commit();
         }
+
+        //close any "timer ready" notifications
+        hideNotification(TimerService.timerReadyID);
 
     }
 
@@ -419,6 +423,10 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    public void hideNotification(int ID){
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(ID);
+    }
     /////////////////////////////////////////////////////////////////////////
     ////////////End of service related stuff. You may now touch!/////////////
     /////////////////////////////////////////////////////////////////////////

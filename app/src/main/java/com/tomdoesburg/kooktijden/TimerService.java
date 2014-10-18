@@ -7,11 +7,18 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.tomdoesburg.model.Vegetable;
+import com.tomdoesburg.sqlite.MySQLiteHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by FrankD on 13-9-2014.
@@ -20,9 +27,10 @@ public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE";
+    private MediaPlayer mediaPlayer;
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
-
-    private int notificationID = 1;
+    public static final int notificationID = 1;
+    public static int timerReadyID = 2;
 
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
@@ -82,19 +90,43 @@ public class TimerService extends Service {
 
         if(deadline1 > 0 && timer1Running){
             deadline1 --;
+            if(deadline1 == 0){
+                timer1Running = false;
+                onTimerFinished();
+            }
         }
         if(deadline2 > 0 && timer2Running){
             deadline2 --;
+            if(deadline2 == 0){
+                timer2Running = false;
+                onTimerFinished();
+            }
         }
         if(deadline3 > 0 && timer3Running){
             deadline3 --;
+            if(deadline3 == 0){
+                timer3Running = false;
+                onTimerFinished();
+            }
         }
         if(deadline4 > 0 && timer4Running){
             deadline4 --;
+            if(deadline4 == 0){
+                timer4Running = false;
+                onTimerFinished();
+            }
         }if(deadline5 > 0 && timer5Running){
             deadline5 --;
+            if(deadline5 == 0){
+                timer5Running = false;
+                onTimerFinished();
+            }
         }if(deadline6 > 0 && timer6Running){
             deadline6 --;
+            if(deadline6 == 0){
+                timer6Running = false;
+                onTimerFinished();
+            }
         }
         /*
         Log.v(TAG, "Deadline 1: " + deadline1);
@@ -105,17 +137,15 @@ public class TimerService extends Service {
         Log.v(TAG, "Deadline 6: " + deadline6);
         */
 
-        if(!runningOnForeground){
-            showNotification();
+        if(!runningOnForeground && timerActive()){
+            showNotification(this.notificationID);
         }else{
-            hideNotification();
+            hideNotification(this.notificationID);
         }
 
         if(doneCounting()){
             killService();
         }
-
-        Log.v(TAG,"tick sent, UI visible = " + runningOnForeground);
     }
 
 
@@ -151,7 +181,7 @@ public class TimerService extends Service {
 
     @Override
     public void onDestroy() {
-        hideNotification();
+        hideNotification(this.notificationID);
         timerHandler.removeCallbacks(timerRunnable);
         Log.i(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
@@ -159,7 +189,6 @@ public class TimerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
         try {
             Bundle extras = intent.getExtras();
@@ -266,30 +295,97 @@ public class TimerService extends Service {
         return null;
     }
 
-    public void showNotification(){
+    private boolean timerActive(){
+        //returns true if there is any timer currently running
+        return(timer1Running || timer2Running || timer3Running
+                ||timer4Running || timer5Running || timer6Running);
+
+    }
+
+    private String getFirstAlarmTime(){
+        //returns current time of the active alarm closest to zero
+        int soonestDeadline = 0;
+
+        if(timer1Running && (soonestDeadline > deadline1 || soonestDeadline == 0)){
+            soonestDeadline = deadline1;
+        }
+        if(timer2Running && (soonestDeadline > deadline2 || soonestDeadline == 0)){
+            soonestDeadline = deadline2;
+        }
+        if(timer3Running && (soonestDeadline > deadline3 || soonestDeadline == 0)){
+            soonestDeadline = deadline3;
+        }
+        if(timer4Running && (soonestDeadline > deadline4 || soonestDeadline == 0)){
+            soonestDeadline = deadline4;
+        }
+        if(timer5Running && (soonestDeadline > deadline5 || soonestDeadline == 0)){
+            soonestDeadline = deadline5;
+        }
+        if(timer6Running && (soonestDeadline > deadline6 || soonestDeadline == 0)){
+            soonestDeadline = deadline6;
+        }
+
+        String returnVal = String.format("%02d", soonestDeadline / 60) + ":" + String.format("%02d", soonestDeadline % 60);
+
+        return returnVal;
+    }
+
+    public void showNotification(int ID){
         // Creates an explicit intent for an Activity in your app
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationCompat.Builder mBuilder =
-            new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.kooktijden_icon)
-                    .setContentTitle("My notification")
-                    .setContentText("Hello World!")
-                    .setContentIntent(pIntent);
+        if(ID == this.notificationID) {
+            //notify user that a timer is running
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.kooktijden_icon)
+                            .setContentTitle(getString(R.string.timer))
+                            .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                            .setContentIntent(pIntent);
 
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // mId allows you to update the notification later on.
+            mNotificationManager.notify(ID, mBuilder.build());
 
+        }else if(ID == this.timerReadyID){
+            //notify user that timer is finished
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.kooktijden_icon)
+                            .setContentTitle(getString(R.string.timer))
+                            .setContentText(getString(R.string.timer_ready))
+                            .setAutoCancel(true)
+                            .setContentIntent(pIntent);
 
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(this.notificationID, mBuilder.build());
-
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // mId allows you to update the notification later on.
+            mNotificationManager.notify(ID, mBuilder.build());
+        }
     }
 
-    public void hideNotification(){
+    public void hideNotification(int ID){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(this.notificationID);
+        mNotificationManager.cancel(ID);
     }
 
+    public void onTimerFinished(){
+        Log.v(TAG, "timer finished");
+
+        //only play alarm when cooking plate is not visible
+        if(!runningOnForeground) {
+            //show timer ready notification!
+            showNotification(this.timerReadyID);
+            //play sound
+            mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+            mediaPlayer.start();
+            //SHAKE IT!
+            Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+            long[] pattern = {0, 500, 500};
+            // -1 vibrate once
+            // 0 vibrate indefinitely
+            vibrator.vibrate(pattern, -1);
+        }
+    }
 
 }
