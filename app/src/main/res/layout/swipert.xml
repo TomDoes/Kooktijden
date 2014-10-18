@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/white" >
 
     <com.tomdoesburg.kooktijden.MyViewPager
         android:id="@+id/pager"
@@ -25,11 +26,20 @@
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_above="@+id/adView"
         android:padding="10dp"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         app:fillColor="@color/red"
         app:pageColor="@color/gray_lighter" />
+
+    <WebView
+        android:id="@+id/indicatorBlocker"
+        android:layout_height="40dp"
+        android:layout_width="fill_parent"
+        android:background="@android:color/white"
+        android:layout_above="@+id/adView"
+        android:scrollbars="none" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -39,6 +49,5 @@
         android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id_kookplaat"/>
-
 
 </RelativeLayout>

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -40,6 +41,7 @@ public class MainActivity extends FragmentActivity {
     private MySQLiteHelper db;
     private ImageButton lockButton;
     private CirclePageIndicator indicator;
+    private WebView indicatorBlocker;
 
     SharedPreferences sharedPrefs;
 
@@ -87,6 +89,7 @@ public class MainActivity extends FragmentActivity {
 
         lockButton = (ImageButton) findViewById(R.id.lockButton);
         indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+        indicatorBlocker = (WebView)findViewById(R.id.indicatorBlocker);
 
         //Set the pager with an adapter
         pager = (ViewPager)findViewById(R.id.pager);
@@ -108,6 +111,7 @@ public class MainActivity extends FragmentActivity {
                     lockButton.setImageResource(R.drawable.lock_locked);
                     Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
                     indicator.startAnimation(anim);
+                    indicatorBlocker.setVisibility(View.VISIBLE);
 
                     //save locked position in preferences (in case of restart)
                     sharedPrefs.edit().putInt("kookplaatViewPos",pager.getCurrentItem()).commit();
@@ -128,6 +132,7 @@ public class MainActivity extends FragmentActivity {
                             MyViewPager.swipingEnabled = true;
                             lockButton.setImageResource(R.drawable.lock_unlocked);
                             Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_in);
+                            indicatorBlocker.setVisibility(View.INVISIBLE);
                             indicator.startAnimation(anim);
 
                             //RESETS ALL FRAGMENTKOOKPLAAT 1-6
@@ -167,6 +172,7 @@ public class MainActivity extends FragmentActivity {
             lockButton.setImageResource(R.drawable.lock_locked);
             Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
             indicator.startAnimation(anim);
+            indicatorBlocker.setVisibility(View.VISIBLE);
         }
 
         AdView mAdView = (AdView)findViewById(R.id.adView);
@@ -375,6 +381,7 @@ public class MainActivity extends FragmentActivity {
             lockButton.setImageResource(R.drawable.lock_locked);
             Animation anim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade_out);
             indicator.startAnimation(anim);
+            indicatorBlocker.setVisibility(View.VISIBLE);
             //save locked position in preferences (in case of restart)
             sharedPrefs.edit().putInt("kookplaatViewPos", pager.getCurrentItem()).commit();
         }
