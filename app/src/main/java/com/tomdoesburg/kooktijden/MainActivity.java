@@ -91,6 +91,7 @@ public class MainActivity extends FragmentActivity {
         lockButton = (ImageButton) findViewById(R.id.lockButton);
         indicator = (CirclePageIndicator)findViewById(R.id.indicator);
         indicatorBlocker = (WebView)findViewById(R.id.indicatorBlocker);
+        indicatorBlocker.setVisibility(View.INVISIBLE);
 
         //Set the pager with an adapter
         pager = (ViewPager)findViewById(R.id.pager);
