@@ -333,6 +333,7 @@ public class MainActivity extends FragmentActivity {
         super.onResume();
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
+        TimerService.runningOnForeground = true;
     }
 
     //Service related
@@ -342,6 +343,7 @@ public class MainActivity extends FragmentActivity {
         super.onPause();
         unregisterReceiver(br);
         Log.i(TAG, "Unregistered broacast receiver");
+        TimerService.runningOnForeground = false;
     }
 
     //Service related
@@ -350,6 +352,7 @@ public class MainActivity extends FragmentActivity {
     public void onStop() {
         try {
             unregisterReceiver(br);
+            TimerService.runningOnForeground = false;
         } catch (Exception e) {
             // Receiver was probably already stopped in onPause()
         }

@@ -1,10 +1,16 @@
 package com.tomdoesburg.kooktijden;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 /**
@@ -14,6 +20,9 @@ public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE";
+    public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
+
+    private int notificationID = 1;
 
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
@@ -62,7 +71,6 @@ public class TimerService extends Service {
 
     //subtracts time from deadlines every second
     public void tick(){
-
         bi.putExtra("deadline1", deadline1);
         bi.putExtra("deadline2", deadline2);
         bi.putExtra("deadline3", deadline3);
@@ -96,10 +104,21 @@ public class TimerService extends Service {
         Log.v(TAG, "Deadline 5: " + deadline5);
         Log.v(TAG, "Deadline 6: " + deadline6);
         */
+
+        if(!runningOnForeground){
+            showNotification();
+        }else{
+            hideNotification();
+        }
+
         if(doneCounting()){
             killService();
         }
+
+        Log.v(TAG,"tick sent, UI visible = " + runningOnForeground);
     }
+
+
 
     //indicates whether or not we can stop the service
     public boolean doneCounting(){
@@ -132,6 +151,7 @@ public class TimerService extends Service {
 
     @Override
     public void onDestroy() {
+        hideNotification();
         timerHandler.removeCallbacks(timerRunnable);
         Log.i(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
@@ -245,5 +265,31 @@ public class TimerService extends Service {
     public IBinder onBind(Intent arg0) {
         return null;
     }
+
+    public void showNotification(){
+        // Creates an explicit intent for an Activity in your app
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder mBuilder =
+            new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.kooktijden_icon)
+                    .setContentTitle("My notification")
+                    .setContentText("Hello World!")
+                    .setContentIntent(pIntent);
+
+
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(this.notificationID, mBuilder.build());
+
+    }
+
+    public void hideNotification(){
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(this.notificationID);
+    }
+
 
 }

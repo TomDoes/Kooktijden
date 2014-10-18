@@ -22,6 +22,7 @@ import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 import java.util.Locale;
+import java.util.Timer;
 
 /**
  * Created by Joost on 6-10-2014.
@@ -90,15 +91,16 @@ public class ActivityZoomedKookplaat extends Activity{
         super.onResume();
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
+        TimerService.runningOnForeground = true;
 
         //make all the buttons work
 
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pause the running timer
-                //TODO pause the running timer
+
                 if(timerRunning){
+                    //pause the running timer
                     pauseTimer();
                     pause.setImageResource(R.drawable.icon_play);
                 }else{
@@ -130,6 +132,22 @@ public class ActivityZoomedKookplaat extends Activity{
             }
         });
 
+
+        //set pause button image (pause when timer is not running and play when running)
+        this.timerRunning = isTimerRunning(getKookPlaatNum());
+        Log.v(TAG, "timerRunning = " + timerRunning);
+        //set current time
+        this.secondsLeft = getTimerDeadline(getKookPlaatNum());
+        int barVal = progress.getMax()-secondsLeft;
+        progress.setProgress(barVal);
+        // format the textview to show the easily readable format
+        text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
+
+        if(timerRunning){
+            pause.setImageResource(R.drawable.icon_pause);
+        }else{
+            pause.setImageResource(R.drawable.icon_play);
+        }
     }
 
     @Override
@@ -137,12 +155,14 @@ public class ActivityZoomedKookplaat extends Activity{
         super.onPause();
         unregisterReceiver(br);
         Log.i(TAG, "Unregistered broacast receiver");
+        TimerService.runningOnForeground = false;
     }
 
     @Override
     public void onStop() {
         try {
             unregisterReceiver(br);
+            TimerService.runningOnForeground = false;
         } catch (Exception e) {
             // Receiver was probably already stopped in onPause()
         }
@@ -306,6 +326,7 @@ public class ActivityZoomedKookplaat extends Activity{
     }
 
     public int getKookPlaatNum(){
+
         if(this.kookPlaatID.endsWith("1")) {
             return 1;
         }else if(this.kookPlaatID.endsWith("2")){
@@ -319,6 +340,7 @@ public class ActivityZoomedKookplaat extends Activity{
         }else if(this.kookPlaatID.endsWith("6")){
             return 6;
         }
+
         return -1;
     }
 
