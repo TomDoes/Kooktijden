@@ -59,7 +59,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 frag.setArguments(args);
 
                 fragmentTransaction
-                        .replace(R.id.container, frag)
+                        .replace(R.id.container, frag)  //TODO deze container is de boosdoener voor de twopane bug.
                         .commit();
 
             }
