@@ -240,7 +240,9 @@ public class TimerService extends Service {
     public void onDestroy() {
         hideNotification(this.notificationID);
         timerHandler.removeCallbacks(timerRunnable);
-        wakeLock.release();
+        if (wakeLock.isHeld()){
+            wakeLock.release();
+        }
         Log.i(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
     }
@@ -249,9 +251,10 @@ public class TimerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"TimerService");
-        wakeLock.acquire();
-
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TimerService");
+        if(!wakeLock.isHeld()) {
+            wakeLock.acquire();
+        }
         try {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat1");

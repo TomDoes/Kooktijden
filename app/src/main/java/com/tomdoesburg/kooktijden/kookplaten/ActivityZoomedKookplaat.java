@@ -321,26 +321,32 @@ public class ActivityZoomedKookplaat extends Activity{
             case 1:
                 TimerService.deadline1 += 30;
                 TimerService.deadline1Add += 30;
+                TimerService.timer1Finished = false;
                 break;
             case 2:
                 TimerService.deadline2 += 30;
                 TimerService.deadline2Add += 30;
+                TimerService.timer2Finished = false;
                 break;
             case 3:
                 TimerService.deadline3 += 30;
                 TimerService.deadline3Add += 30;
+                TimerService.timer3Finished = false;
                 break;
             case 4:
                 TimerService.deadline4 += 30;
                 TimerService.deadline4Add += 30;
+                TimerService.timer4Finished = false;
                 break;
             case 5:
                 TimerService.deadline5 += 30;
                 TimerService.deadline5Add += 30;
+                TimerService.timer5Finished = false;
                 break;
             case 6:
                 TimerService.deadline6 += 30;
                 TimerService.deadline6Add += 30;
+                TimerService.timer6Finished = false;
                 break;
         }
 
@@ -485,6 +491,16 @@ public class ActivityZoomedKookplaat extends Activity{
         // -1 vibrate once
         // 0 vibrate indefinitely
         vibrator.vibrate(pattern, -1);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
+        //super.onBackPressed();
 
     }
 
