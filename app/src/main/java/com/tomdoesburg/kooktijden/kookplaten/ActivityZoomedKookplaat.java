@@ -264,26 +264,32 @@ public class ActivityZoomedKookplaat extends Activity{
         switch (kookPlaatnum) {
             case 1:
                 TimerService.timer1Running = false;
+                TimerService.timer1Finished = false;
                 TimerService.deadline1 = 0;
                 break;
             case 2:
                 TimerService.timer2Running = false;
+                TimerService.timer2Finished = false;
                 TimerService.deadline2 = 0;
                 break;
             case 3:
                 TimerService.timer3Running = false;
+                TimerService.timer3Finished = false;
                 TimerService.deadline3 = 0;
                 break;
             case 4:
                 TimerService.timer4Running = false;
+                TimerService.timer4Finished = false;
                 TimerService.deadline4 = 0;
                 break;
             case 5:
                 TimerService.timer5Running = false;
+                TimerService.timer5Finished = false;
                 TimerService.deadline5 = 0;
                 break;
             case 6:
                 TimerService.timer6Running = false;
+                TimerService.timer6Finished = false;
                 TimerService.deadline6 = 0;
                 break;
         }

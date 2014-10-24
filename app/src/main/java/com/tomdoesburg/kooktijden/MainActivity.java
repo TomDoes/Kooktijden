@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -215,6 +217,18 @@ public class MainActivity extends FragmentActivity {
         return false;
     }
 
+    public boolean allTimersDone(){ //true is there is any running timer
+        if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
+                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
+            return false;
+        }else if (TimerService.deadline1 == 0 && TimerService.deadline2 ==0 && TimerService.deadline3 == 0
+                || TimerService.deadline4 == 0 && TimerService.deadline5 == 0 && TimerService.deadline6 == 0){
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -318,11 +332,18 @@ public class MainActivity extends FragmentActivity {
         TimerService.timer5Running = false;
         TimerService.timer6Running = false;
 
+        TimerService.timer1Finished = false;
+        TimerService.timer2Finished = false;
+        TimerService.timer3Finished = false;
+        TimerService.timer4Finished = false;
+        TimerService.timer5Finished = false;
+        TimerService.timer6Finished = false;
+
         Intent intent = new Intent(this, TimerService.class);
         intent.putExtra(TimerService.KILL_SERVICE,true);
         startService(intent);
 
-        //refresh all fragments
+        //reset all fragments
         int curFragment = pager.getCurrentItem();
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
@@ -339,6 +360,13 @@ public class MainActivity extends FragmentActivity {
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
+
+        //if timer service still exists, but there are no running alarms: kill service
+        if(allTimersDone()){
+            Intent intent = new Intent(this, TimerService.class);
+            intent.putExtra(TimerService.KILL_SERVICE,true);
+            startService(intent);
+        }
     }
 
     //Service related

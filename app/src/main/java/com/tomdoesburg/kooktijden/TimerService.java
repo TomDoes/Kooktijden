@@ -33,6 +33,7 @@ public class TimerService extends Service {
     public final static String VEGID = "VEGID";
 
     private MediaPlayer mediaPlayer;
+    public static boolean alarmOn = false;
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
     public static final int notificationID = 1;
     public static int timerReadyID = 2;
@@ -49,6 +50,13 @@ public class TimerService extends Service {
     public static boolean timer5Running = false;
     public static boolean timer6Running = false;
 
+    //if a timer is done, the appropriate finished variable is set to true
+    public static boolean timer1Finished = false;
+    public static boolean timer2Finished = false;
+    public static boolean timer3Finished = false;
+    public static boolean timer4Finished = false;
+    public static boolean timer5Finished = false;
+    public static boolean timer6Finished = false;
 
     //time left before end of alarm in seconds
     public static int deadline1 = 0;
@@ -95,6 +103,32 @@ public class TimerService extends Service {
         }
     };
 
+
+
+    //handler for delayed killing of service
+    Handler killHandler = new Handler();
+    Runnable killRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            if(doneCounting()) {
+                killService();
+            }
+        }
+    };
+
+    //handler for repeating alarm when app is in background
+    Handler alarmHandler = new Handler();
+    Runnable alarmRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            onTimerFinished();
+            //  alarmHandler.postDelayed(this, 1000);
+        }
+    };
+
+
     //subtracts time from deadlines every second
     public void tick(){
         bi.putExtra("deadline1", deadline1);
@@ -110,6 +144,7 @@ public class TimerService extends Service {
             deadline1 --;
             if(deadline1 == 0){
                 timer1Running = false;
+                timer1Finished = true;
                 onTimerFinished();
             }
         }
@@ -117,6 +152,7 @@ public class TimerService extends Service {
             deadline2 --;
             if(deadline2 == 0){
                 timer2Running = false;
+                timer2Finished = true;
                 onTimerFinished();
             }
         }
@@ -124,6 +160,7 @@ public class TimerService extends Service {
             deadline3 --;
             if(deadline3 == 0){
                 timer3Running = false;
+                timer3Finished = true;
                 onTimerFinished();
             }
         }
@@ -131,17 +168,20 @@ public class TimerService extends Service {
             deadline4 --;
             if(deadline4 == 0){
                 timer4Running = false;
+                timer4Finished = true;
                 onTimerFinished();
             }
         }if(deadline5 > 0 && timer5Running){
             deadline5 --;
             if(deadline5 == 0){
                 timer5Running = false;
+                timer5Finished = true;
                 onTimerFinished();
             }
         }if(deadline6 > 0 && timer6Running){
             deadline6 --;
             if(deadline6 == 0){
+                timer6Finished = true;
                 timer6Running = false;
                 onTimerFinished();
             }
@@ -154,7 +194,7 @@ public class TimerService extends Service {
         }
 
         if(doneCounting()){
-            killService();
+         //   killService();
         }
     }
 
@@ -219,6 +259,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer1Running = true;
+                timer1Finished = false;
                 deadline1 = deadline;
                 deadline1Add = 0;
                 vegID1 = vegID;
@@ -235,6 +276,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer2Running = true;
+                timer2Finished = false;
                 deadline2 = deadline;
                 deadline2Add = 0;
                 vegID2 = vegID;
@@ -250,6 +292,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer3Running = true;
+                timer3Finished = false;
                 deadline3 = deadline;
                 deadline3Add = 0;
                 vegID3 = vegID;
@@ -266,6 +309,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer4Running = true;
+                timer4Finished = false;
                 deadline4 = deadline;
                 deadline4Add = 0;
                 vegID4 = vegID;
@@ -281,6 +325,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer5Running = true;
+                timer5Finished = false;
                 deadline5 = deadline;
                 deadline5Add = 0;
                 vegID5 = vegID;
@@ -296,6 +341,7 @@ public class TimerService extends Service {
 
             if(deadline > 0) {
                 timer6Running = true;
+                timer6Finished = false;
                 deadline6 = deadline;
                 deadline6Add = 0;
                 vegID6 = vegID;
@@ -308,7 +354,8 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             boolean kill = extras.getBoolean(KILL_SERVICE);
             if(kill){
-                killService();
+               killHandler.postDelayed(killRunnable,5000);
+              //  killService();
             }
 
         }catch(NullPointerException e){
@@ -413,6 +460,11 @@ public class TimerService extends Service {
             // -1 vibrate once
             // 0 vibrate indefinitely
             vibrator.vibrate(pattern, -1);
+
+            if(!runningOnForeground){
+                alarmHandler.postDelayed(alarmRunnable, 4000);
+            }
+
         }
     }
 
