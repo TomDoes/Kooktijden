@@ -27,19 +27,14 @@
         android:name="com.tomdoesburg.kooktijden.vegetables.VegetableListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         tools:layout="@android:layout/list_content" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/vegetable_detail_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/vegetable_detail_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="5">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
@@ -47,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id_vegetable_list" />
-
-    </LinearLayout>
+            ads:adUnitId="@string/banner_ad_unit_id_vegetable_details"></com.google.android.gms.ads.AdView>
+    </FrameLayout>
 
 </LinearLayout>

@@ -52,22 +52,27 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             if (savedInstanceState == null) {
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                VegetableListFragment frag = new VegetableListFragment();
+                VegetableDetailFragment frag = new VegetableDetailFragment();
                 Bundle args = new Bundle();
                 args.putString("kookPlaatID", this.kookPlaatID);
+                args.putInt(VegetableDetailFragment.ARG_ITEM_ID, 1);
+
                 Log.v(TAG,"argument is " + this.kookPlaatID);
                 frag.setArguments(args);
 
                 fragmentTransaction
-                        .replace(R.id.container, frag)  //TODO deze container is de boosdoener voor de twopane bug.
+                        .replace(R.id.vegetable_detail_container, frag)
                         .commit();
 
             }
         }
 
-        AdView mAdView = (AdView) view_veg_list.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if(!mTwoPane) {
+            AdView mAdView = (AdView) view_veg_list.findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
+
 
 
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

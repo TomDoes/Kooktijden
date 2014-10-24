@@ -198,7 +198,6 @@ public class MainActivity extends FragmentActivity {
             editor.putBoolean("databaseLoaded", true);
             editor.commit();
         }
-
         //close any "timer ready" notifications
         hideNotification(TimerService.timerReadyID);
 
@@ -297,6 +296,7 @@ public class MainActivity extends FragmentActivity {
         }
 
     }
+
 
     public Vegetable getVegetableFromDB(int ID){
         return db.getVegetable(ID);
