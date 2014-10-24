@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -60,6 +61,8 @@ public class ActivityZoomedKookplaat extends Activity{
         kookPlaatID = intent.getStringExtra("kookPlaatID");
         vegID = intent.getIntExtra("vegetableID",0);
 
+        Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
+
         //get vegetable from database
         MySQLiteHelper db = new MySQLiteHelper(this);
         Vegetable vegetable = db.getVegetable(vegID);
@@ -79,6 +82,9 @@ public class ActivityZoomedKookplaat extends Activity{
         stop = (ImageButton) view.findViewById(R.id.buttonTimerStop);
         plus = (Button) view.findViewById(R.id.buttonTimerPlus);
         vegetableName = (TextView) view.findViewById(R.id.vegetableName);
+        vegetableName.setTypeface(typeFace);
+
+        plus.setTypeface(typeFace);
 
         //set the vegetable name according to locale
         String language = Locale.getDefault().getDisplayLanguage();
@@ -151,6 +157,8 @@ public class ActivityZoomedKookplaat extends Activity{
         int barVal = progress.getMax()-secondsLeft;
         progress.setProgress(barVal);
         // format the textview to show the easily readable format
+        Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
+        text.setTypeface(typeFace);
         text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
         if(timerRunning){
