@@ -408,7 +408,7 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateGUI(intent);
+            updateGUI();
         }
     };
 
@@ -425,9 +425,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     //Service related: processes ticks and updates GUI
-    private void updateGUI(Intent intent) {
-        if (intent.getExtras() != null) {
-            long millisUntilFinished = intent.getIntExtra("countdown", 0);
+    private void updateGUI() {
             Log.i(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
 
@@ -449,8 +447,6 @@ public class MainActivity extends FragmentActivity {
                         k6.tick();
                         break;
             }
-
-        }
     }
 
     public void hideNotification(int ID){
