@@ -37,11 +37,12 @@ public class TimerService extends Service {
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
     public static final int notificationID = 1;
     public static int timerReadyID = 2;
+    private  NotificationCompat.Builder mBuilder;
+    private boolean firstNotification = true; //lets us know if we can re-use (false) a notification or create a new one (true)
 
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
     private WakeLock wakeLock;
-
 
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
@@ -251,7 +252,7 @@ public class TimerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TimerService");
+        wakeLock = powerManager.newWakeLock((PowerManager.PARTIAL_WAKE_LOCK), "TimerService");
         if(!wakeLock.isHeld()) {
             wakeLock.acquire();
         }
@@ -415,12 +416,23 @@ public class TimerService extends Service {
 
         if(ID == this.notificationID) {
             //notify user that a timer is running
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.kooktijden_icon)
-                            .setContentTitle(getString(R.string.timer))
-                            .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
-                            .setContentIntent(pIntent);
+            if(!this.firstNotification){//re-use mBuilder
+                mBuilder.setSmallIcon(R.drawable.kooktijden_icon)
+                        .setOnlyAlertOnce(true)
+                        .setContentTitle(getString(R.string.timer))
+                        .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                        .setContentIntent(pIntent);
+            }else{ //create new instance of mBuilder
+                this.firstNotification = false;
+
+                mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setOnlyAlertOnce(true)
+                                .setSmallIcon(R.drawable.kooktijden_icon)
+                                .setContentTitle(getString(R.string.timer))
+                                .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                                .setContentIntent(pIntent);
+            }
 
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on.
@@ -442,6 +454,10 @@ public class TimerService extends Service {
         }
     }
 
+    public void wakeUpScreen(){
+       //TODO: wake up screen without conflicting with existing wakelock
+    }
+
     public void hideNotification(int ID){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(ID);
@@ -454,6 +470,11 @@ public class TimerService extends Service {
         if(!runningOnForeground) {
             //show timer ready notification!
             showNotification(this.timerReadyID);
+
+            //turn on screen (if turned off)
+            wakeUpScreen();
+
+
             //play sound
             mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
             mediaPlayer.start();
