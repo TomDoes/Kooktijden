@@ -43,11 +43,11 @@ public class TimerHelper {
     private Animation fade_in;
     private Animation fade_out;
 
+    void init(final Activity activity, final View kookplaatview, final String kookPlaatID) {
 
-    void init(final Activity activity, final ProgressBar progress, final TextView text,final String kookPlaatID) {
         this.activity = activity;
-        this.progress = progress;
-        this.text = text;
+        this.progress = (ProgressBar) kookplaatview.findViewById(R.id.kookplaat);
+        this.text = (TextView) kookplaatview.findViewById(R.id.kookplaatText);
         this.kookPlaatID = kookPlaatID;
 
 
