@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -47,11 +45,9 @@ public class FragmentKookplaat1pits extends Fragment {
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
-        ProgressBar kookplaat1_progress = (ProgressBar) kookplaat1view.findViewById(R.id.kookplaat);
-        TextView kookplaat1_text = (TextView) kookplaat1view.findViewById(R.id.kookplaatText);
 
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1_progress,kookplaat1_text,"kookPlaat1");
+        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
 
     }
 
