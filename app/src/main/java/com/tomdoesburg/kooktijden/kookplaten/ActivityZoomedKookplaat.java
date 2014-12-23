@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -60,6 +61,8 @@ public class ActivityZoomedKookplaat extends Activity{
         kookPlaatID = intent.getStringExtra("kookPlaatID");
         vegID = intent.getIntExtra("vegetableID",0);
 
+        Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
+
         //get vegetable from database
         MySQLiteHelper db = new MySQLiteHelper(this);
         Vegetable vegetable = db.getVegetable(vegID);
@@ -79,6 +82,9 @@ public class ActivityZoomedKookplaat extends Activity{
         stop = (ImageButton) view.findViewById(R.id.buttonTimerStop);
         plus = (Button) view.findViewById(R.id.buttonTimerPlus);
         vegetableName = (TextView) view.findViewById(R.id.vegetableName);
+        vegetableName.setTypeface(typeFace);
+
+        plus.setTypeface(typeFace);
 
         //set the vegetable name according to locale
         String language = Locale.getDefault().getDisplayLanguage();
@@ -151,6 +157,8 @@ public class ActivityZoomedKookplaat extends Activity{
         int barVal = progress.getMax()-secondsLeft;
         progress.setProgress(barVal);
         // format the textview to show the easily readable format
+        Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
+        text.setTypeface(typeFace);
         text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
         if(timerRunning){
@@ -264,26 +272,32 @@ public class ActivityZoomedKookplaat extends Activity{
         switch (kookPlaatnum) {
             case 1:
                 TimerService.timer1Running = false;
+                TimerService.timer1Finished = false;
                 TimerService.deadline1 = 0;
                 break;
             case 2:
                 TimerService.timer2Running = false;
+                TimerService.timer2Finished = false;
                 TimerService.deadline2 = 0;
                 break;
             case 3:
                 TimerService.timer3Running = false;
+                TimerService.timer3Finished = false;
                 TimerService.deadline3 = 0;
                 break;
             case 4:
                 TimerService.timer4Running = false;
+                TimerService.timer4Finished = false;
                 TimerService.deadline4 = 0;
                 break;
             case 5:
                 TimerService.timer5Running = false;
+                TimerService.timer5Finished = false;
                 TimerService.deadline5 = 0;
                 break;
             case 6:
                 TimerService.timer6Running = false;
+                TimerService.timer6Finished = false;
                 TimerService.deadline6 = 0;
                 break;
         }
@@ -307,26 +321,32 @@ public class ActivityZoomedKookplaat extends Activity{
             case 1:
                 TimerService.deadline1 += 30;
                 TimerService.deadline1Add += 30;
+                TimerService.timer1Finished = false;
                 break;
             case 2:
                 TimerService.deadline2 += 30;
                 TimerService.deadline2Add += 30;
+                TimerService.timer2Finished = false;
                 break;
             case 3:
                 TimerService.deadline3 += 30;
                 TimerService.deadline3Add += 30;
+                TimerService.timer3Finished = false;
                 break;
             case 4:
                 TimerService.deadline4 += 30;
                 TimerService.deadline4Add += 30;
+                TimerService.timer4Finished = false;
                 break;
             case 5:
                 TimerService.deadline5 += 30;
                 TimerService.deadline5Add += 30;
+                TimerService.timer5Finished = false;
                 break;
             case 6:
                 TimerService.deadline6 += 30;
                 TimerService.deadline6Add += 30;
+                TimerService.timer6Finished = false;
                 break;
         }
 
@@ -471,6 +491,16 @@ public class ActivityZoomedKookplaat extends Activity{
         // -1 vibrate once
         // 0 vibrate indefinitely
         vibrator.vibrate(pattern, -1);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
+        //super.onBackPressed();
 
     }
 

@@ -299,10 +299,39 @@ public class TimerHelper {
         return false;
     }
 
+    public boolean isTimerFinished(int kookPlaatNum){
+        switch(kookPlaatNum){
+            case 1: return TimerService.timer1Finished;
+
+            case 2: return TimerService.timer2Finished;
+
+            case 3: return TimerService.timer3Finished;
+
+            case 4: return TimerService.timer4Finished;
+
+            case 5: return TimerService.timer5Finished;
+
+            case 6: return TimerService.timer6Finished;
+        }
+        return false;
+    }
+
     public void onTick(){ //this function will be called by the timerService via mainactivity
+        int kookPlaatNum = getKookPlaatNum();
+
+        if(isTimerFinished(kookPlaatNum)){
+            progress.setProgress(progress.getMax());
+            text.setText("00:00");
+            int vegID = getVegID(kookPlaatNum);
+            Vegetable veg = ((MainActivity) activity).getVegetableFromDB(vegID);
+            this.vegetable = veg;
+            this.vegetableSelected = true;
+
+        }
+
 
         if(this.timerRunning) {
-            int kookPlaatNum = getKookPlaatNum();
+            //int kookPlaatNum = getKookPlaatNum();
 
             //update progressbar max value
             int additionalTime = getAdditionalTime(kookPlaatNum);

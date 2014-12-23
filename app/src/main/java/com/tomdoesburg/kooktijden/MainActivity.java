@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -215,6 +217,18 @@ public class MainActivity extends FragmentActivity {
         return false;
     }
 
+    public boolean allTimersDone(){ //true is there is any running timer
+        if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
+                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
+            return false;
+        }else if (TimerService.deadline1 == 0 && TimerService.deadline2 ==0 && TimerService.deadline3 == 0
+                || TimerService.deadline4 == 0 && TimerService.deadline5 == 0 && TimerService.deadline6 == 0){
+            return true;
+        }
+        return false;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -318,11 +332,18 @@ public class MainActivity extends FragmentActivity {
         TimerService.timer5Running = false;
         TimerService.timer6Running = false;
 
+        TimerService.timer1Finished = false;
+        TimerService.timer2Finished = false;
+        TimerService.timer3Finished = false;
+        TimerService.timer4Finished = false;
+        TimerService.timer5Finished = false;
+        TimerService.timer6Finished = false;
+
         Intent intent = new Intent(this, TimerService.class);
         intent.putExtra(TimerService.KILL_SERVICE,true);
         startService(intent);
 
-        //refresh all fragments
+        //reset all fragments
         int curFragment = pager.getCurrentItem();
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
@@ -336,9 +357,17 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
+
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
+
+        //if timer service still exists, but there are no running alarms: kill service
+        if(allTimersDone()){
+            Intent intent = new Intent(this, TimerService.class);
+            intent.putExtra(TimerService.KILL_SERVICE,true);
+            startService(intent);
+        }
     }
 
     //Service related
@@ -379,7 +408,7 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateGUI(intent);
+            updateGUI();
         }
     };
 
@@ -396,9 +425,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     //Service related: processes ticks and updates GUI
-    private void updateGUI(Intent intent) {
-        if (intent.getExtras() != null) {
-            long millisUntilFinished = intent.getIntExtra("countdown", 0);
+    private void updateGUI() {
             Log.i(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
 
@@ -420,8 +447,6 @@ public class MainActivity extends FragmentActivity {
                         k6.tick();
                         break;
             }
-
-        }
     }
 
     public void hideNotification(int ID){
@@ -444,7 +469,7 @@ public class MainActivity extends FragmentActivity {
         db.addVegetable(new Vegetable("Carrots", "Wortels", 10, 10, "Gently scrub the carrots under cold running water to remove the dirt on the surface. Trim both ends of each carrots. Use a kitchen knife or vegetable peeler to peel the top layer. Submerge the carrots in salted water and let it boil for roughly 10 minutes.", "Snijd de boven- en onderkant van de wortels af. Schraap vervolgens met een keukenmes alle vuil en onregelmatigheden weg. Grotere en grovere wortels kun je beter helemaal schillen. Hierna kunnen de wortels in de pan. Vul deze met koud water tot de wortels er net onder staan en voeg wat zout toe. Laat het water ongeveer 10 minuten koken."));
         db.addVegetable(new Vegetable("Cauliflower", "Bloemkool", 12, 12, "Remove the leaves and stem of the cauliflower, then wash under running water. Submerge in salted water and boil the cauliflower.", "Verwijder de bladeren van de bloemkool en een stuk van de stronk. Was de bloemkool in zijn geheel met de stronk naar beneden gehouden. Zet de bloemkool in een pan met water met zout en breng aan de kook."));
         db.addVegetable(new Vegetable("Corn on the cob", "Maiskolf", 15, 25, "Remove the husks, clean the cob and cook in water without salt. The cooking time depends on the size and it's best not to overcook the corn. The corn is done if you can pop it from the cob using a fork. Serve with butter and salt.", "Verwijder het groene omhulsel, maak de maiskolf schoon en kook in ruim water zonder zout. Kleinere kolven zijn sneller gaar dan grotere en te lang koken gaat ten koste van de smaak. Controleer daarom regelmatig of de mais gaar is. De mais is gaar als je de korrels zonder veel moeite van de kolf kunt wippen met een vork. Serveer met een klontje boter en wat zout."));
-        db.addVegetable(new Vegetable("Endive", "Witlof", 12, 15, "Pull of any brown outer leaves and clean the endive with water. The green tip is quite bitter and is many people prefer to remove it. Remove the stem, then cut the endive up and boil in water. ", "Trek eventuele bruine bladeren van de witlof af en spoel de stronk af. Daarna kan je een klein plakje van het bruine voetje weghalen. Van onderen kan je de harde kern weg snijden. Snijd de witlof in reepjes en leg deze in onder een laagje water in de pan, breng ze vervolgens aan de kook."));
+        db.addVegetable(new Vegetable("Endive", "Witlof", 12, 15, "Pull of any brown outer leaves and clean the endive with water. The green tip and heart are quite bitter and is many people prefer to remove it. Remove the stem, then cut the endive up and boil in water. ", "Trek eventuele bruine bladeren van de witlof af en spoel de stronk af. Daarna kan je een klein plakje van het bruine voetje weghalen. Verwijder het hart van de witlof aan de binnenkant, die is namelijk erg bitter. Snijd vervolgens de witlof in reepjes en leg deze in onder een laagje water in de pan, breng ze vervolgens aan de kook."));
         db.addVegetable(new Vegetable("Leek", "Prei", 15, 15, "To prepare leeks, cut off and discard the dark green parts that are tough. Trim the leek's beard at the bottom. You'll often find dirt on the leek. The easiest way to clean leeks is to cut them into rings, and swirl them in water to remove the grit, then drain them well. Cook the rings in water with a pinch of salt.", "Voor je begint met prei koken, is het belangrijk dat je de prei goed wast. Vooral tussen de bladeren van de stengels zit vaak aarde. Snijd ook de wortel en de donkergroene stukken van de prei af. Vervolgens snijd je de prei in ringetjes die je ook goed moet wassen. Kook de ringetjes in een pan met een snufje zout."));
         db.addVegetable(new Vegetable("Peas", "Erwten", 5, 5, "Peas exist in loads of variants. The pea is a vegetable that grows inside a legume (a carpel which is folded around the peas). Peas are round or oval shaped. Most types don't need a lot of cooking, a good warm-up of approximately 5 minutes is enough.", "Erwten bestaan in veel verschillende varianten. Het is een groente die groeit binnenin een peul (een langwerpig vruchtblad dat dichtgevouwen om de erwten zit). Erwten zijn rond of ovaal van vorm. De meeste soorten hoeven niet lang te koken, vaak zo'n 5 minuten goed opwarmen al voldoende."));
         db.addVegetable(new Vegetable("Potatoes (halves)", "Aardappelen (halven)", 10, 15, "Peal or wash the potatoes before cooking. Cutting the potatoes in halves decreases the cooking time substantially. Make sure you cut the potatoes in equally sized parts, else the parts will not cook through simultaneously. Submerge the potatoes in a pan filled with water. If desired, add a pinch of salt to the water.", "Schil of was de aardappelen voor je ze gaat koken. Door de aardappelen doormidden te snijden voor je ze gaat koken verkort je de kooktijd aanzienlijk. Zorg er hierbij wel voor dat je de aardappelen in delen van gelijke grootte snijd, anders zijn de delen niet gelijktijdig gaar. Doe de aardappelen in een pan met water en voeg eventueel een snufje zout toe."));

@@ -30,7 +30,7 @@
         android:layout_above="@+id/adView"
         android:padding="10dp"
         android:layout_width="wrap_content"
-        app:fillColor="@color/red"
+        app:fillColor="@color/teal"
         app:pageColor="@color/gray_lighter" />
 
     <WebView
