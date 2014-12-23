@@ -45,6 +45,7 @@ public class MainActivity extends FragmentActivity {
     private ImageButton lockButton;
     private CirclePageIndicator indicator;
     private WebView indicatorBlocker;
+    private StateSaver stateSaver;
 
     SharedPreferences sharedPrefs;
 
@@ -250,6 +251,7 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     // Call Back method to get the cooking time from the vegetable Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -362,9 +364,15 @@ public class MainActivity extends FragmentActivity {
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
 
+        Intent intent = new Intent(this, TimerService.class);
+        startService(intent);
+
+        stateSaver = new StateSaver(this);
+        stateSaver.retrieveStates();
+
         //if timer service still exists, but there are no running alarms: kill service
         if(allTimersDone()){
-            Intent intent = new Intent(this, TimerService.class);
+            intent = new Intent(this, TimerService.class);
             intent.putExtra(TimerService.KILL_SERVICE,true);
             startService(intent);
         }
@@ -375,6 +383,10 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onPause() {
         super.onPause();
+
+        stateSaver =  new StateSaver(this);
+        stateSaver.saveStates();
+
         unregisterReceiver(br);
         Log.i(TAG, "Unregistered broacast receiver");
         TimerService.runningOnForeground = false;
@@ -458,6 +470,7 @@ public class MainActivity extends FragmentActivity {
     /////////////////////////////////////////////////////////////////////////
 
     public void addVegetablesToDb (MySQLiteHelper db) {
+        db.addVegetable(new Vegetable("test", "test", 1, 1, "test", "test"));
         db.addVegetable(new Vegetable("Artichoke", "Artisjok", 25, 25, "Artichokes look more like a Flower than a vegetable. To prepare an artichoke you have to cut of the stem and remove the tougher leaves until only the soft remain.", "Artisjokken lijken meer op een bloem dan een groente. Om een artisjok te bereiden moet je de steel er af snijden en verwijder je de harde bladeren totdat er alleen nog zachte over zijn."));
         db.addVegetable(new Vegetable("Asparagus (whole)", "Asperges (heel)", 15, 15, "Before cooking asparagus you have to peel them. This easiest way is to leave them for 30 minutes in a bit of water before peeling them. To peel them grab the head and move your knife from the top downwards. Next cut a small piece from the bottom. Cook the asparagus with the peels and the bottom ens for more flavour.", "Voordat asperges in de pan kunnen, moeten ze geschild worden. Dit gaat het makkelijkst wanneer je ze een half uur laat weken in koud water voordat je ze schilt. Pak vervolgens een asperge bij de kop en schil van boven naar beneden en verwijder een stukje van de onderkant. Kook de asperges vervolgens met de schillen en de uiteinden voor meer smaak."));
         db.addVegetable(new Vegetable("Beans", "Sperziebonen", 8, 8, "Remove both ends of the beans and place them in boiling water. After 8 minutes rinse the beans with cold water to preserve the green color and prevent overcooking", "Snij de uiteinden van de sperziebonen af en plaats ze in kokend water. Giet de sperziebonen na 8 minuten af en spoel ze kort af met koud water om de mooie groene kleur te behouden en te voorkomen dat ze nog verder garen."));

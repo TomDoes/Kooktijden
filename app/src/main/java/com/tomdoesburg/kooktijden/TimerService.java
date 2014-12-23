@@ -1,10 +1,8 @@
 package com.tomdoesburg.kooktijden;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -12,15 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.os.PowerManager.WakeLock;
-
-import com.tomdoesburg.model.Vegetable;
-import com.tomdoesburg.sqlite.MySQLiteHelper;
-
-import java.util.ArrayList;
 
 /**
  * Created by FrankD on 13-9-2014.
@@ -39,6 +32,7 @@ public class TimerService extends Service {
     public static int timerReadyID = 2;
     private  NotificationCompat.Builder mBuilder;
     private boolean firstNotification = true; //lets us know if we can re-use (false) a notification or create a new one (true)
+    private boolean killHandlerCalled = false;
 
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
@@ -112,7 +106,9 @@ public class TimerService extends Service {
 
         @Override
         public void run() {
-            if(doneCounting()) {
+            killHandlerCalled = false;
+
+            if(doneCounting() || onlyPausedStates()) {
                 killService();
             }
         }
@@ -194,9 +190,13 @@ public class TimerService extends Service {
             hideNotification(this.notificationID);
         }
 
-        if(doneCounting()){
-         //   killService();
+        //method is in paused state and user has left the app.
+        // killing service is more cpu efficient in this case
+        if(!killHandlerCalled && !runningOnForeground && onlyPausedStates()){
+            killHandlerCalled = true;
+            killHandler.postDelayed(killRunnable,1000);
         }
+
     }
 
 
@@ -210,6 +210,18 @@ public class TimerService extends Service {
                 deadline5 +
                 deadline6
                 == 0;
+    }
+
+    //returns true if not a single timer is running
+    public boolean onlyPausedStates(){
+        boolean anyTimerRunning = (timer1Running || timer2Running || timer3Running
+                || timer4Running || timer5Running || timer6Running);
+
+        if(!anyTimerRunning){
+            return true;
+        }else{//anyTimerRunning == true
+            return false;
+        }
     }
 
     public void killService(){
@@ -234,6 +246,19 @@ public class TimerService extends Service {
         timer5Running = false;
         timer6Running = false;
 
+
+        //hide notifications from screen
+        hideNotification(this.notificationID);
+
+        //remove handler callbacks
+        timerHandler.removeCallbacks(timerRunnable);
+
+        //release wakelock (if any was held)
+        if (wakeLock.isHeld()){
+            wakeLock.release();
+        }
+
+        //kill service
         this.stopSelf();
     }
 
@@ -244,7 +269,7 @@ public class TimerService extends Service {
         if (wakeLock.isHeld()){
             wakeLock.release();
         }
-        Log.i(TAG, "Service comitted suicide Aaaah");
+        Log.d(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
     }
 
@@ -253,6 +278,8 @@ public class TimerService extends Service {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock((PowerManager.PARTIAL_WAKE_LOCK), "TimerService");
+        wakeLock.setReferenceCounted(false); //only 1 call to acquire is enough to acquire, only 1 release required to release
+
         if(!wakeLock.isHeld()) {
             wakeLock.acquire();
         }
@@ -358,8 +385,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             boolean kill = extras.getBoolean(KILL_SERVICE);
             if(kill){
-               killHandler.postDelayed(killRunnable,5000);
-              //  killService();
+                killHandler.postDelayed(killRunnable,5000);
             }
 
         }catch(NullPointerException e){

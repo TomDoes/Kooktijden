@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.StateSaver;
 import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -47,6 +48,7 @@ public class ActivityZoomedKookplaat extends Activity{
     private TextView text;
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
+    private StateSaver stateSaver;
 
     final Context context = this;
 
@@ -104,6 +106,12 @@ public class ActivityZoomedKookplaat extends Activity{
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
+
+        Intent intent = new Intent(this, TimerService.class);
+        startService(intent);
+
+        stateSaver = new StateSaver(this);
+        stateSaver.retrieveStates();
 
         //make all the buttons work
 
@@ -208,6 +216,10 @@ public class ActivityZoomedKookplaat extends Activity{
     public void onPause() {
         super.onPause();
         unregisterReceiver(br);
+
+        stateSaver =  new StateSaver(this);
+        stateSaver.saveStates();
+
         Log.i(TAG, "Unregistered broacast receiver");
         TimerService.runningOnForeground = false;
     }

@@ -18,6 +18,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.StateSaver;
 
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
     private final String TAG = "VegetableActivity";
