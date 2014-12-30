@@ -445,7 +445,7 @@ public class TimerService extends Service {
     private String getFirstAlarmText(){
         //returns current time of the active alarm closest to zero
         int soonestDeadline = 0;
-        String vegetableName = "";
+        String vegetableName = "Timer";
         String language = Locale.getDefault().getDisplayLanguage();
         boolean dutch = language.equals("Nederlands");
 

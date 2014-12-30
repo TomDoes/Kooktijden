@@ -445,7 +445,7 @@ public class MainActivity extends FragmentActivity {
 
     //Service related: processes ticks and updates GUI
     private void updateGUI() {
-            Log.i(TAG, "received tick!");
+            //Log.d(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
 
             int curItem = pager.getCurrentItem();
