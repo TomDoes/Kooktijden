@@ -41,6 +41,7 @@ public class TimerService extends Service {
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
     private WakeLock wakeLock;
+    private WakeLock screenLock;
 
     //vegetable database, used for displaying vegetable names in notifications
     public static MySQLiteHelper db;
@@ -573,6 +574,13 @@ public class TimerService extends Service {
 
     public void wakeUpScreen(){
        //TODO: wake up screen without conflicting with existing wakelock
+
+        screenLock = ((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        screenLock.acquire();
+
+        //later
+        screenLock.release();
     }
 
     public void hideNotification(int ID){

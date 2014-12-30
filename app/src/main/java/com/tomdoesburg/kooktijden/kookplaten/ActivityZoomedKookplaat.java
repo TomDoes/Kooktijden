@@ -124,8 +124,10 @@ public class ActivityZoomedKookplaat extends Activity{
                     pauseTimer();
                     pause.setImageResource(R.drawable.icon_play);
                 }else{
-                    startTimerService();
-                    pause.setImageResource(R.drawable.icon_pause);
+                    if(secondsLeft > 0) {
+                        startTimerService();
+                        pause.setImageResource(R.drawable.icon_pause);
+                    }
                 }
 
                 //go back to previous activity
