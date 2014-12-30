@@ -15,6 +15,10 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.tomdoesburg.sqlite.MySQLiteHelper;
+
+import java.util.Locale;
+
 /**
  * Created by FrankD on 13-9-2014.
  */
@@ -37,6 +41,9 @@ public class TimerService extends Service {
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
     private WakeLock wakeLock;
+
+    //vegetable database, used for displaying vegetable names in notifications
+    public static MySQLiteHelper db;
 
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
@@ -435,9 +442,91 @@ public class TimerService extends Service {
         return returnVal;
     }
 
+    private String getFirstAlarmText(){
+        //returns current time of the active alarm closest to zero
+        int soonestDeadline = 0;
+        String vegetableName = "";
+        String language = Locale.getDefault().getDisplayLanguage();
+        boolean dutch = language.equals("Nederlands");
+
+        if(timer1Running && (soonestDeadline > deadline1 || soonestDeadline == 0)){
+            soonestDeadline = deadline1;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID1).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID1).getNameEN();
+                }
+            }
+
+        }
+        if(timer2Running && (soonestDeadline > deadline2 || soonestDeadline == 0)){
+            soonestDeadline = deadline2;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID2).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID2).getNameEN();
+                }
+            }
+
+        }
+        if(timer3Running && (soonestDeadline > deadline3 || soonestDeadline == 0)){
+            soonestDeadline = deadline3;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID3).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID3).getNameEN();
+                }
+            }
+        }
+        if(timer4Running && (soonestDeadline > deadline4 || soonestDeadline == 0)){
+            soonestDeadline = deadline4;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID4).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID4).getNameEN();
+                }
+            }
+        }
+        if(timer5Running && (soonestDeadline > deadline5 || soonestDeadline == 0)){
+            soonestDeadline = deadline5;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID5).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID5).getNameEN();
+                }
+            }
+        }
+        if(timer6Running && (soonestDeadline > deadline6 || soonestDeadline == 0)){
+            soonestDeadline = deadline6;
+
+            if(!db.equals(null)) {
+                if(dutch){
+                    vegetableName = db.getVegetable(vegID6).getNameNL();
+                }else {
+                    vegetableName = db.getVegetable(vegID6).getNameEN();
+                }
+            }
+        }
+
+        String returnVal = vegetableName + " " + getString(R.string.ready_in) + " " + String.format("%02d", soonestDeadline / 60) + ":" + String.format("%02d", soonestDeadline % 60);
+
+        return returnVal;
+    }
+
     public void showNotification(int ID){
         // Creates an explicit intent for an Activity in your app
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         if(ID == this.notificationID) {
@@ -446,7 +535,8 @@ public class TimerService extends Service {
                 mBuilder.setSmallIcon(R.drawable.kooktijden_icon)
                         .setOnlyAlertOnce(true)
                         .setContentTitle(getString(R.string.timer))
-                        .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                        //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                        .setContentText(getFirstAlarmText())
                         .setContentIntent(pIntent);
             }else{ //create new instance of mBuilder
                 this.firstNotification = false;
@@ -456,7 +546,8 @@ public class TimerService extends Service {
                                 .setOnlyAlertOnce(true)
                                 .setSmallIcon(R.drawable.kooktijden_icon)
                                 .setContentTitle(getString(R.string.timer))
-                                .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                                //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
+                                .setContentText(getFirstAlarmText())
                                 .setContentIntent(pIntent);
             }
 

@@ -370,6 +370,9 @@ public class MainActivity extends FragmentActivity {
         stateSaver = new StateSaver(this);
         stateSaver.retrieveStates();
 
+        //set vegetable database
+        TimerService.db = db;
+
         //if timer service still exists, but there are no running alarms: kill service
         if(allTimersDone()){
             intent = new Intent(this, TimerService.class);
@@ -396,6 +399,10 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     public void onStop() {
+
+        stateSaver =  new StateSaver(this);
+        stateSaver.saveStates();
+
         try {
             unregisterReceiver(br);
             TimerService.runningOnForeground = false;
