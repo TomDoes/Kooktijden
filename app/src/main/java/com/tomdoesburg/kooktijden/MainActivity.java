@@ -206,7 +206,7 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    public boolean timerRunning(){ //true is there is any running timer
+    public boolean timerRunning(){ //true is there is any running timer or any on pause
         if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
                 ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
             return true;
@@ -218,7 +218,7 @@ public class MainActivity extends FragmentActivity {
         return false;
     }
 
-    public boolean allTimersDone(){ //true is there is any running timer
+    public boolean allTimersDone(){ //true if there isn't any running timer
         if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
                 ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
             return false;
@@ -367,8 +367,10 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
 
+        //retrieve states
         stateSaver = new StateSaver(this);
         stateSaver.retrieveStates();
+
 
         //set vegetable database
         TimerService.db = db;
@@ -387,7 +389,7 @@ public class MainActivity extends FragmentActivity {
     public void onPause() {
         super.onPause();
 
-        stateSaver =  new StateSaver(this);
+        stateSaver = new StateSaver(this);
         stateSaver.saveStates();
 
         unregisterReceiver(br);

@@ -26,9 +26,8 @@ public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE";
-    public final static String TIMER_DONE = "TIMER_DONE";
-    public final static String VEGID = "VEGID";
 
+    private StateSaver stateSaver;
     private MediaPlayer mediaPlayer;
     public static boolean alarmOn = false;
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
@@ -150,6 +149,7 @@ public class TimerService extends Service {
             if(deadline1 == 0){
                 timer1Running = false;
                 timer1Finished = true;
+                deadline1Add = 0;
                 onTimerFinished();
             }
         }
@@ -158,6 +158,7 @@ public class TimerService extends Service {
             if(deadline2 == 0){
                 timer2Running = false;
                 timer2Finished = true;
+                deadline2Add = 0;
                 onTimerFinished();
             }
         }
@@ -166,6 +167,7 @@ public class TimerService extends Service {
             if(deadline3 == 0){
                 timer3Running = false;
                 timer3Finished = true;
+                deadline3Add = 0;
                 onTimerFinished();
             }
         }
@@ -174,6 +176,7 @@ public class TimerService extends Service {
             if(deadline4 == 0){
                 timer4Running = false;
                 timer4Finished = true;
+                deadline4Add = 0;
                 onTimerFinished();
             }
         }if(deadline5 > 0 && timer5Running){
@@ -181,6 +184,7 @@ public class TimerService extends Service {
             if(deadline5 == 0){
                 timer5Running = false;
                 timer5Finished = true;
+                deadline5Add = 0;
                 onTimerFinished();
             }
         }if(deadline6 > 0 && timer6Running){
@@ -188,6 +192,7 @@ public class TimerService extends Service {
             if(deadline6 == 0){
                 timer6Finished = true;
                 timer6Running = false;
+                deadline6Add = 0;
                 onTimerFinished();
             }
         }
@@ -205,6 +210,9 @@ public class TimerService extends Service {
             killHandler.postDelayed(killRunnable,1000);
         }
 
+        //save state
+        stateSaver = new StateSaver(getApplicationContext());
+        stateSaver.saveStates();
     }
 
 
@@ -277,6 +285,7 @@ public class TimerService extends Service {
         if (wakeLock.isHeld()){
             wakeLock.release();
         }
+
         Log.d(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
     }
@@ -599,6 +608,9 @@ public class TimerService extends Service {
             //turn on screen (if turned off)
             wakeUpScreen();
 
+            //save state
+            stateSaver = new StateSaver(getApplicationContext());
+            stateSaver.saveStates();
 
             //play sound
             mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
