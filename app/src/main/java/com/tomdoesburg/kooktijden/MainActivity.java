@@ -206,6 +206,11 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public boolean serviceActive(){
+        return (TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
+                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running);
+    }
+
     public boolean timerRunning(){ //true is there is any running timer or any on pause
         if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
                 ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
@@ -265,7 +270,6 @@ public class MainActivity extends FragmentActivity {
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
                 String kookPlaatID = data.getStringExtra("kookPlaatID");
-                Log.v(TAG, kookPlaatID + " was selected");
                 setVegetable(vegId,kookPlaatID);
                 //MySQLiteHelper db = new MySQLiteHelper(this);
                 //Vegetable veg = db.getVegetable(vegId);
@@ -367,13 +371,14 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
 
-        //retrieve states
-        stateSaver = new StateSaver(this);
-        stateSaver.retrieveStates();
-
-
-        //set vegetable database
-        TimerService.db = db;
+        //retrieve states only if timer not active
+        if(!serviceActive()){
+            Log.d(TAG,"MainActivity retrieving state");
+            stateSaver = new StateSaver(this);
+            stateSaver.retrieveStates();
+        }else{
+            Log.d(TAG,"MainActivity NOT retrieving state");
+        }
 
         //if timer service still exists, but there are no running alarms: kill service
         if(allTimersDone()){
@@ -389,6 +394,7 @@ public class MainActivity extends FragmentActivity {
     public void onPause() {
         super.onPause();
 
+        Log.d(TAG,"MainActivity onPause() saving state");
         stateSaver = new StateSaver(this);
         stateSaver.saveStates();
 
@@ -402,8 +408,9 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onStop() {
 
-        stateSaver =  new StateSaver(this);
-        stateSaver.saveStates();
+        //Log.d(TAG,"MainActivity onStop() saving state");
+        //stateSaver =  new StateSaver(this);
+        //stateSaver.saveStates();
 
         try {
             unregisterReceiver(br);
@@ -414,6 +421,13 @@ public class MainActivity extends FragmentActivity {
         super.onStop();
     }
 
+    @Override
+    public void onBackPressed(){
+        Log.d(TAG,"MainActivity onBackPressed() saving state");
+        stateSaver =  new StateSaver(this);
+        stateSaver.saveStates();
+        super.onBackPressed();
+    }
     /*
 
     //Service related

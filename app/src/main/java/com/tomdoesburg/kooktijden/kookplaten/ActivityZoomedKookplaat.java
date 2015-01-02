@@ -43,6 +43,7 @@ public class ActivityZoomedKookplaat extends Activity{
     private ImageButton stop;
     private Button plus;
     private TextView vegetableName;
+    private Vegetable vegetable;
     //private View kookplaat1;
     private ProgressBar progress;
     private TextView text;
@@ -67,7 +68,7 @@ public class ActivityZoomedKookplaat extends Activity{
 
         //get vegetable from database
         MySQLiteHelper db = new MySQLiteHelper(this);
-        Vegetable vegetable = db.getVegetable(vegID);
+        this.vegetable = db.getVegetable(vegID);
 
         //set cooking time
         this.cookingTime = db.getVegetable(vegID).getCookingTimeMin();
@@ -110,8 +111,11 @@ public class ActivityZoomedKookplaat extends Activity{
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
 
-        stateSaver = new StateSaver(this);
-        stateSaver.retrieveStates();
+        //retrieve states only if timer not active
+        if(!serviceActive()){
+            stateSaver = new StateSaver(this);
+            stateSaver.retrieveStates();
+        }
 
         //make all the buttons work
 
@@ -219,6 +223,7 @@ public class ActivityZoomedKookplaat extends Activity{
         super.onPause();
         unregisterReceiver(br);
 
+        Log.d(TAG,"ActivityZoomedKookplaat onPause() saving state");
         stateSaver =  new StateSaver(this);
         stateSaver.saveStates();
 
@@ -276,8 +281,21 @@ public class ActivityZoomedKookplaat extends Activity{
             Intent intent = new Intent(this, TimerService.class);
             intent.putExtra(this.kookPlaatID, this.secondsLeft);
             intent.putExtra("vegID", this.vegID);
+            intent.putExtra("vegName", getVegetableName(vegetable));
+
             this.startService(intent);
         }
+    }
+
+    private String getVegetableName(Vegetable veg){
+        String language = Locale.getDefault().getDisplayLanguage();
+
+        if(language.equals("Nederlands")){
+            return veg.getNameNL();
+        }else{
+            return veg.getNameEN();
+        }
+
     }
 
     public void stopTimer(){
@@ -506,6 +524,11 @@ public class ActivityZoomedKookplaat extends Activity{
         // 0 vibrate indefinitely
         vibrator.vibrate(pattern, -1);
 
+    }
+
+    public boolean serviceActive(){
+        return (TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
+                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running);
     }
 
     @Override

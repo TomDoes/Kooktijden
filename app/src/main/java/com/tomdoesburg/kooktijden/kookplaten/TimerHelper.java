@@ -19,6 +19,8 @@ import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.kooktijden.vegetables.VegetableActivity;
 import com.tomdoesburg.model.Vegetable;
 
+import java.util.Locale;
+
 /**
  * Created by Joost on 11-7-2014.
  */
@@ -81,11 +83,9 @@ public class TimerHelper {
                 if(vegetableSelected && !timerRunning && secondsLeft > 0){
 
                     if(text.getText().equals("Start")) {
-                        Log.d(TAG,"equals start");
                         startTimerService();
                         ((MainActivity) activity).lock();
                     }else{
-                        Log.d(TAG,"not equals start: " + text.getText().toString());
                         //open a zoomed-in view of the selected kookplaat
                         Intent intent = new Intent(activity, ActivityZoomedKookplaat.class);
                         intent.putExtra("kookPlaatID", kookPlaatID);
@@ -153,6 +153,17 @@ public class TimerHelper {
         text.setText(activity.getString(R.string.paused));
     }
 
+    private String getVegetableName(Vegetable veg){
+        String language = Locale.getDefault().getDisplayLanguage();
+
+        if(language.equals("Nederlands")){
+            return veg.getNameNL();
+        }else{
+            return veg.getNameEN();
+        }
+
+    }
+
     public void startTimerService(){ //starts the countdown for the cooking time of the vegetable
         int kookPlaatnum = getKookPlaatNum();
 
@@ -183,6 +194,7 @@ public class TimerHelper {
             Intent intent = new Intent(activity, TimerService.class);
             intent.putExtra(this.kookPlaatID, this.secondsLeft);
             intent.putExtra("vegID", vegetable.getId());
+            intent.putExtra("vegName", getVegetableName(vegetable)); //gets correct name based on display language
             activity.startService(intent);
         }
     }

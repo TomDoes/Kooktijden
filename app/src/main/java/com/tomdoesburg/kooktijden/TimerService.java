@@ -42,9 +42,6 @@ public class TimerService extends Service {
     private WakeLock wakeLock;
     private WakeLock screenLock;
 
-    //vegetable database, used for displaying vegetable names in notifications
-    public static MySQLiteHelper db;
-
     public static boolean timer1Running = false;
     public static boolean timer2Running = false;
     public static boolean timer3Running = false;
@@ -84,6 +81,14 @@ public class TimerService extends Service {
     public static int vegID5;
     public static int vegID6;
 
+    //vegateble name
+    public static String vegName1 = " ";
+    public static String vegName2 = " ";
+    public static String vegName3 = " ";
+    public static String vegName4 = " ";
+    public static String vegName5 = " ";
+    public static String vegName6 = " ";
+
     public static final String TIMER_SERVICE = "com.tomdoesburg.kooktijden.TimerService";
     Intent bi = new Intent(TIMER_SERVICE);
 
@@ -107,7 +112,7 @@ public class TimerService extends Service {
 
 
 
-    //handler for delayed killing of service
+    //handler for delayed killing of service, including all variables
     Handler killHandler = new Handler();
     Runnable killRunnable = new Runnable() {
 
@@ -115,7 +120,7 @@ public class TimerService extends Service {
         public void run() {
             killHandlerCalled = false;
 
-            if(doneCounting() || onlyPausedStates()) {
+            if(!runningOnForeground && (doneCounting() || onlyPausedStates())) {
                 killService();
             }
         }
@@ -135,12 +140,7 @@ public class TimerService extends Service {
 
     //subtracts time from deadlines every second
     public void tick(){
-        bi.putExtra("deadline1", deadline1);
-        bi.putExtra("deadline2", deadline2);
-        bi.putExtra("deadline3", deadline3);
-        bi.putExtra("deadline4", deadline4);
-        bi.putExtra("deadline5", deadline5);
-        bi.putExtra("deadline6", deadline6);
+        //it's possible to put extra's to broadcast bi
 
         sendBroadcast(bi);
 
@@ -207,15 +207,18 @@ public class TimerService extends Service {
         // killing service is more cpu efficient in this case
         if(!killHandlerCalled && !runningOnForeground && onlyPausedStates()){
             killHandlerCalled = true;
+            //save state
+            Log.d(TAG,"onTick() saving state, then calling killHandler");
+            stateSaver = new StateSaver(getApplicationContext());
+            stateSaver.saveStates();
+
             killHandler.postDelayed(killRunnable,1000);
         }
 
         //save state
-        stateSaver = new StateSaver(getApplicationContext());
-        stateSaver.saveStates();
+      //  stateSaver = new StateSaver(getApplicationContext());
+      //  stateSaver.saveStates();
     }
-
-
 
     //indicates whether or not we can stop the service
     public boolean doneCounting(){
@@ -241,6 +244,7 @@ public class TimerService extends Service {
     }
 
     public void killService(){
+
         deadline1 = 0;
         deadline2 = 0;
         deadline3 = 0;
@@ -297,6 +301,7 @@ public class TimerService extends Service {
         wakeLock = powerManager.newWakeLock((PowerManager.PARTIAL_WAKE_LOCK), "TimerService");
         wakeLock.setReferenceCounted(false); //only 1 call to acquire is enough to acquire, only 1 release required to release
 
+
         if(!wakeLock.isHeld()) {
             wakeLock.acquire();
         }
@@ -304,6 +309,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat1");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer1Running = true;
@@ -311,6 +317,7 @@ public class TimerService extends Service {
                 deadline1 = deadline;
                 deadline1Add = 0;
                 vegID1 = vegID;
+                vegName1 = vegName;
             }
 
         }catch(NullPointerException e){
@@ -321,6 +328,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat2");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer2Running = true;
@@ -328,6 +336,7 @@ public class TimerService extends Service {
                 deadline2 = deadline;
                 deadline2Add = 0;
                 vegID2 = vegID;
+                vegName2 = vegName;
             }
         }catch(NullPointerException e){
             //do nothing
@@ -337,6 +346,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat3");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer3Running = true;
@@ -344,6 +354,7 @@ public class TimerService extends Service {
                 deadline3 = deadline;
                 deadline3Add = 0;
                 vegID3 = vegID;
+                vegName3 = vegName;
             }
 
         }catch(NullPointerException e){
@@ -354,6 +365,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat4");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer4Running = true;
@@ -361,6 +373,7 @@ public class TimerService extends Service {
                 deadline4 = deadline;
                 deadline4Add = 0;
                 vegID4 = vegID;
+                vegName4 = vegName;
             }
         }catch(NullPointerException e){
             //do nothing
@@ -370,6 +383,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat5");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer5Running = true;
@@ -377,6 +391,7 @@ public class TimerService extends Service {
                 deadline5 = deadline;
                 deadline5Add = 0;
                 vegID5 = vegID;
+                vegName5 = vegName;
             }
         }catch(NullPointerException e){
             //do nothing
@@ -386,6 +401,7 @@ public class TimerService extends Service {
             Bundle extras = intent.getExtras();
             int deadline = extras.getInt("kookPlaat6");
             int vegID = extras.getInt("vegID");
+            String vegName = extras.getString("vegName");
 
             if(deadline > 0) {
                 timer6Running = true;
@@ -393,6 +409,7 @@ public class TimerService extends Service {
                 deadline6 = deadline;
                 deadline6Add = 0;
                 vegID6 = vegID;
+                vegName6 = vegName;
             }
         }catch(NullPointerException e){
             //do nothing
@@ -409,7 +426,8 @@ public class TimerService extends Service {
             //do nothing
         }
 
-        return super.onStartCommand(intent, flags, startId);
+        //return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -461,71 +479,27 @@ public class TimerService extends Service {
 
         if(timer1Running && (soonestDeadline > deadline1 || soonestDeadline == 0)){
             soonestDeadline = deadline1;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID1).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID1).getNameEN();
-                }
-            }
-
+            vegetableName = vegName1;
         }
         if(timer2Running && (soonestDeadline > deadline2 || soonestDeadline == 0)){
             soonestDeadline = deadline2;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID2).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID2).getNameEN();
-                }
-            }
-
+            vegetableName = vegName2;
         }
         if(timer3Running && (soonestDeadline > deadline3 || soonestDeadline == 0)){
             soonestDeadline = deadline3;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID3).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID3).getNameEN();
-                }
-            }
+            vegetableName = vegName3;
         }
         if(timer4Running && (soonestDeadline > deadline4 || soonestDeadline == 0)){
             soonestDeadline = deadline4;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID4).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID4).getNameEN();
-                }
-            }
+            vegetableName = vegName4;
         }
         if(timer5Running && (soonestDeadline > deadline5 || soonestDeadline == 0)){
             soonestDeadline = deadline5;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID5).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID5).getNameEN();
-                }
-            }
+            vegetableName = vegName5;
         }
         if(timer6Running && (soonestDeadline > deadline6 || soonestDeadline == 0)){
             soonestDeadline = deadline6;
-
-            if(!db.equals(null)) {
-                if(dutch){
-                    vegetableName = db.getVegetable(vegID6).getNameNL();
-                }else {
-                    vegetableName = db.getVegetable(vegID6).getNameEN();
-                }
-            }
+            vegetableName = vegName6;
         }
 
         String returnVal = vegetableName + " " + getString(R.string.ready_in) + " " + String.format("%02d", soonestDeadline / 60) + ":" + String.format("%02d", soonestDeadline % 60);
@@ -609,6 +583,7 @@ public class TimerService extends Service {
             wakeUpScreen();
 
             //save state
+            Log.d(TAG,"onTimerFinished() saving state");
             stateSaver = new StateSaver(getApplicationContext());
             stateSaver.saveStates();
 
