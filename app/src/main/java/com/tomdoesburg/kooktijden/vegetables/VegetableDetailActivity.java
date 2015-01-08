@@ -1,12 +1,11 @@
 package com.tomdoesburg.kooktijden.vegetables;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import com.tomdoesburg.kooktijden.R;
-import com.tomdoesburg.kooktijden.StateSaver;
 
 /**
  * An activity representing a single Vegetable detail screen. This
@@ -71,7 +70,7 @@ public class VegetableDetailActivity extends Activity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            Intent intent =  new Intent(this, VegetableActivity.class);
+            Intent intent =  new Intent(this.getApplicationContext(), VegetableActivity.class);
             intent.putExtra("kookPlaatID",this.kookPlaatID);
 
             NavUtils.navigateUpTo(this,intent);

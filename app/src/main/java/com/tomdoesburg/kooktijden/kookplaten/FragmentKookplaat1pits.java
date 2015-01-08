@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
+import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 
@@ -20,11 +21,8 @@ import com.tomdoesburg.model.Vegetable;
 // object in our collection.
 public class FragmentKookplaat1pits extends Fragment {
     private final String TAG = "FragmentKookplaat1pits";
-    public static final String ARG_OBJECT = "object";
 
     //Timer related variables
-    int timeSeconds;
-    boolean timerRunning;
     TimerHelper timerHelper1;
 
     @Override
@@ -47,7 +45,7 @@ public class FragmentKookplaat1pits extends Fragment {
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
 
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
+        timerHelper1.init((MainActivity) getActivity(),kookplaat1view,"kookPlaat1");
 
     }
 

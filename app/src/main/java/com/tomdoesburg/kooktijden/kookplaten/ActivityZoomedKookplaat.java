@@ -51,7 +51,7 @@ public class ActivityZoomedKookplaat extends Activity{
     private int secondsLeft; //time left in seconds
     private StateSaver stateSaver;
 
-    final Context context = this;
+
 
 
     @Override
@@ -108,12 +108,12 @@ public class ActivityZoomedKookplaat extends Activity{
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
 
-        Intent intent = new Intent(this, TimerService.class);
+        Intent intent = new Intent(this.getApplicationContext(), TimerService.class);
         startService(intent);
 
         //retrieve states only if timer not active
         if(!serviceActive()){
-            stateSaver = new StateSaver(this);
+            stateSaver = new StateSaver(this.getApplicationContext());
             stateSaver.retrieveStates();
         }
 
@@ -183,7 +183,7 @@ public class ActivityZoomedKookplaat extends Activity{
     }
 
     private void createStopDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.stop_timer).setTitle(R.string.stop_timer_title);
 
@@ -224,7 +224,7 @@ public class ActivityZoomedKookplaat extends Activity{
         unregisterReceiver(br);
 
         Log.d(TAG,"ActivityZoomedKookplaat onPause() saving state");
-        stateSaver =  new StateSaver(this);
+        stateSaver =  new StateSaver(this.getApplicationContext());
         stateSaver.saveStates();
 
         Log.i(TAG, "Unregistered broacast receiver");
@@ -278,7 +278,7 @@ public class ActivityZoomedKookplaat extends Activity{
             }
 
             this.timerRunning = true;
-            Intent intent = new Intent(this, TimerService.class);
+            Intent intent = new Intent(this.getApplicationContext(), TimerService.class);
             intent.putExtra(this.kookPlaatID, this.secondsLeft);
             intent.putExtra("vegID", this.vegID);
             intent.putExtra("vegName", getVegetableName(vegetable));
@@ -333,7 +333,7 @@ public class ActivityZoomedKookplaat extends Activity{
                 TimerService.deadline6 = 0;
                 break;
         }
-        Intent intent = new Intent(this, MainActivity.class);//return to main activity
+        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);//return to main activity
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); //clear the back stack
         startActivity(intent);
         finish();
@@ -533,11 +533,11 @@ public class ActivityZoomedKookplaat extends Activity{
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
-        //super.onBackPressed();
+        super.onBackPressed();
 
     }
 

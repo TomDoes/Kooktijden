@@ -509,9 +509,9 @@ public class TimerService extends Service {
 
     public void showNotification(int ID){
         // Creates an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent pIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, intent, 0);
 
         if(ID == this.notificationID) {
             //notify user that a timer is running

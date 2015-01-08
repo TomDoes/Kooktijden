@@ -129,7 +129,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this.getApplicationContext(), MainActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
         }
@@ -158,7 +158,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, VegetableDetailActivity.class);
+            Intent detailIntent = new Intent(this.getApplicationContext(), VegetableDetailActivity.class);
             detailIntent.putExtra(VegetableDetailFragment.ARG_ITEM_ID, id);
             detailIntent.putExtra("kookPlaatID", this.kookPlaatID);
             startActivityForResult(detailIntent, 123);
@@ -194,11 +194,11 @@ public class VegetableActivity extends Activity implements VegetableListFragment
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
-        //super.onBackPressed();
+        super.onBackPressed();
 
     }
 }

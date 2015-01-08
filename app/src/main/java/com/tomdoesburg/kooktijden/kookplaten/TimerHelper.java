@@ -31,7 +31,7 @@ public class TimerHelper {
     private Vegetable vegetable;
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
-    private Activity activity;
+    private static Activity activity;
 
     //booleans
     private boolean vegetableSelected = false;
@@ -87,7 +87,7 @@ public class TimerHelper {
                         ((MainActivity) activity).lock();
                     }else{
                         //open a zoomed-in view of the selected kookplaat
-                        Intent intent = new Intent(activity, ActivityZoomedKookplaat.class);
+                        Intent intent = new Intent(activity.getApplicationContext(), ActivityZoomedKookplaat.class);
                         intent.putExtra("kookPlaatID", kookPlaatID);
                         intent.putExtra("vegetableID", getVegID(getKookPlaatNum()));
                         activity.startActivity(intent);
@@ -95,7 +95,7 @@ public class TimerHelper {
 
                 }else if(vegetableSelected){
                     //open a zoomed-in view of the selected kookplaat
-                    Intent intent = new Intent(activity, ActivityZoomedKookplaat.class);
+                    Intent intent = new Intent(activity.getApplicationContext(), ActivityZoomedKookplaat.class);
                     intent.putExtra("kookPlaatID", kookPlaatID);
                     intent.putExtra("vegetableID", getVegID(getKookPlaatNum()));
                     activity.startActivity(intent);
@@ -109,7 +109,7 @@ public class TimerHelper {
 
     public void startVegetableActivity(){
         if(!vegetableSelected) {
-            Intent intent = new Intent(activity, VegetableActivity.class);
+            Intent intent = new Intent(activity.getApplicationContext(), VegetableActivity.class);
             intent.putExtra("kookPlaatID", kookPlaatID);
             activity.startActivityForResult(intent, 9001);   //IT'S OVER NINE THOUSAND!
         }
@@ -191,7 +191,7 @@ public class TimerHelper {
             }
 
             this.timerRunning = true;
-            Intent intent = new Intent(activity, TimerService.class);
+            Intent intent = new Intent(activity.getApplicationContext(), TimerService.class);
             intent.putExtra(this.kookPlaatID, this.secondsLeft);
             intent.putExtra("vegID", vegetable.getId());
             intent.putExtra("vegName", getVegetableName(vegetable)); //gets correct name based on display language
@@ -370,10 +370,10 @@ public class TimerHelper {
             text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
             if (this.secondsLeft == 0) {
-                    //stop timer
-                    onTimerFinished();
-                }
+                //stop timer
+                onTimerFinished();
             }
+        }
     }
 
     public void onTimerFinished(){

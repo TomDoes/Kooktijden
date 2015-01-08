@@ -17,7 +17,7 @@ public class StateSaver {
     SharedPreferences.Editor editor;
 
     public StateSaver(Context context){
-        this.context = context;
+        this.context = context; //only use ActivityContext
     }
 
 

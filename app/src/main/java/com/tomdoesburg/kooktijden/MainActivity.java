@@ -8,9 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -36,7 +34,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import org.codechimp.apprater.AppRater;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity{
 
     private static final String TAG = "MAIN_ACTIVITY";
     private ViewPager pager;
@@ -46,6 +44,7 @@ public class MainActivity extends FragmentActivity {
     private CirclePageIndicator indicator;
     private WebView indicatorBlocker;
     private StateSaver stateSaver;
+    private AdView mAdView;
 
     SharedPreferences sharedPrefs;
 
@@ -180,9 +179,10 @@ public class MainActivity extends FragmentActivity {
             indicatorBlocker.setVisibility(View.VISIBLE);
         }
 
-        AdView mAdView = (AdView)findViewById(R.id.adView);
+        mAdView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
 
 
         db = new MySQLiteHelper(this);
@@ -297,6 +297,7 @@ public class MainActivity extends FragmentActivity {
         Vegetable veg = db.getVegetable(vegID);
 
         int curItem = pager.getCurrentItem();
+
         switch(curItem){
             case 0: FragmentKookplaat1pits k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
                 k1.setVegetable(ID, veg);
@@ -345,7 +346,7 @@ public class MainActivity extends FragmentActivity {
         TimerService.timer5Finished = false;
         TimerService.timer6Finished = false;
 
-        Intent intent = new Intent(this, TimerService.class);
+        Intent intent = new Intent(this.getApplicationContext(), TimerService.class);
         intent.putExtra(TimerService.KILL_SERVICE,true);
         startService(intent);
 
@@ -364,17 +365,19 @@ public class MainActivity extends FragmentActivity {
     public void onResume() {
         super.onResume();
 
+        mAdView.resume();
+
         this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
 
-        Intent intent = new Intent(this, TimerService.class);
+        Intent intent = new Intent(this.getApplicationContext(), TimerService.class);
         startService(intent);
 
         //retrieve states only if timer not active
         if(!serviceActive()){
             Log.d(TAG,"MainActivity retrieving state");
-            stateSaver = new StateSaver(this);
+            stateSaver = new StateSaver(this.getApplicationContext());
             stateSaver.retrieveStates();
         }else{
             Log.d(TAG,"MainActivity NOT retrieving state");
@@ -382,35 +385,45 @@ public class MainActivity extends FragmentActivity {
 
         //if timer service still exists, but there are no running alarms: kill service
         if(allTimersDone()){
-            intent = new Intent(this, TimerService.class);
+            intent = new Intent(this.getApplicationContext(), TimerService.class);
             intent.putExtra(TimerService.KILL_SERVICE,true);
             startService(intent);
         }
+
+        super.onResume();
     }
 
     //Service related
 
     @Override
     public void onPause() {
-        super.onPause();
+
+        mAdView.pause();
 
         Log.d(TAG,"MainActivity onPause() saving state");
-        stateSaver = new StateSaver(this);
+        stateSaver = new StateSaver(this.getApplicationContext());
         stateSaver.saveStates();
 
         unregisterReceiver(br);
         Log.i(TAG, "Unregistered broacast receiver");
         TimerService.runningOnForeground = false;
+        super.onPause();
     }
 
     //Service related
 
     @Override
+    public void onBackPressed(){
+        Log.d(TAG,"MainActivity onBackPressed() saving state");
+        stateSaver = new StateSaver(this.getApplicationContext());
+        stateSaver.saveStates();
+        super.onBackPressed();
+    }
+
+    @Override
     public void onStop() {
 
-        //Log.d(TAG,"MainActivity onStop() saving state");
-        //stateSaver =  new StateSaver(this);
-        //stateSaver.saveStates();
+        mAdView.destroy();
 
         try {
             unregisterReceiver(br);
@@ -421,23 +434,15 @@ public class MainActivity extends FragmentActivity {
         super.onStop();
     }
 
-    @Override
-    public void onBackPressed(){
-        Log.d(TAG,"MainActivity onBackPressed() saving state");
-        stateSaver =  new StateSaver(this);
-        stateSaver.saveStates();
-        super.onBackPressed();
-    }
-    /*
 
     //Service related
      @Override
      public void onDestroy() {
-         getActivity().stopService(new Intent(getActivity(), TimerService.class));
-        // Log.i(TAG, "Stopped service");
+        //db.close();
+
          super.onDestroy();
      }
-     */
+
     //Service related: br receives ticks from service
     private BroadcastReceiver br = new BroadcastReceiver() {
 
@@ -465,6 +470,7 @@ public class MainActivity extends FragmentActivity {
             //To do: forward tick action to all TimerHelper instances
 
             int curItem = pager.getCurrentItem();
+
             switch(curItem){
                 case 0: FragmentKookplaat1pits k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
                         k1.tick();
@@ -513,5 +519,6 @@ public class MainActivity extends FragmentActivity {
         db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "Fresh spinach is very healthy and versatile. Rinse the spinach before use to remove any left-over grains of sand. Remove the thick petioles from the leaves. Place the spinach in a large pan with a small amount of water and a pinch of salt, and bring to the boil. Note: spinach shrinks tremendously during cooking!", "Verse spinazie is bijzonder gezond en veelzijdig. Spoel voor gebruik de spinazie goed af om eventuele zandkorrels te verwijderen. Haal de dikke bladstengels van de bladeren. Plaats de spinazie in een ruime pan met een klein laagje water en een snufje zout en breng het aan de kook. Let op: spinazie slinkt enorm tijdens het koken!"));
         db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 15, 20, "Boiling sweet potatoes is almost the same process as that of the normal potato. Peel and wash the potatoes and cut them into uniform pieces. Place the pieces in a pan and add water so that the majority of the potatoes are submerged. Add a pinch of salt and bring to a boil. Make sure that the potatoes are cooked with the aid of a fork. If you can easily pierce the potatoes then they are done.", "Het koken van zoete aardappelen is bijna hetzelfde proces als dat van de normale aardappel. Schil of was de aardappels en snijd ze in gelijkmatige stukken. Plaats de delen in een pan en zet ze voor het grootste deel onder water. Doe hier een snufje zout bij en breng aan de kook. Controleer of de aardappels gaar zijn met behulp van een vork. De aardappels zijn gaar als je gemakkelijk in de aardappels kunt prikken."));
     }
+
 
 }
