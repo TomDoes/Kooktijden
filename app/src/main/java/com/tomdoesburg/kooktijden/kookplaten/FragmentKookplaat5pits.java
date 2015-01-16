@@ -17,7 +17,7 @@ import com.tomdoesburg.model.Vegetable;
  */
 // Instances of this class are fragments representing a single
 // object in our collection.
-public class FragmentKookplaat5pits extends Fragment {
+public class FragmentKookplaat5pits extends FragmentKookplaat {
     public static final String ARG_OBJECT = "object";
 
     //timerHelper instances
@@ -45,32 +45,33 @@ public class FragmentKookplaat5pits extends Fragment {
 
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
-        timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
-
+        timerHelper1 = new FragmentKookplaat.TimerHelper();
+        // timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
+        timerHelper1.init(kookplaat1view,"kookPlaat1");
 
         //kookplaat 2
         View kookplaat2view = getView().findViewById(R.id.kookplaat2);
-        timerHelper2 = new TimerHelper();
-        timerHelper2.init(getActivity(),kookplaat2view,"kookPlaat2");
+        timerHelper2 = new FragmentKookplaat.TimerHelper();
+        //timerHelper2.init(getActivity(),kookplaat2view,"kookPlaat2");
+        timerHelper2.init(kookplaat2view,"kookPlaat2");
 
 
         //kookplaat 3
         View kookplaat3view = getView().findViewById(R.id.kookplaat3);
-        timerHelper3 = new TimerHelper();
-        timerHelper3.init(getActivity(),kookplaat3view,"kookPlaat3");
+        timerHelper3 = new FragmentKookplaat.TimerHelper();
+        timerHelper3.init(kookplaat3view,"kookPlaat3");
 
 
         //kookplaat 4
         View kookplaat4view = getView().findViewById(R.id.kookplaat4);
-        timerHelper4 = new TimerHelper();
-        timerHelper4.init(getActivity(),kookplaat4view,"kookPlaat4");
+        timerHelper4 = new FragmentKookplaat.TimerHelper();
+        timerHelper4.init(kookplaat4view,"kookPlaat4");
 
 
         //kookplaat 5
         View kookplaat5view = getView().findViewById(R.id.kookplaat5);
-        timerHelper5 = new TimerHelper();
-        timerHelper5.init(getActivity(),kookplaat5view,"kookPlaat5");
+        timerHelper5 = new FragmentKookplaat.TimerHelper();
+        timerHelper5.init(kookplaat5view,"kookPlaat5");
     }
 
     public void tick(){

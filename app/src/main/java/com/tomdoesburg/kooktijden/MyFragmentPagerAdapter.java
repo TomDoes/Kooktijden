@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat1pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
@@ -20,15 +21,15 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
-    Fragment kookPlaat1pits;
-    Fragment kookPlaat2pits;
-    Fragment kookPlaat4pits;
-    Fragment kookPlaat5pits;
-    Fragment kookPlaat6pits;
+    FragmentKookplaat kookPlaat1pits;
+    FragmentKookplaat kookPlaat2pits;
+    FragmentKookplaat kookPlaat4pits;
+    FragmentKookplaat kookPlaat5pits;
+    FragmentKookplaat kookPlaat6pits;
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment;
+        FragmentKookplaat fragment;
 
         switch(i){
             case 0:
@@ -56,7 +57,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter {
         throw new IllegalArgumentException("no layout for this integer");
     }
 
-    public Fragment getActiveFragment(int ID){
+    public FragmentKookplaat getActiveFragment(int ID){
         switch(ID){
             case 0: return kookPlaat1pits;
             case 1: return kookPlaat2pits;

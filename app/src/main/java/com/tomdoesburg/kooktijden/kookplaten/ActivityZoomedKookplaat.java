@@ -59,6 +59,8 @@ public class ActivityZoomedKookplaat extends Activity{
         super.onCreate(savedInstanceState);
         View view = getLayoutInflater().inflate(R.layout.kookplaat_zoom,null);
 
+        System.gc();
+
         //get the kookplaat that was selected
         Intent intent = getIntent();
         kookPlaatID = intent.getStringExtra("kookPlaatID");
@@ -133,9 +135,6 @@ public class ActivityZoomedKookplaat extends Activity{
                         pause.setImageResource(R.drawable.icon_pause);
                     }
                 }
-
-                //go back to previous activity
-                //finish();
             }
         });
 
@@ -191,7 +190,6 @@ public class ActivityZoomedKookplaat extends Activity{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 stopTimer();
-                finish();
             }
         });
 
@@ -336,7 +334,6 @@ public class ActivityZoomedKookplaat extends Activity{
         Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);//return to main activity
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); //clear the back stack
         startActivity(intent);
-        finish();
     }
 
     public void addTime(){
@@ -533,9 +530,9 @@ public class ActivityZoomedKookplaat extends Activity{
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        //Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
         super.onBackPressed();
 
