@@ -36,7 +36,6 @@ public class ActivityZoomedKookplaat extends Activity{
 
     private static final String TAG = "ActivityZoomedKookplaat";
     private boolean timerRunning = true;
-    private MediaPlayer mediaPlayer;
     private String kookPlaatID;
     private int vegID;
     private ImageButton pause;
@@ -44,14 +43,11 @@ public class ActivityZoomedKookplaat extends Activity{
     private Button plus;
     private TextView vegetableName;
     private Vegetable vegetable;
-    //private View kookplaat1;
     private ProgressBar progress;
     private TextView text;
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
     private StateSaver stateSaver;
-
-
 
 
     @Override
@@ -402,10 +398,6 @@ public class ActivityZoomedKookplaat extends Activity{
 
             // format the textview to show the easily readable format
             text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
-
-            if (this.secondsLeft == 0) { //stop timer
-                onTimerFinished();
-            }
         }
     }
 
@@ -508,21 +500,6 @@ public class ActivityZoomedKookplaat extends Activity{
         return false;
     }
 
-    public void onTimerFinished(){
-        Log.v(TAG, "timer finished");
-        this.timerRunning = false;
-        //play sound
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
-        mediaPlayer.start();
-        //SHAKE IT!
-        Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = {0, 500, 500};
-        // -1 vibrate once
-        // 0 vibrate indefinitely
-        vibrator.vibrate(pattern, -1);
-
-    }
-
     public boolean serviceActive(){
         return (TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
                 ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running);
@@ -530,12 +507,8 @@ public class ActivityZoomedKookplaat extends Activity{
 
     @Override
     public void onBackPressed() {
-        //Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
         super.onBackPressed();
-
     }
 
 }

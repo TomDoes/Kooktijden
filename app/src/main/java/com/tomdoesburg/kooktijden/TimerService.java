@@ -15,8 +15,6 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.tomdoesburg.sqlite.MySQLiteHelper;
-
 import java.util.Locale;
 
 /**
@@ -36,7 +34,7 @@ public class TimerService extends Service {
     private  NotificationCompat.Builder mBuilder;
     private boolean firstNotification = true; //lets us know if we can re-use (false) a notification or create a new one (true)
     private boolean killHandlerCalled = false;
-
+    private boolean alarmHandlerCalled = false;
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
     private WakeLock wakeLock;
@@ -132,8 +130,11 @@ public class TimerService extends Service {
 
         @Override
         public void run() {
-            onTimerFinished();
-            //  alarmHandler.postDelayed(this, 1000);
+           alarmHandlerCalled = false;
+
+          if(!runningOnForeground) {
+              onTimerFinished();
+          }
         }
     };
 
@@ -205,7 +206,7 @@ public class TimerService extends Service {
 
         //method is in paused state and user has left the app.
         // killing service is more cpu efficient in this case
-        if(!killHandlerCalled && !runningOnForeground && onlyPausedStates()){
+        if(!alarmHandlerCalled && !killHandlerCalled && !runningOnForeground && onlyPausedStates()){
             killHandlerCalled = true;
             //save state
             Log.d(TAG,"onTick() saving state, then calling killHandler");
@@ -290,6 +291,10 @@ public class TimerService extends Service {
             wakeLock.release();
         }
 
+        if(mediaPlayer != null){
+            mediaPlayer.release();
+        }
+
         Log.d(TAG, "Service comitted suicide Aaaah");
         super.onDestroy();
     }
@@ -297,10 +302,12 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock((PowerManager.PARTIAL_WAKE_LOCK), "TimerService");
-        wakeLock.setReferenceCounted(false); //only 1 call to acquire is enough to acquire, only 1 release required to release
 
+        if(wakeLock== null) {
+            powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            wakeLock = powerManager.newWakeLock((PowerManager.PARTIAL_WAKE_LOCK), "TimerService");
+            wakeLock.setReferenceCounted(false); //only 1 call to acquire is enough to acquire, only 1 release required to release
+        }
 
         if(!wakeLock.isHeld()) {
             wakeLock.acquire();
@@ -573,7 +580,6 @@ public class TimerService extends Service {
 
     public void onTimerFinished(){
         Log.v(TAG, "timer finished");
-
         //only play alarm when cooking plate is not visible
         if(!runningOnForeground) {
             //show timer ready notification!
@@ -581,27 +587,30 @@ public class TimerService extends Service {
 
             //turn on screen (if turned off)
             wakeUpScreen();
-
-            //save state
-            Log.d(TAG,"onTimerFinished() saving state");
-            stateSaver = new StateSaver(getApplicationContext());
-            stateSaver.saveStates();
-
-            //play sound
-            mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
-            mediaPlayer.start();
-            //SHAKE IT!
-            Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-            long[] pattern = {0, 500, 500};
-            // -1 vibrate once
-            // 0 vibrate indefinitely
-            vibrator.vibrate(pattern, -1);
-
-            if(!runningOnForeground){
-                alarmHandler.postDelayed(alarmRunnable, 4000);
-            }
-
         }
+        //play sound
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+        if(!mediaPlayer.isPlaying()){
+            mediaPlayer.start();
+        }
+        //SHAKE IT!
+        Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 500, 500};
+        // -1 vibrate once
+        // 0 vibrate indefinitely
+        vibrator.vibrate(pattern, -1);
+
+        //save state
+        Log.d(TAG,"onTimerFinished() saving state");
+        stateSaver = new StateSaver(getApplicationContext());
+        stateSaver.saveStates();
+
+        if(!runningOnForeground){
+            alarmHandler.postDelayed(alarmRunnable, 4000);
+            alarmHandlerCalled = true;
+        }
+
+
     }
 
 }

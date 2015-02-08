@@ -11,6 +11,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.TimerHelper;
 import com.tomdoesburg.model.Vegetable;
 
 /**
@@ -19,11 +20,11 @@ import com.tomdoesburg.model.Vegetable;
  */
 // Instances of this class are fragments representing a single
 // object in our collection.
-public class FragmentKookplaat1pits extends FragmentKookplaat {
+public class FragmentKookplaat1pits extends android.support.v4.app.Fragment  {
     private final String TAG = "FragmentKookplaat1pits";
 
     //Timer related variables
-    //TimerHelper timerHelper1;
+    TimerHelper timerHelper1;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +45,8 @@ public class FragmentKookplaat1pits extends FragmentKookplaat {
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
 
-        timerHelper1 = new FragmentKookplaat.TimerHelper();
-        timerHelper1.init(kookplaat1view,"kookPlaat1");
+        timerHelper1 = new TimerHelper();
+        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
     }
 
     public void tick(){
@@ -60,5 +61,10 @@ public class FragmentKookplaat1pits extends FragmentKookplaat {
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        timerHelper1.resumeExistingTimer();
+    }
 
 }

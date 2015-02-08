@@ -8,18 +8,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat1pits;
@@ -29,8 +25,6 @@ import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
-import com.viewpagerindicator.CirclePageIndicator;
-
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
@@ -38,29 +32,15 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends FragmentActivity{
 
     private static final String TAG = "MAIN_ACTIVITY";
-    private static ViewPager pager;
-    private static MyFragmentPagerAdapter pagerAdapter;
-    private static MySQLiteHelper db;
-    private static ImageButton lockButton;
-    private static CirclePageIndicator indicator;
-    private static WebView indicatorBlocker;
-    private static StateSaver stateSaver;
-    private static AdView mAdView;
-    private static AdRequest adRequest;
-
-    //kookplaat fragments
-    private static FragmentKookplaat1pits k1;
-    private static FragmentKookplaat2pits k2;
-    private static FragmentKookplaat4pits k4;
-    private static FragmentKookplaat5pits k5;
-    private static FragmentKookplaat6pits k6;
-
-    private static SharedPreferences sharedPrefs;
-
+    private MySQLiteHelper db;
+    private StateSaver stateSaver;
+   // private static AdView mAdView = null;
+    //private AdRequest adRequest;
+    private SharedPreferences sharedPrefs;
     private WeakReference<Context> weakContext;
-
     //create empty frame, needed for overlays
     private static FrameLayout layout;
+    private int curFragment; //0,1,2,3 or 4 depending on FragmentKookplaat type
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +55,13 @@ public class MainActivity extends FragmentActivity{
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+
         //create empty frame, needed for overlays
         layout = new FrameLayout(weakContext.get());
-
         //inflate our regular layout in the frame
-        View regular = getLayoutInflater().inflate(R.layout.swipert,null);
+        View regular = getLayoutInflater().inflate(R.layout.activity_main,null);
         layout.addView(regular);
+
 
         if (!sharedPrefs.contains("firstStart_pt1")) {
             //the app is being launched for first time
@@ -102,100 +83,41 @@ public class MainActivity extends FragmentActivity{
         //show the view to the user
         setContentView(layout);
 
-        lockButton = (ImageButton) findViewById(R.id.lockButton);
-        indicator = (CirclePageIndicator)findViewById(R.id.indicator);
-        indicatorBlocker = (WebView)findViewById(R.id.indicatorBlocker);
-        indicatorBlocker.setVisibility(View.INVISIBLE);
-
-        //Set the pager with an adapter
-        pager = (ViewPager)findViewById(R.id.pager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(pagerAdapter);
-
-        //Bind the indicator dots to the adapter
-        indicator.setViewPager(pager);
-
-
-        //clicking the lock icon toggles the ability to swipe between fragments
-        lockButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                lockButton = (ImageButton) findViewById(R.id.lockButton);
-                if(MyViewPager.swipingEnabled){
-                    MyViewPager.swipingEnabled = false;
-                    lockButton.setImageResource(R.drawable.lock_locked);
-                    //Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-                    //indicator.startAnimation(anim);
-                    indicatorBlocker.setVisibility(View.VISIBLE);
-
-                    //save locked position in preferences (in case of restart)
-                    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPrefs.edit().putInt("kookplaatViewPos",pager.getCurrentItem()).commit();
-                } else {
-
-                    //inflate our unlock warning layout
-                    final View unlockWarning = getLayoutInflater().inflate(R.layout.instructional_overlay_activity_main_unlockwarning,null);
-
-                    Button proceed = (Button) unlockWarning.findViewById(R.id.unlock_proceed);
-                    final Button cancel = (Button) unlockWarning.findViewById(R.id.unlock_cancel);
-
-                    proceed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            layout.removeView(unlockWarning);
-
-                            //unlock the layout
-                            MyViewPager.swipingEnabled = true;
-                            lockButton.setImageResource(R.drawable.lock_unlocked);
-                            //Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-                            indicatorBlocker.setVisibility(View.INVISIBLE);
-                            //indicator.startAnimation(anim);
-
-                            //RESETS ALL FRAGMENTKOOKPLAAT 1-6
-                            reset();
-
-                            //remove locked position from preferences
-                            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            sharedPrefs.edit().remove("kookplaatViewPos").commit();
-                        }
-                    });
-
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            layout.removeView(unlockWarning);
-                        }
-                    });
-
-                    //if there is a timer running, show a warning overlay
-                    //if not, just unlock the layout
-                    if(timerRunning()){
-                        layout.addView(unlockWarning);
-                    } else {
-                        proceed.performClick();
-                    }
-
-
-                }
-
-            }
-        });
-
 
         //if user has locked a view the last time, set that as the default
         if(sharedPrefs.contains("kookplaatViewPos")){
-            pager.setCurrentItem(sharedPrefs.getInt("kookplaatViewPos",0));
-            MyViewPager.swipingEnabled = false;
-            lockButton.setImageResource(R.drawable.lock_locked);
-            //Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-            //indicator.startAnimation(anim);
-            indicatorBlocker.setVisibility(View.VISIBLE);
-        }
+            int kookplaat = sharedPrefs.getInt("kookplaatViewPos",0);
+            curFragment = kookplaat;
 
-        mAdView = (AdView)findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+            switch(kookplaat){
+                case 0:
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits(),"0").commit();
+                        break;
+                case 1: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat2pits(),"1").commit();
+                        break;
+                case 2: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat4pits(),"2").commit();
+                        break;
+                case 3: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat5pits(),"3").commit();
+                        break;
+                case 4: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits(),"4").commit();
+                        break;
+
+            default: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits()).commit();
+                    break;
+
+            }
+
+        }else{
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits()).commit();
+            curFragment = 0;
+        }
+        /*
+        if(mAdView == null) {
+            mAdView = (AdView) findViewById(R.id.adView);
+            adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
+        */
 
         db = new MySQLiteHelper(weakContext.get());
 
@@ -286,7 +208,6 @@ public class MainActivity extends FragmentActivity{
                 //Vegetable veg = db.getVegetable(vegId);
             }
         }
-
     }
 
     public void setVegetable(int vegID, String kookPlaatID){
@@ -307,24 +228,18 @@ public class MainActivity extends FragmentActivity{
 
         Vegetable veg = db.getVegetable(vegID);
 
-        int curItem = pager.getCurrentItem();
+        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-        switch(curItem){
-            case 0: k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k1.setVegetable(ID, veg);
-                break;
-            case 1: k2 = (FragmentKookplaat2pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k2.setVegetable(ID, veg);
-                break;
-            case 2: k4 = (FragmentKookplaat4pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k4.setVegetable(ID, veg);
-                break;
-            case 3: k5 = (FragmentKookplaat5pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k5.setVegetable(ID, veg);
-                break;
-            case 4: k6 = (FragmentKookplaat6pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                k6.setVegetable(ID, veg);
-                break;
+        if (frag instanceof FragmentKookplaat1pits){
+            ((FragmentKookplaat1pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat2pits){
+            ((FragmentKookplaat2pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat4pits){
+            ((FragmentKookplaat4pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat5pits){
+            ((FragmentKookplaat5pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat6pits){
+            ((FragmentKookplaat6pits) frag).setVegetable(ID,veg);
         }
 
     }
@@ -361,11 +276,7 @@ public class MainActivity extends FragmentActivity{
         intent.putExtra(TimerService.KILL_SERVICE,true);
         startService(intent);
 
-        //reset all fragments
-        int curFragment = pager.getCurrentItem();
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(pagerAdapter);
-        pager.setCurrentItem(curFragment);
+        //todo: clear fragment?
 
     }
 
@@ -399,9 +310,17 @@ public class MainActivity extends FragmentActivity{
         }
 
         //load adds
+        /*
+        if(mAdView == null) {
+            mAdView = (AdView) findViewById(R.id.adView);
+            adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
         mAdView.resume();
-        adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        */
 
         super.onResume();
     }
@@ -411,7 +330,7 @@ public class MainActivity extends FragmentActivity{
     @Override
     public void onPause() {
 
-        mAdView.pause();
+        //mAdView.pause();
 
         Log.d(TAG,"MainActivity onPause() saving state");
         stateSaver = new StateSaver(getApplicationContext());
@@ -435,8 +354,11 @@ public class MainActivity extends FragmentActivity{
 
     @Override
     public void onStop() {
-
+        /*
         mAdView.destroy();
+        layout.removeView(mAdView);
+        mAdView = null;
+        */
 
         try {
             unregisterReceiver(br);
@@ -453,7 +375,6 @@ public class MainActivity extends FragmentActivity{
      @Override
      public void onDestroy() {
         layout.removeAllViews();
-        pager.setAdapter(null);
 
         try {
             db.close();
@@ -473,42 +394,28 @@ public class MainActivity extends FragmentActivity{
     };
 
     public void lock(){
-        if(MyViewPager.swipingEnabled) {
-            MyViewPager.swipingEnabled = false;
-            lockButton.setImageResource(R.drawable.lock_locked);
-            //Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-            //indicator.startAnimation(anim);
-            indicatorBlocker.setVisibility(View.VISIBLE);
             //save locked position in preferences (in case of restart)
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            sharedPrefs.edit().putInt("kookplaatViewPos", pager.getCurrentItem()).commit();
-        }
+            //sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            //sharedPrefs.edit().putInt("kookplaatViewPos", pager.getCurrentItem()).commit();
     }
 
     //Service related: processes ticks and updates GUI
     private void updateGUI() {
             //Log.d(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
+        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-            int curItem = pager.getCurrentItem();
-
-            switch(curItem){
-                case 0: k1 = (FragmentKookplaat1pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                        k1.tick();
-                        break;
-                case 1: k2 = (FragmentKookplaat2pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                        k2.tick();
-                        break;
-                case 2: k4 = (FragmentKookplaat4pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                        k4.tick();
-                        break;
-                case 3: k5 = (FragmentKookplaat5pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                        k5.tick();
-                        break;
-                case 4: k6 = (FragmentKookplaat6pits) pagerAdapter.getActiveFragment(pager.getCurrentItem());
-                        k6.tick();
-                        break;
-            }
+        if (frag instanceof FragmentKookplaat1pits){
+            ((FragmentKookplaat1pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat2pits){
+            ((FragmentKookplaat2pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat4pits){
+            ((FragmentKookplaat4pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat5pits){
+            ((FragmentKookplaat5pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat6pits){
+            ((FragmentKookplaat6pits) frag).tick();
+        }
     }
 
     public void hideNotification(int ID){

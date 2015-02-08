@@ -24,7 +24,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     private final String TAG = "VegetableActivity";
     private boolean mTwoPane;
     private String kookPlaatID = "";
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +68,14 @@ public class VegetableActivity extends Activity implements VegetableListFragment
 
             }
         }
-
+        /*
         if(!mTwoPane) {
             mAdView = (AdView) view_veg_list.findViewById(R.id.adView);
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
         }
 
-
+        */
 
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.v("firstStart", "Is this the first time the list is launched? - " + sharedPrefs.getBoolean("firstStart_pt2", false));
@@ -196,7 +196,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     public void onPause() {
         if(!mTwoPane) {
-            mAdView.pause();
+           // mAdView.pause();
         }
         super.onPause();
     }
@@ -204,7 +204,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     public void onResume(){
         if(!mTwoPane) {
-            mAdView.resume();
+            //mAdView.resume();
         }
         super.onResume();
     }
@@ -212,17 +212,14 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     public void onDestroy(){
         if(!mTwoPane) {
-            mAdView.destroy();
+            //mAdView.destroy();
         }
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        //Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
-       // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        //startActivity(intent);
-        super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
+        super.onBackPressed();
     }
 }

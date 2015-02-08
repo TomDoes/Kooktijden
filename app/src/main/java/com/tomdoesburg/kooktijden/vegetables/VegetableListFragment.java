@@ -3,16 +3,11 @@ package com.tomdoesburg.kooktijden.vegetables;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ListFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
-import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
