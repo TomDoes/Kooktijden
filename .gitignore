@@ -28,3 +28,9 @@ gen-external-apklibs
 .DS_Store
 .idea/
 *.iml
+=======
+/local.properties
+/.idea/.DS_Store
+./idea/
+app/
+
