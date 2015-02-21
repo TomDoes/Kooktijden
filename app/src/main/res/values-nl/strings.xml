@@ -22,6 +22,8 @@
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>
     <string name="banner_ad_unit_id_vegetable_list">ca-app-pub-6550849443292807/9484474579</string>
 
+    <string name="dialog_close">Sluiten</string>
+
     <string name="instructional_understand">Ik snap het</string>
     <string name="instructional_pt1_swipe">Veeg naar links/rechts om van kookplaat te wisselen.</string>
     <string name="instructional_pt1_lock">Klik op het slotje om de huidige layout als standaard in te stellen.</string>

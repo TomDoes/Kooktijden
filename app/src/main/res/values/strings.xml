@@ -22,6 +22,8 @@
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>
     <string name="banner_ad_unit_id_vegetable_list">ca-app-pub-6550849443292807/9484474579</string>
 
+    <string name="dialog_close">Close</string>
+
     <string name="instructional_understand">Got it</string>
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>
     <string name="instructional_pt1_lock">Toggle the lock to set the current layout as default.</string>

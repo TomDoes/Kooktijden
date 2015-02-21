@@ -321,7 +321,6 @@ public class MainActivity extends FragmentActivity{
         }
         mAdView.resume();
         */
-
         super.onResume();
     }
 
