@@ -24,12 +24,11 @@ import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
-
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
 
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends FragmentActivity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
     private static final String TAG = "MAIN_ACTIVITY";
     private MySQLiteHelper db;
@@ -40,6 +39,7 @@ public class MainActivity extends FragmentActivity{
     private WeakReference<Context> weakContext;
     //create empty frame, needed for overlays
     private static FrameLayout layout;
+    private int curFragment; //0,1,2,3 or 4 depending on FragmentKookplaat type
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +175,15 @@ public class MainActivity extends FragmentActivity{
         if (id == R.id.action_rate) {
             AppRater.rateNow(weakContext.get());
             return true;
+        }else if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+
+            return true;
+        }else if (id == R.id.action_reset) {
+            KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this,getString(R.string.dialog_reset_title),getString(R.string.dialog_reset_message));
+            dialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -261,11 +270,30 @@ public class MainActivity extends FragmentActivity{
         TimerService.timer5Finished = false;
         TimerService.timer6Finished = false;
 
+        TimerService.deadline1Add = 0;
+        TimerService.deadline2Add = 0;
+        TimerService.deadline3Add = 0;
+        TimerService.deadline4Add = 0;
+        TimerService.deadline5Add = 0;
+        TimerService.deadline6Add = 0;
+
         Intent intent = new Intent(getApplicationContext(), TimerService.class);
-        intent.putExtra(TimerService.KILL_SERVICE,true);
+        intent.putExtra(TimerService.KILL_SERVICE_IMMEDIATELY,true);
         startService(intent);
 
-        //todo: clear fragment?
+        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (frag instanceof FragmentKookplaat1pits){
+            ((FragmentKookplaat1pits) frag).reset();
+        }else if(frag instanceof FragmentKookplaat2pits){
+            ((FragmentKookplaat2pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat4pits){
+            ((FragmentKookplaat4pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat5pits){
+            ((FragmentKookplaat5pits) frag).tick();
+        }else if(frag instanceof FragmentKookplaat6pits){
+            ((FragmentKookplaat6pits) frag).tick();
+        }
 
     }
 
@@ -437,4 +465,8 @@ public class MainActivity extends FragmentActivity{
     }
 
 
+    @Override
+    public void resetDialogYesClicked() {
+        reset();
+    }
 }

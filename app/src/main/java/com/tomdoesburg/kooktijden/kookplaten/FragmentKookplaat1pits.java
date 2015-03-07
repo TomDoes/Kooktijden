@@ -2,6 +2,7 @@ package com.tomdoesburg.kooktijden.kookplaten;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,14 @@ public class FragmentKookplaat1pits extends android.support.v4.app.Fragment  {
         timerHelper1.onTick();
     }
 
+    public void reset(){
+
+        timerHelper1.reset();
+    }
+
     public void setVegetable(int kookPlaat, Vegetable veg){
+        Log.v(TAG, "setVegetable Fragmentkookplaat, ID = " + kookPlaat + ", veg = " + veg.getNameNL());
+
         switch(kookPlaat){
             case 1:
                 timerHelper1.setVegetable(veg);

@@ -3,6 +3,7 @@ package com.tomdoesburg.kooktijden;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -95,6 +96,18 @@ public class TimerHelper {
 
     }
 
+    public void reset(){
+        vegetable = null;
+        cookingTime = 0; //cooking time in minutes
+        secondsLeft = 0; //time left in seconds
+
+        //booleans
+        vegetableSelected = false;
+        timerRunning = false;
+        text.setText(weakContext.get().getString(R.string.pickfood));
+
+    }
+
     public void startVegetableActivity(){
         if(!vegetableSelected) {
             Context context = weakContext.get();
@@ -105,6 +118,7 @@ public class TimerHelper {
     }
 
     public void setVegetable(Vegetable veg){
+        Log.v(TAG, "setvegetable timerhelper");
         this.timerRunning = false;
         this.vegetable = veg;
         this.cookingTime = veg.getCookingTimeMin();

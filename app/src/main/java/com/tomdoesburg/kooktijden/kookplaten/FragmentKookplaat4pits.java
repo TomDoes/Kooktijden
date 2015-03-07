@@ -73,6 +73,13 @@ public class FragmentKookplaat4pits extends Fragment {
         timerHelper4.onTick();
     }
 
+    public void reset(){
+        timerHelper1.reset();
+        timerHelper2.reset();
+        timerHelper3.reset();
+        timerHelper4.reset();
+    }
+
     public void setVegetable(int kookPlaat, Vegetable veg){
         switch(kookPlaat){
             case 1:

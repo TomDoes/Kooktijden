@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.tomdoesburg.kooktijden.KooktijdenDialogTwoButtons;
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.kooktijden.StateSaver;
@@ -32,7 +33,7 @@ import java.util.Timer;
 /**
  * Created by Joost on 6-10-2014.
  */
-public class ActivityZoomedKookplaat extends Activity{
+public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
     private static final String TAG = "ActivityZoomedKookplaat";
     private boolean timerRunning = true;
@@ -137,8 +138,9 @@ public class ActivityZoomedKookplaat extends Activity{
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                createStopDialog();
+                KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(ActivityZoomedKookplaat.this,getString(R.string.stop_timer_title),getString(R.string.stop_timer_message));
+                dialog.show();
+                //createStopDialog();
             }
         });
 
@@ -509,6 +511,11 @@ public class ActivityZoomedKookplaat extends Activity{
     public void onBackPressed() {
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
         super.onBackPressed();
+    }
+
+    @Override
+    public void resetDialogYesClicked() {
+        stopTimer();
     }
 
 }

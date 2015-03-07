@@ -23,7 +23,8 @@ import java.util.Locale;
 public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
-    public final static String KILL_SERVICE = "KILL_SERVICE";
+    public final static String KILL_SERVICE = "KILL_SERVICE"; //delayed kill (preferrable)
+    public final static String KILL_SERVICE_IMMEDIATELY = "KILL_SERVICE"; //instant kill
 
     private StateSaver stateSaver;
     private MediaPlayer mediaPlayer;
@@ -433,6 +434,17 @@ public class TimerService extends Service {
             //do nothing
         }
 
+        try{
+            Bundle extras = intent.getExtras();
+            boolean kill = extras.getBoolean(KILL_SERVICE_IMMEDIATELY);
+            if(kill){
+                killService();
+            }
+
+        }catch(NullPointerException e){
+            //do nothing
+        }
+
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
@@ -588,6 +600,7 @@ public class TimerService extends Service {
             //turn on screen (if turned off)
             wakeUpScreen();
         }
+
         //play sound
         mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
         if(!mediaPlayer.isPlaying()){

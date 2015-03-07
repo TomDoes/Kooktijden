@@ -1,4 +1,4 @@
-package com.tomdoesburg.kooktijden.vegetables;
+package com.tomdoesburg.kooktijden;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -22,14 +22,16 @@ public class SettingsActivity extends Activity {
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //get view and set controls to current settings
-        View regular = getLayoutInflater().inflate(R.layout.activity_settings,null);
+        //View regular = getLayoutInflater().inflate(R.layout.activity_settings,null);
+        //show the view to the user
+        setContentView(R.layout.activity_settings);
 
-        final NumberPicker numberpicker = (NumberPicker)regular.findViewById(R.id.stoveTopsNumberPicker);
+        final NumberPicker numberpicker = (NumberPicker) findViewById(R.id.stoveTopsNumberPicker);
         String[] displayedValues = {"1", "2", "4", "5", "6"};
         numberpicker.setDisplayedValues(displayedValues);
         numberpicker.setValue(sharedPrefs.getInt("numberOfStoveTops",4));
 
-        Button setButton = (Button)regular.findViewById(R.id.setButton);
+        Button setButton = (Button) findViewById(R.id.setButton);
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,10 +44,6 @@ public class SettingsActivity extends Activity {
                 finish();
             }
         });
-
-
-        //show the view to the user
-        setContentView(regular);
 
     }
 }

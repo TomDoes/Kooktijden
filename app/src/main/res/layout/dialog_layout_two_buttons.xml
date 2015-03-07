@@ -54,15 +54,40 @@
             android:layout_marginRight="10dp"
             android:layout_gravity="center_horizontal" />
 
-        <Button
-            android:id="@+id/btn_close"
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="@string/dialog_close"
-            android:background="@drawable/rounded_square_green"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/dialog_yes"
+                android:background="@drawable/rounded_square_green"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/dialog_no"
+                android:background="@drawable/rounded_square_green"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
     </LinearLayout>
 
