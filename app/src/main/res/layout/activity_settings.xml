@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/settingsTitle"
+        android:text="@string/settings_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="50dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="50dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:gravity="start"
+        android:textSize="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:background="@color/kooktijden_green" />
+
+    <Button
+        android:id="@+id/setButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="@string/settings_set"
+        android:textColor="@color/white"
+        android:background="@drawable/circle"
+        android:layout_gravity="end"
+        android:layout_marginTop="-40dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center">
+
+        <NumberPicker
+            android:id="@+id/stoveTopsNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_stovetops"
+            android:padding="10dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+
+    <!--
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_kookplaat"/>
+    -->
+
+</LinearLayout>
