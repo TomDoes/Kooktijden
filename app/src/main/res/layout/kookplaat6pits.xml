@@ -29,30 +29,31 @@
             android:id="@+id/kookplaat3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/kookplaat2"/>
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/kookplaat1"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/kookplaat1"/>
+            android:layout_toRightOf="@id/kookplaat3"
+            android:layout_below="@id/kookplaat2"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/kookplaat1"
-            android:layout_below="@id/kookplaat2"/>
+            android:layout_below="@id/kookplaat3"/>
 
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/kookplaat2"
-            android:layout_below="@id/kookplaat3"/>
+            android:layout_toRightOf="@+id/kookplaat5"
+            android:layout_below="@id/kookplaat4"/>
 
     </RelativeLayout>
 
