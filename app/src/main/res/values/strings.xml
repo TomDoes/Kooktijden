@@ -35,4 +35,7 @@
     <string name="cancel">Cancel</string>
     <string name="stop_timer_title">Stop timer</string>
     <string name="stop_timer">Are you sure you want to remove this timer?</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_stovetops">stove top(s)</string>
+    <string name="settings_set">set</string>
 </resources>

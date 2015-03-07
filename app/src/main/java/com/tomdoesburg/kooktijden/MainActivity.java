@@ -16,8 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat1pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat2pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat4pits;
@@ -25,6 +24,7 @@ import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat5pits;
 import com.tomdoesburg.kooktijden.kookplaten.FragmentKookplaat6pits;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
+
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
@@ -40,7 +40,6 @@ public class MainActivity extends FragmentActivity{
     private WeakReference<Context> weakContext;
     //create empty frame, needed for overlays
     private static FrameLayout layout;
-    private int curFragment; //0,1,2,3 or 4 depending on FragmentKookplaat type
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,44 +72,34 @@ public class MainActivity extends FragmentActivity{
             instructions_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    layout.removeView(instructional);
-                    sharedPrefs.edit().putBoolean("firstStart_pt1", false).commit();
+                layout.removeView(instructional);
+                sharedPrefs.edit().putBoolean("firstStart_pt1", false).commit();
                 }
             });
+        }
+
+        //set view to the one set through settings
+        int kookplaat = sharedPrefs.getInt("numberOfStoveTops",4);
+        switch(kookplaat){
+            case 1: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat1pits()).commit();
+                    break;
+            case 2: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat2pits()).commit();
+                    break;
+            //case 3 does not exist, since we don't have a stove top layout for this
+            case 4: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat4pits()).commit();
+                    break;
+            case 5: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat5pits()).commit();
+                    break;
+            case 6: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat6pits()).commit();
+                    break;
+            default: getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentKookplaat4pits()).commit();
+                    break;
 
         }
 
         //show the view to the user
         setContentView(layout);
 
-
-        //if user has locked a view the last time, set that as the default
-        if(sharedPrefs.contains("kookplaatViewPos")){
-            int kookplaat = sharedPrefs.getInt("kookplaatViewPos",0);
-            curFragment = kookplaat;
-
-            switch(kookplaat){
-                case 0:
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits(),"0").commit();
-                        break;
-                case 1: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat2pits(),"1").commit();
-                        break;
-                case 2: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat4pits(),"2").commit();
-                        break;
-                case 3: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat5pits(),"3").commit();
-                        break;
-                case 4: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits(),"4").commit();
-                        break;
-
-            default: getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits()).commit();
-                    break;
-
-            }
-
-        }else{
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,  new FragmentKookplaat1pits()).commit();
-            curFragment = 0;
-        }
         /*
         if(mAdView == null) {
             mAdView = (AdView) findViewById(R.id.adView);
