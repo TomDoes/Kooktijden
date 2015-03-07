@@ -2,8 +2,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/settingsTitle"
@@ -15,7 +14,7 @@
         android:paddingBottom="50dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:gravity="start"
-        android:textSize="?android:attr/textAppearanceLarge"
+        android:textSize="20dp"
         android:textColor="@color/white"
         android:background="@color/kooktijden_green" />
 
