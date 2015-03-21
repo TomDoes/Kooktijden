@@ -286,13 +286,13 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         if (frag instanceof FragmentKookplaat1pits){
             ((FragmentKookplaat1pits) frag).reset();
         }else if(frag instanceof FragmentKookplaat2pits){
-            ((FragmentKookplaat2pits) frag).tick();
+            ((FragmentKookplaat2pits) frag).reset();
         }else if(frag instanceof FragmentKookplaat4pits){
-            ((FragmentKookplaat4pits) frag).tick();
+            ((FragmentKookplaat4pits) frag).reset();
         }else if(frag instanceof FragmentKookplaat5pits){
-            ((FragmentKookplaat5pits) frag).tick();
+            ((FragmentKookplaat5pits) frag).reset();
         }else if(frag instanceof FragmentKookplaat6pits){
-            ((FragmentKookplaat6pits) frag).tick();
+            ((FragmentKookplaat6pits) frag).reset();
         }
 
     }
@@ -405,7 +405,17 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateGUI();
+            if(intent.hasExtra(TimerService.TIMER_DONE)){
+                //get vegetable name that is done
+                String vegName = intent.getStringExtra(TimerService.TIMER_DONE);
+                //open dialog
+                String alarmText = getString(R.string.the_alarm_for) + " " + vegName + " " + getString(R.string.has_finished);
+                new KooktijdenDialog(MainActivity.this,getString(R.string.timer_ready),alarmText).show();
+            }else if(intent.hasExtra(TimerService.TIMER_TICK)){
+                //update screen
+                updateGUI();
+            }
+
         }
     };
 

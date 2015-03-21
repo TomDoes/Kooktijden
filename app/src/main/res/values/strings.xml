@@ -20,6 +20,8 @@
 
     <string name="timer">Timer</string>
     <string name="timer_ready">Timer ready!</string>
+    <string name="the_alarm_for">The alarm for</string>
+    <string name="has_finished">has finished</string>
     <string name="notification_text">First timer ready in</string>
     <string name="ready_in">ready in</string>
     <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>

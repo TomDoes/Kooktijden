@@ -25,6 +25,8 @@ public class TimerService extends Service {
     private final static String TAG = "TimerService";
     public final static String KILL_SERVICE = "KILL_SERVICE"; //delayed kill (preferrable)
     public final static String KILL_SERVICE_IMMEDIATELY = "KILL_SERVICE"; //instant kill
+    public final static String TIMER_DONE = "TIMER_DONE"; //timer done.
+    public final static String TIMER_TICK = "TIMER_TICK"; //timer done.
 
     private StateSaver stateSaver;
     private MediaPlayer mediaPlayer;
@@ -143,7 +145,9 @@ public class TimerService extends Service {
     //subtracts time from deadlines every second
     public void tick(){
         //it's possible to put extra's to broadcast bi
-
+        if(!bi.hasExtra(TIMER_TICK)) { //we only need to do this once
+            bi.putExtra(TIMER_TICK, TIMER_TICK);
+        }
         sendBroadcast(bi);
 
         if(deadline1 > 0 && timer1Running){
@@ -152,6 +156,7 @@ public class TimerService extends Service {
                 timer1Running = false;
                 timer1Finished = true;
                 deadline1Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName1)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }
@@ -161,6 +166,7 @@ public class TimerService extends Service {
                 timer2Running = false;
                 timer2Finished = true;
                 deadline2Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName2)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }
@@ -170,6 +176,7 @@ public class TimerService extends Service {
                 timer3Running = false;
                 timer3Finished = true;
                 deadline3Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName3)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }
@@ -179,6 +186,7 @@ public class TimerService extends Service {
                 timer4Running = false;
                 timer4Finished = true;
                 deadline4Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName4)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }if(deadline5 > 0 && timer5Running){
@@ -187,6 +195,7 @@ public class TimerService extends Service {
                 timer5Running = false;
                 timer5Finished = true;
                 deadline5Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName5)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }if(deadline6 > 0 && timer6Running){
@@ -195,6 +204,7 @@ public class TimerService extends Service {
                 timer6Finished = true;
                 timer6Running = false;
                 deadline6Add = 0;
+                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName6)); //notify main activity to open a dialog
                 onTimerFinished();
             }
         }

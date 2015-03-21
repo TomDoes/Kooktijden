@@ -100,6 +100,7 @@ public class TimerHelper {
         vegetable = null;
         cookingTime = 0; //cooking time in minutes
         secondsLeft = 0; //time left in seconds
+        progress.setProgress(0);
 
         //booleans
         vegetableSelected = false;

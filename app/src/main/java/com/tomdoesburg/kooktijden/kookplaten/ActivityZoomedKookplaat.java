@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.tomdoesburg.kooktijden.KooktijdenDialog;
 import com.tomdoesburg.kooktijden.KooktijdenDialogTwoButtons;
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
@@ -242,7 +243,20 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            onTick();
+
+
+            if(intent.hasExtra(TimerService.TIMER_DONE)){
+                //get vegetable name that is done
+                String vegName = intent.getStringExtra(TimerService.TIMER_DONE);
+                //open dialog
+                String alarmText = getString(R.string.the_alarm_for) + " " + vegName + " " + getString(R.string.has_finished);
+                new KooktijdenDialog(ActivityZoomedKookplaat.this,getString(R.string.timer_ready),alarmText).show();
+
+            }else if(intent.hasExtra(TimerService.TIMER_TICK)){
+                //update screen
+                onTick();
+            }
+
 
         }
     };
