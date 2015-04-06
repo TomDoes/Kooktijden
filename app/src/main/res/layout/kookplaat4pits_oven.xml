@@ -51,11 +51,22 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/topLayout">
 
+        <RelativeLayout
+            android:id="@+id/inner_bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_corners"
+            android:layout_centerHorizontal="true"
+            >
+
         <include layout="@layout/single_kookplaat"
             android:id="@+id/kookplaat5"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
