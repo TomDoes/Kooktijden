@@ -1,11 +1,13 @@
 package com.tomdoesburg.kooktijden.kookplaten;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -15,7 +17,7 @@ import com.tomdoesburg.kooktijden.TimerHelper;
 import com.tomdoesburg.model.Vegetable;
 
 /**
- * Created by Joost on 2-7-2014.
+ * Created by Frank
  */
 // Instances of this class are fragments representing a single
 // object in our collection.
@@ -31,13 +33,46 @@ public class FragmentKookplaat4pits extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // The last two arguments ensure LayoutParams are inflated properly.
-        View rootView = inflater.inflate(R.layout.kookplaat4pits, container, false);
+        View rootView = inflater.inflate(R.layout.kookplaat4pits_oven, container, false);
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final View topView = view.findViewById(R.id.topLayout);
+        ViewTreeObserver vto = topView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                Log.v(TAG,"Topview width / 2: " + (topView.getMeasuredWidth() / 2));
+                Log.v(TAG,"Topview height " + topView.getMeasuredHeight());
+                topView.setPivotX(topView.getMeasuredWidth() / 2);
+                topView.setPivotY(topView.getMeasuredHeight());
+                topView.setRotationX(20);
+
+            }
+        });
+
+        final View bottomView = view.findViewById(R.id.bottomLayout);
+        ViewTreeObserver vto2 = bottomView.getViewTreeObserver();
+        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                Log.v(TAG,"Bottomview width / 2: " + (bottomView.getMeasuredWidth() / 2));
+                Log.v(TAG,"Bottomview height " + bottomView.getMeasuredHeight());
+
+                bottomView.setPivotX(bottomView.getMeasuredWidth() / 2);
+                bottomView.setPivotY(0);
+                bottomView.setRotationX(-25);
+
+            }
+        });
 
         // analytics
         Tracker t = ((KooktijdenApplication) getActivity().getApplication()).getTracker(KooktijdenApplication.TrackerName.APP_TRACKER);

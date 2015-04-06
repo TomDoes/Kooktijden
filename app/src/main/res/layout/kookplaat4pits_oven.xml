@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:animateLayoutChanges="true"
+    tools:context="com.tomdoesburg.kooktijden.MainActivity$PlaceholderFragment">
+
+    <!-- Created by Joost on 1/7/14. -->
+
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_centerHorizontal="true">
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"/>
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/kookplaat1"/>
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/kookplaat2"/>
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/kookplaat3"
+            android:layout_alignLeft="@+id/kookplaat2"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/bottomLayout"
+        android:layout_alignLeft="@+id/topLayout"
+        android:layout_alignRight="@+id/topLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/topLayout">
+
+        <include layout="@layout/single_kookplaat"
+            android:id="@+id/kookplaat5"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
