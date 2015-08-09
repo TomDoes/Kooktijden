@@ -42,6 +42,7 @@
             android:id="@+id/titleTV"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:gravity="center"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
@@ -52,6 +53,7 @@
             android:id="@+id/messageTV"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:gravity="center"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -60,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/dialog_close"
-            android:background="@drawable/rounded_square_green"
+            android:background="@drawable/dialog_button_selector"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"/>
 

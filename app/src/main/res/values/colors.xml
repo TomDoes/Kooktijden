@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="whiteTransparent">#CCFFFFFF</color>
+    <color name="gray_black">#333333</color>
     <color name="white">#FFFFFF</color>
     <color name="gray_lighter">#dcdcdc</color>
     <color name="gray_light">#808080</color>
@@ -14,6 +16,7 @@
     <color name="green">#61AE24</color>
     <color name="green_light">#A0D36E</color>
     <color name="green_dark">#32742C</color>
+    <color name="kooktijden_green_transparent">#80039688</color>
     <color name="kooktijden_green">#039688</color>
     <color name="aqua">#01A4A4</color>
     <color name="red">#A9071E</color>

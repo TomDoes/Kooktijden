@@ -75,13 +75,13 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
 
         //init progress bar and kookplaat
         //this.kookplaat1 = view.findViewById(R.id.kookplaat1);
-        this.progress = (ProgressBar) view.findViewById(R.id.kookplaat1);
+        this.progress = (ProgressBar) view.findViewById(R.id.kookplaat);
         this.text = (TextView) view.findViewById(R.id.kookplaatText);
         this.text.setText("");
         this.progress.setMax(this.cookingTime*60);
 
         //init buttons etc.
-        pause = (ImageButton) view.findViewById(R.id.buttonTimerPause);
+        //pause = (ImageButton) view.findViewById(R.id.buttonTimerPause);
         stop = (ImageButton) view.findViewById(R.id.buttonTimerStop);
         plus = (Button) view.findViewById(R.id.buttonTimerPlus);
         vegetableName = (TextView) view.findViewById(R.id.vegetableName);
@@ -118,7 +118,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         }
 
         //make all the buttons work
-
+/*
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +135,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
                 }
             }
         });
+        */
 
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +175,9 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
 
         if(timerRunning){
-            pause.setImageResource(R.drawable.icon_pause);
+          //  pause.setImageResource(R.drawable.icon_pause);
         }else{
-            pause.setImageResource(R.drawable.icon_play);
+          //  pause.setImageResource(R.drawable.icon_play);
         }
     }
 
@@ -352,7 +353,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
 
         //if timer has ended we still should be able to add 30 seconds and continue running
         if(this.secondsLeft == 0 && !timerRunning){
-            pause.setImageResource(R.drawable.icon_play);
+           // pause.setImageResource(R.drawable.icon_play);
         }
 
         int kookPlaatnum = getKookPlaatNum();

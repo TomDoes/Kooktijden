@@ -8,7 +8,7 @@
             android:shape="ring"
             android:useLevel="false"
             android:thicknessRatio="15.0">
-            <solid android:color="@color/listcolor0" />
+            <solid android:color="@color/gray_dark" />
         </shape>
     </item>
 

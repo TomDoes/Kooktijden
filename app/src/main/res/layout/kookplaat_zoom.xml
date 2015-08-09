@@ -6,6 +6,15 @@
     tools:context="com.tomdoesburg.kooktijden.MainActivity$PlaceholderFragment">
 
     <!-- Created by Joost on 6/10/14. -->
+    <!-- Edited by Frank on 9-8-2015. -->
+    <TextView
+        android:id="@+id/vegetableName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rellayout"
+        android:layout_centerHorizontal="true"
+        android:text="vegetable name"
+        android:textSize="24dp" />
 
     <RelativeLayout
         android:id="@+id/rellayout"
@@ -14,77 +23,111 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_corners_zoom">
 
+        <TextView
+            android:id="@+id/firstLetterTV"
+            android:layout_margin="35dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/kookplaat"
+            android:layout_alignTop="@+id/kookplaat"
+            android:layout_alignRight="@+id/kookplaat"
+            android:layout_alignBottom="@+id/kookplaat"
+            android:textColor="@color/whiteTransparent"
+            android:gravity="center"
+            android:background="@drawable/circle_gray"
+            android:textSize="80dip"
+            android:text="S" />
+
         <ProgressBar
-            android:id="@+id/kookplaat1"
+            android:id="@+id/kookplaat"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="250dip"
             android:layout_height="250dip"
+            android:gravity="center"
             android:indeterminate="false"
-            android:progressDrawable="@drawable/customprogressbar" />
-
-        <ImageButton
-            android:id="@+id/buttonTimerPause"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="60dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:src="@drawable/icon_pause"
-            android:textColor="@color/gray_dark" />
+            android:progressDrawable="@drawable/customprogressbar"
+            android:visibility="visible"
+            />
 
         <TextView
             android:id="@+id/kookplaatText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/buttonTimerPause"
+            android:layout_alignLeft="@+id/kookplaat"
+            android:layout_alignTop="@+id/kookplaat"
+            android:layout_alignRight="@+id/kookplaat"
+            android:layout_alignBottom="@+id/kookplaat"
+            android:gravity="center"
+            android:textSize="25dip"
+            android:text="@string/pickfood"
+            />
+
+        <View
+            android:layout_alignLeft="@+id/kookplaat"
+            android:layout_centerVertical="true"
+            android:layout_width="30dip"
+            android:layout_height="4dip"
+            android:background="@color/black"/>
+
+        <View
+            android:layout_alignRight="@+id/kookplaat"
+            android:layout_centerVertical="true"
+            android:layout_width="30dip"
+            android:layout_height="4dip"
+            android:background="@color/black"/>
+
+        <View
+            android:layout_alignBottom="@+id/kookplaat"
             android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
-            android:text="00:00"
-            android:textSize="20dp" />
+            android:layout_width="4dip"
+            android:layout_height="30dip"
+            android:background="@color/black"/>
+
+        <View
+            android:layout_alignTop="@+id/kookplaat"
+            android:layout_centerHorizontal="true"
+            android:layout_width="4dip"
+            android:layout_height="30dip"
+            android:background="@color/black"/>
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/buttonRow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/rellayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp">
+    <ImageButton
+        android:id="@+id/startStopButton"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rellayout"
+        android:layout_alignLeft="@+id/rellayout"
+        android:padding="5dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/icon_pause"
+        android:scaleType="fitCenter"
+        android:textColor="@color/gray_dark" />
 
-        <ImageButton
-            android:id="@+id/buttonTimerStop"
-            android:layout_width="75dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
-            android:layout_marginRight="30dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_action_discard"
-            android:scaleType="fitCenter"
-            android:textColor="@color/gray_dark" />
+    <ImageButton
+        android:id="@+id/buttonTimerStop"
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rellayout"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_action_discard"
+        android:scaleType="fitCenter"
+        android:textColor="@color/gray_dark" />
 
         <Button
             android:id="@+id/buttonTimerPlus"
             android:layout_width="75dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
+            android:layout_below="@+id/rellayout"
+            android:layout_alignRight="@+id/rellayout"
             android:background="@android:color/transparent"
             android:text="+30s"
             android:textColor="@color/gray_dark"
             android:textSize="20dp" />
 
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/vegetableName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonRow"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:text="vegetable name"
-        android:textSize="24dp" />
 
 
 </RelativeLayout>

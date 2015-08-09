@@ -53,9 +53,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int i) {
         db.execSQL("DROP TABLE IF EXISTS vegetables");
-
         this.onCreate(db);
-
     }
 
 
