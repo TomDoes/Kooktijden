@@ -2,11 +2,14 @@ package com.tomdoesburg.kooktijden;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,10 +30,15 @@ import com.tomdoesburg.sqlite.MySQLiteHelper;
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
 
 public class MainActivity extends FragmentActivity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
     private static final String TAG = "MAIN_ACTIVITY";
+    //used for service connection
+    TimerService mService;
+    private boolean mServiceBound = false;
+
     private MySQLiteHelper db;
     private StateSaver stateSaver;
    // private static AdView mAdView = null;
@@ -100,14 +108,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         //show the view to the user
         setContentView(layout);
 
-        /*
-        if(mAdView == null) {
-            mAdView = (AdView) findViewById(R.id.adView);
-            adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
-        */
-
         db = new MySQLiteHelper(weakContext.get());
 
         Log.d("database", "Created the database connection");
@@ -116,47 +116,15 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         // Add vegetables only on first launch
         if(!sharedPrefs.getBoolean("databaseLoaded",false)) {
             //TODO work with db versions
-
             Log.d("database", "adding stuff to the db");
             addVegetablesToDb(db);
-
             SharedPreferences.Editor editor = sharedPrefs.edit();
             editor.putBoolean("databaseLoaded", true);
             editor.commit();
         }
         //close any "timer ready" notifications
         hideNotification(TimerService.timerReadyID);
-
     }
-
-    public boolean serviceActive(){
-        return (TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
-                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running);
-    }
-
-    public boolean timerRunning(){ //true is there is any running timer or any on pause
-        if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
-                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
-            return true;
-        }else if (TimerService.deadline1 > 0 || TimerService.deadline2 > 0 || TimerService.deadline3 > 0
-                || TimerService.deadline4 > 0 || TimerService.deadline5 > 0 || TimerService.deadline6 > 0){
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean allTimersDone(){ //true if there isn't any running timer
-        if(TimerService.timer1Running || TimerService.timer2Running || TimerService.timer3Running
-                ||TimerService.timer4Running||TimerService.timer5Running || TimerService.timer6Running){
-            return false;
-        }else if (TimerService.deadline1 == 0 && TimerService.deadline2 ==0 && TimerService.deadline3 == 0
-                || TimerService.deadline4 == 0 && TimerService.deadline5 == 0 && TimerService.deadline6 == 0){
-            return true;
-        }
-        return false;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,7 +168,7 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
-                String kookPlaatID = data.getStringExtra("kookPlaatID");
+                int kookPlaatID = data.getIntExtra("kookPlaatID",0);
                 setVegetable(vegId,kookPlaatID);
                 //MySQLiteHelper db = new MySQLiteHelper(this);
                 //Vegetable veg = db.getVegetable(vegId);
@@ -208,22 +176,8 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         }
     }
 
-    public void setVegetable(int vegID, String kookPlaatID){
-        int ID = 0;
-        if(kookPlaatID.equals("kookPlaat1")){
-            ID = 1;
-        }else if(kookPlaatID.equals("kookPlaat2")){
-            ID = 2;
-        }else if(kookPlaatID.equals("kookPlaat3")){
-            ID = 3;
-        }else if(kookPlaatID.equals("kookPlaat4")){
-            ID = 4;
-        }else if(kookPlaatID.equals("kookPlaat5")){
-            ID = 5;
-        }else if(kookPlaatID.equals("kookPlaat6")){
-            ID = 6;
-        }
-
+    public void setVegetable(int vegID, int ID){
+        Log.v("setVegetable", "" + vegID);
         Vegetable veg = db.getVegetable(vegID);
 
         Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -241,45 +195,11 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         }
 
     }
-
-
     public Vegetable getVegetableFromDB(int ID){
         return db.getVegetable(ID);
     }
 
     public void reset(){
-        //kill service
-        TimerService.deadline1 = 0;
-        TimerService.deadline2 = 0;
-        TimerService.deadline3 = 0;
-        TimerService.deadline4 = 0;
-        TimerService.deadline5 = 0;
-        TimerService.deadline6 = 0;
-
-        TimerService.timer1Running = false;
-        TimerService.timer2Running = false;
-        TimerService.timer3Running = false;
-        TimerService.timer4Running = false;
-        TimerService.timer5Running = false;
-        TimerService.timer6Running = false;
-
-        TimerService.timer1Finished = false;
-        TimerService.timer2Finished = false;
-        TimerService.timer3Finished = false;
-        TimerService.timer4Finished = false;
-        TimerService.timer5Finished = false;
-        TimerService.timer6Finished = false;
-
-        TimerService.deadline1Add = 0;
-        TimerService.deadline2Add = 0;
-        TimerService.deadline3Add = 0;
-        TimerService.deadline4Add = 0;
-        TimerService.deadline5Add = 0;
-        TimerService.deadline6Add = 0;
-
-        Intent intent = new Intent(getApplicationContext(), TimerService.class);
-        intent.putExtra(TimerService.KILL_SERVICE_IMMEDIATELY,true);
-        startService(intent);
 
         Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
@@ -294,7 +214,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         }else if(frag instanceof FragmentKookplaat6pits){
             ((FragmentKookplaat6pits) frag).reset();
         }
-
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -302,58 +221,50 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
     /////////////////////////////////////////////////////////////////////////
     @Override
     public void onResume() {
+        Intent intent = new Intent(this.getApplicationContext(), TimerService.class);
+        startService(intent);
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        mServiceBound = true;
 
-        this.registerReceiver(br, new IntentFilter(TimerService.TIMER_SERVICE));
+        this.registerReceiver(bReceiver, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
 
-        Intent intent = new Intent(getApplicationContext(), TimerService.class);
-        startService(intent);
-
-        //retrieve states only if timer not active
-        if(!serviceActive()){
-            Log.d(TAG,"MainActivity retrieving state");
-            stateSaver = new StateSaver(getApplicationContext());
-            stateSaver.retrieveStates();
-        }else{
-            Log.d(TAG,"MainActivity NOT retrieving state");
-        }
-
-        //if timer service still exists, but there are no running alarms: kill service
-        if(allTimersDone()){
-            intent = new Intent(getApplicationContext(), TimerService.class);
-            intent.putExtra(TimerService.KILL_SERVICE,true);
-            startService(intent);
-        }
-
-        //load adds
-        /*
-        if(mAdView == null) {
-            mAdView = (AdView) findViewById(R.id.adView);
-            adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }else{
-            adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
-        mAdView.resume();
-        */
         super.onResume();
     }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.LocalBinder binder = (TimerService.LocalBinder) service;
+            mService = binder.getService();
+            mServiceBound = true;
+            setServiceInTimerHelper(mService);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mServiceBound = false;
+        }
+    };
 
     //Service related
 
     @Override
     public void onPause() {
-
-        //mAdView.pause();
-
         Log.d(TAG,"MainActivity onPause() saving state");
         stateSaver = new StateSaver(getApplicationContext());
         stateSaver.saveStates();
 
-        unregisterReceiver(br);
+        unregisterReceiver(bReceiver);
         Log.i(TAG, "Unregistered broacast receiver");
+
+        if (mServiceBound) {
+            unbindService(mServiceConnection);
+            mServiceBound = false;
+        }
+
         TimerService.runningOnForeground = false;
         super.onPause();
     }
@@ -370,19 +281,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
     @Override
     public void onStop() {
-        /*
-        mAdView.destroy();
-        layout.removeView(mAdView);
-        mAdView = null;
-        */
-
-        try {
-            unregisterReceiver(br);
-            TimerService.runningOnForeground = false;
-        } catch (Exception e) {
-            // Receiver was probably already stopped in onPause()
-        }
-
         super.onStop();
     }
 
@@ -390,7 +288,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
     //Service related
      @Override
      public void onDestroy() {
-        layout.removeAllViews();
 
         try {
             db.close();
@@ -400,11 +297,11 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
          super.onDestroy();
      }
 
-    //Service related: br receives ticks from service
-    private BroadcastReceiver br = new BroadcastReceiver() {
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            //Log.v(TAG,"Received broadcast");
             if(intent.hasExtra(TimerService.TIMER_DONE)){
                 //get vegetable name that is done
                 String vegName = intent.getStringExtra(TimerService.TIMER_DONE);
@@ -415,19 +312,16 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
                 //update screen
                 updateGUI();
             }
-
         }
     };
 
-    public void lock(){
-            //save locked position in preferences (in case of restart)
-            //sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            //sharedPrefs.edit().putInt("kookplaatViewPos", pager.getCurrentItem()).commit();
+    private void setServiceInTimerHelper(TimerService service){
+        TimerHelper.setService(service);
     }
 
     //Service related: processes ticks and updates GUI
     private void updateGUI() {
-            //Log.d(TAG, "received tick!");
+        //    Log.d(TAG, "received tick!");
             //To do: forward tick action to all TimerHelper instances
         Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
@@ -473,7 +367,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         db.addVegetable(new Vegetable("Spinach", "Spinazie", 4, 5, "Fresh spinach is very healthy and versatile. Rinse the spinach before use to remove any left-over grains of sand. Remove the thick petioles from the leaves. Place the spinach in a large pan with a small amount of water and a pinch of salt, and bring to the boil. Note: spinach shrinks tremendously during cooking!", "Verse spinazie is bijzonder gezond en veelzijdig. Spoel voor gebruik de spinazie goed af om eventuele zandkorrels te verwijderen. Haal de dikke bladstengels van de bladeren. Plaats de spinazie in een ruime pan met een klein laagje water en een snufje zout en breng het aan de kook. Let op: spinazie slinkt enorm tijdens het koken!"));
         db.addVegetable(new Vegetable("Sweet potatoes (whole)", "Zoete aardappelen (heel)", 15, 20, "Boiling sweet potatoes is almost the same process as that of the normal potato. Peel and wash the potatoes and cut them into uniform pieces. Place the pieces in a pan and add water so that the majority of the potatoes are submerged. Add a pinch of salt and bring to a boil. Make sure that the potatoes are cooked with the aid of a fork. If you can easily pierce the potatoes then they are done.", "Het koken van zoete aardappelen is bijna hetzelfde proces als dat van de normale aardappel. Schil of was de aardappels en snijd ze in gelijkmatige stukken. Plaats de delen in een pan en zet ze voor het grootste deel onder water. Doe hier een snufje zout bij en breng aan de kook. Controleer of de aardappels gaar zijn met behulp van een vork. De aardappels zijn gaar als je gemakkelijk in de aardappels kunt prikken."));
     }
-
 
     @Override
     public void resetDialogYesClicked() {

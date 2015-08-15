@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -15,6 +16,7 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -23,6 +25,18 @@ import java.util.Locale;
 public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
+    private HashMap<Integer,VegetableAlarm> vegAlarms = new HashMap<Integer, VegetableAlarm>();
+    private final IBinder mBinder = new LocalBinder();
+    public static final String TIMER_SERVICE = "com.tomdoesburg.kooktijden.TimerService";
+    Intent broadcastIntent = new Intent(TIMER_SERVICE);
+
+    public class LocalBinder extends Binder {
+        public TimerService getService() {
+            // Return this instance of TimerService so clients can call public methods
+            return TimerService.this;
+        }
+    }
+
     public final static String KILL_SERVICE = "KILL_SERVICE"; //delayed kill (preferrable)
     public final static String KILL_SERVICE_IMMEDIATELY = "KILL_SERVICE"; //instant kill
     public final static String TIMER_DONE = "TIMER_DONE"; //timer done.
@@ -43,86 +57,42 @@ public class TimerService extends Service {
     private WakeLock wakeLock;
     private WakeLock screenLock;
 
-    public static boolean timer1Running = false;
-    public static boolean timer2Running = false;
-    public static boolean timer3Running = false;
-    public static boolean timer4Running = false;
-    public static boolean timer5Running = false;
-    public static boolean timer6Running = false;
-
-    //if a timer is done, the appropriate finished variable is set to true
-    public static boolean timer1Finished = false;
-    public static boolean timer2Finished = false;
-    public static boolean timer3Finished = false;
-    public static boolean timer4Finished = false;
-    public static boolean timer5Finished = false;
-    public static boolean timer6Finished = false;
-
-    //time left before end of alarm in seconds
-    public static int deadline1 = 0;
-    public static int deadline2 = 0;
-    public static int deadline3 = 0;
-    public static int deadline4 = 0;
-    public static int deadline5 = 0;
-    public static int deadline6 = 0;
-
-    //additional time (set by using the +30 button)
-    public static int deadline1Add = 0;
-    public static int deadline2Add = 0;
-    public static int deadline3Add = 0;
-    public static int deadline4Add = 0;
-    public static int deadline5Add = 0;
-    public static int deadline6Add = 0;
-
-    //selected vegetable (comes in handy when returning to app)
-    public static int vegID1;
-    public static int vegID2;
-    public static int vegID3;
-    public static int vegID4;
-    public static int vegID5;
-    public static int vegID6;
-
-    //vegateble name
-    public static String vegName1 = " ";
-    public static String vegName2 = " ";
-    public static String vegName3 = " ";
-    public static String vegName4 = " ";
-    public static String vegName5 = " ";
-    public static String vegName6 = " ";
-
-    public static final String TIMER_SERVICE = "com.tomdoesburg.kooktijden.TimerService";
-    Intent bi = new Intent(TIMER_SERVICE);
 
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.v(TAG,"oncreate()");
         //start handler that ticks every second
-        timerHandler.postDelayed(timerRunnable, 0);
+        timerHandler.postDelayed(timerRunnable, 1000);
+        killServiceHandler.postDelayed(killServiceRunnable,5000);
     }
 
     Handler timerHandler = new Handler();
+    boolean timerHandlerActive = false;
     Runnable timerRunnable = new Runnable() {
 
         @Override
         public void run() {
-
-            tick();
-            timerHandler.postDelayed(this, 1000);
+            if(anyTimerRunning()) {
+                tick();
+                timerHandlerActive = true;
+                timerHandler.postDelayed(this, 1000);
+            }else{
+                timerHandlerActive = false;
+            }
         }
     };
 
-
-
-    //handler for delayed killing of service, including all variables
-    Handler killHandler = new Handler();
-    Runnable killRunnable = new Runnable() {
-
+    Handler killServiceHandler = new Handler();
+    Runnable killServiceRunnable = new Runnable() {
         @Override
         public void run() {
-            killHandlerCalled = false;
-
-            if(!runningOnForeground && (doneCounting() || onlyPausedStates())) {
-                killService();
+            if(!runningOnForeground && !anyTimerRunning()) {
+                if(!alarmHandlerCalled) {
+                    killService();
+                }
+            }else{
+                killServiceHandler.postDelayed(killServiceRunnable,5000);
             }
         }
     };
@@ -144,141 +114,104 @@ public class TimerService extends Service {
 
     //subtracts time from deadlines every second
     public void tick(){
+        //Log.v(TAG, "tick()");
         //it's possible to put extra's to broadcast bi
-        if(!bi.hasExtra(TIMER_TICK)) { //we only need to do this once
-            bi.putExtra(TIMER_TICK, TIMER_TICK);
+        if(!broadcastIntent.hasExtra(TIMER_TICK)) { //we only need to do this once
+            broadcastIntent.putExtra(TIMER_TICK, TIMER_TICK);
         }
-        sendBroadcast(bi);
 
-        if(deadline1 > 0 && timer1Running){
-            deadline1 --;
-            if(deadline1 == 0){
-                timer1Running = false;
-                timer1Finished = true;
-                deadline1Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName1)); //notify main activity to open a dialog
-                onTimerFinished();
-            }
-        }
-        if(deadline2 > 0 && timer2Running){
-            deadline2 --;
-            if(deadline2 == 0){
-                timer2Running = false;
-                timer2Finished = true;
-                deadline2Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName2)); //notify main activity to open a dialog
-                onTimerFinished();
-            }
-        }
-        if(deadline3 > 0 && timer3Running){
-            deadline3 --;
-            if(deadline3 == 0){
-                timer3Running = false;
-                timer3Finished = true;
-                deadline3Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName3)); //notify main activity to open a dialog
-                onTimerFinished();
-            }
-        }
-        if(deadline4 > 0 && timer4Running){
-            deadline4 --;
-            if(deadline4 == 0){
-                timer4Running = false;
-                timer4Finished = true;
-                deadline4Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName4)); //notify main activity to open a dialog
-                onTimerFinished();
-            }
-        }if(deadline5 > 0 && timer5Running){
-            deadline5 --;
-            if(deadline5 == 0){
-                timer5Running = false;
-                timer5Finished = true;
-                deadline5Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName5)); //notify main activity to open a dialog
-                onTimerFinished();
-            }
-        }if(deadline6 > 0 && timer6Running){
-            deadline6 --;
-            if(deadline6 == 0){
-                timer6Finished = true;
-                timer6Running = false;
-                deadline6Add = 0;
-                sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName6)); //notify main activity to open a dialog
-                onTimerFinished();
+
+        for (HashMap.Entry<Integer, VegetableAlarm> entry : vegAlarms.entrySet()){
+            VegetableAlarm curAlarm = entry.getValue();
+            if(curAlarm.isRunning()){
+                curAlarm.tick();
+                if(curAlarm.isFinished()){
+                    sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,curAlarm.getVegName()));
+                    onTimerFinished();
+                }
             }
         }
 
-        if(!runningOnForeground && timerActive()){
+        sendBroadcast(broadcastIntent);
+
+        //if timer is done
+        /*
+        *   sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName1)); //notify main activity to open a dialog
+                onTimerFinished();
+        * */
+
+
+        if(!runningOnForeground && anyTimerRunning()){
             showNotification(this.notificationID);
         }else{
             hideNotification(this.notificationID);
         }
+    }
 
-        //method is in paused state and user has left the app.
-        // killing service is more cpu efficient in this case
-        if(!alarmHandlerCalled && !killHandlerCalled && !runningOnForeground && onlyPausedStates()){
-            killHandlerCalled = true;
-            //save state
-            Log.d(TAG,"onTick() saving state, then calling killHandler");
-            stateSaver = new StateSaver(getApplicationContext());
-            stateSaver.saveStates();
+    public void setTimer(int ID, VegetableAlarm alarm){
+        vegAlarms.put(ID,alarm);
+    }
 
-            killHandler.postDelayed(killRunnable,1000);
+    public VegetableAlarm getTimer(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            return vegAlarms.get(ID);
+        }else{
+            return null;
         }
-
-        //save state
-      //  stateSaver = new StateSaver(getApplicationContext());
-      //  stateSaver.saveStates();
     }
 
-    //indicates whether or not we can stop the service
-    public boolean doneCounting(){
-        return deadline1 +
-                deadline2 +
-                deadline3 +
-                deadline4 +
-                deadline5 +
-                deadline6
-                == 0;
+    public void startTimer(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            vegAlarms.get(ID).setIsRunning(true);
+            if(!timerHandlerActive){
+                timerHandler.postDelayed(timerRunnable, 1000);
+            }
+        }
     }
 
-    //returns true if not a single timer is running
-    public boolean onlyPausedStates(){
-        boolean anyTimerRunning = (timer1Running || timer2Running || timer3Running
-                || timer4Running || timer5Running || timer6Running);
+    public void stopTimer(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            vegAlarms.get(ID).setIsRunning(false);
+        }
+    }
 
-        if(!anyTimerRunning){
-            return true;
-        }else{//anyTimerRunning == true
+    public void removeTimer(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            vegAlarms.remove(ID);
+        }
+    }
+
+    public int getTimeLeft(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            return vegAlarms.get(ID).getTimeLeft();
+        }else{
+            return -1;
+        }
+    }
+
+    public boolean hasAlarm(int ID){
+        return vegAlarms.containsKey(ID);
+    }
+
+    public boolean isRunning(int ID){
+        if(vegAlarms.containsKey(ID)) {
+            return vegAlarms.get(ID).isRunning();
+        }else{
             return false;
         }
     }
 
+    public boolean anyTimerRunning(){
+        for (HashMap.Entry<Integer, VegetableAlarm> entry : vegAlarms.entrySet()){
+            if(entry.getValue().isRunning()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public void killService(){
-
-        deadline1 = 0;
-        deadline2 = 0;
-        deadline3 = 0;
-        deadline4 = 0;
-        deadline5 = 0;
-        deadline6 = 0;
-
-        deadline1Add = 0;
-        deadline2Add = 0;
-        deadline3Add = 0;
-        deadline4Add = 0;
-        deadline5Add = 0;
-        deadline6Add = 0;
-
-        timer1Running = false;
-        timer2Running = false;
-        timer3Running = false;
-        timer4Running = false;
-        timer5Running = false;
-        timer6Running = false;
-
-
         //hide notifications from screen
         hideNotification(this.notificationID);
 
@@ -289,7 +222,6 @@ public class TimerService extends Service {
         if (wakeLock.isHeld()){
             wakeLock.release();
         }
-
         //kill service
         this.stopSelf();
     }
@@ -297,7 +229,8 @@ public class TimerService extends Service {
     @Override
     public void onDestroy() {
         hideNotification(this.notificationID);
-        timerHandler.removeCallbacks(timerRunnable);
+        timerHandler.removeCallbacksAndMessages(null);
+
         if (wakeLock.isHeld()){
             wakeLock.release();
         }
@@ -323,218 +256,11 @@ public class TimerService extends Service {
         if(!wakeLock.isHeld()) {
             wakeLock.acquire();
         }
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat1");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
 
-            if(deadline > 0) {
-                timer1Running = true;
-                timer1Finished = false;
-                deadline1 = deadline;
-                deadline1Add = 0;
-                vegID1 = vegID;
-                vegName1 = vegName;
-            }
-
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat2");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
-
-            if(deadline > 0) {
-                timer2Running = true;
-                timer2Finished = false;
-                deadline2 = deadline;
-                deadline2Add = 0;
-                vegID2 = vegID;
-                vegName2 = vegName;
-            }
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat3");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
-
-            if(deadline > 0) {
-                timer3Running = true;
-                timer3Finished = false;
-                deadline3 = deadline;
-                deadline3Add = 0;
-                vegID3 = vegID;
-                vegName3 = vegName;
-            }
-
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat4");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
-
-            if(deadline > 0) {
-                timer4Running = true;
-                timer4Finished = false;
-                deadline4 = deadline;
-                deadline4Add = 0;
-                vegID4 = vegID;
-                vegName4 = vegName;
-            }
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat5");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
-
-            if(deadline > 0) {
-                timer5Running = true;
-                timer5Finished = false;
-                deadline5 = deadline;
-                deadline5Add = 0;
-                vegID5 = vegID;
-                vegName5 = vegName;
-            }
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try {
-            Bundle extras = intent.getExtras();
-            int deadline = extras.getInt("kookPlaat6");
-            int vegID = extras.getInt("vegID");
-            String vegName = extras.getString("vegName");
-
-            if(deadline > 0) {
-                timer6Running = true;
-                timer6Finished = false;
-                deadline6 = deadline;
-                deadline6Add = 0;
-                vegID6 = vegID;
-                vegName6 = vegName;
-            }
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try{
-            Bundle extras = intent.getExtras();
-            boolean kill = extras.getBoolean(KILL_SERVICE);
-            if(kill){
-                killHandler.postDelayed(killRunnable,5000);
-            }
-
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        try{
-            Bundle extras = intent.getExtras();
-            boolean kill = extras.getBoolean(KILL_SERVICE_IMMEDIATELY);
-            if(kill){
-                killService();
-            }
-
-        }catch(NullPointerException e){
-            //do nothing
-        }
-
-        //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
 
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
 
-    private boolean timerActive(){
-        //returns true if there is any timer currently running
-        return(timer1Running || timer2Running || timer3Running
-                ||timer4Running || timer5Running || timer6Running);
-
-    }
-
-    private String getFirstAlarmTime(){
-        //returns current time of the active alarm closest to zero
-        int soonestDeadline = 0;
-
-        if(timer1Running && (soonestDeadline > deadline1 || soonestDeadline == 0)){
-            soonestDeadline = deadline1;
-        }
-        if(timer2Running && (soonestDeadline > deadline2 || soonestDeadline == 0)){
-            soonestDeadline = deadline2;
-        }
-        if(timer3Running && (soonestDeadline > deadline3 || soonestDeadline == 0)){
-            soonestDeadline = deadline3;
-        }
-        if(timer4Running && (soonestDeadline > deadline4 || soonestDeadline == 0)){
-            soonestDeadline = deadline4;
-        }
-        if(timer5Running && (soonestDeadline > deadline5 || soonestDeadline == 0)){
-            soonestDeadline = deadline5;
-        }
-        if(timer6Running && (soonestDeadline > deadline6 || soonestDeadline == 0)){
-            soonestDeadline = deadline6;
-        }
-
-        String returnVal = String.format("%02d", soonestDeadline / 60) + ":" + String.format("%02d", soonestDeadline % 60);
-
-        return returnVal;
-    }
-
-    private String getFirstAlarmText(){
-        //returns current time of the active alarm closest to zero
-        int soonestDeadline = 0;
-        String vegetableName = "Timer";
-        String language = Locale.getDefault().getDisplayLanguage();
-        boolean dutch = language.equals("Nederlands");
-
-        if(timer1Running && (soonestDeadline > deadline1 || soonestDeadline == 0)){
-            soonestDeadline = deadline1;
-            vegetableName = vegName1;
-        }
-        if(timer2Running && (soonestDeadline > deadline2 || soonestDeadline == 0)){
-            soonestDeadline = deadline2;
-            vegetableName = vegName2;
-        }
-        if(timer3Running && (soonestDeadline > deadline3 || soonestDeadline == 0)){
-            soonestDeadline = deadline3;
-            vegetableName = vegName3;
-        }
-        if(timer4Running && (soonestDeadline > deadline4 || soonestDeadline == 0)){
-            soonestDeadline = deadline4;
-            vegetableName = vegName4;
-        }
-        if(timer5Running && (soonestDeadline > deadline5 || soonestDeadline == 0)){
-            soonestDeadline = deadline5;
-            vegetableName = vegName5;
-        }
-        if(timer6Running && (soonestDeadline > deadline6 || soonestDeadline == 0)){
-            soonestDeadline = deadline6;
-            vegetableName = vegName6;
-        }
-
-        String returnVal = vegetableName + " " + getString(R.string.ready_in) + " " + String.format("%02d", soonestDeadline / 60) + ":" + String.format("%02d", soonestDeadline % 60);
-
-        return returnVal;
-    }
 
     public void showNotification(int ID){
         // Creates an explicit intent for an Activity in your app
@@ -549,7 +275,7 @@ public class TimerService extends Service {
                         .setOnlyAlertOnce(true)
                         .setContentTitle(getString(R.string.timer))
                         //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
-                        .setContentText(getFirstAlarmText())
+                        .setContentText("Text hier")
                         .setContentIntent(pIntent);
             }else{ //create new instance of mBuilder
                 this.firstNotification = false;
@@ -560,7 +286,7 @@ public class TimerService extends Service {
                                 .setSmallIcon(R.drawable.kooktijden_icon)
                                 .setContentTitle(getString(R.string.timer))
                                 //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
-                                .setContentText(getFirstAlarmText())
+                                .setContentText("Text hier")
                                 .setContentIntent(pIntent);
             }
 
@@ -606,7 +332,6 @@ public class TimerService extends Service {
         if(!runningOnForeground) {
             //show timer ready notification!
             showNotification(this.timerReadyID);
-
             //turn on screen (if turned off)
             wakeUpScreen();
         }
@@ -632,8 +357,27 @@ public class TimerService extends Service {
             alarmHandler.postDelayed(alarmRunnable, 4000);
             alarmHandlerCalled = true;
         }
-
-
     }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.d(TAG, "Bound Service");
+        sendBroadcast(broadcastIntent);
+        return mBinder;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        sendBroadcast(broadcastIntent);
+        Log.d(TAG,"Rebind Service");
+        super.onRebind(intent);
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.v(TAG, "in onUnbind");
+        return true;
+    }
+
 
 }

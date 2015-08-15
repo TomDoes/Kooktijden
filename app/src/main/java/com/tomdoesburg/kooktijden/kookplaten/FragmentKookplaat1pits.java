@@ -13,6 +13,7 @@ import com.tomdoesburg.kooktijden.KooktijdenApplication;
 import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.kooktijden.TimerHelper;
+import com.tomdoesburg.kooktijden.TimerService;
 import com.tomdoesburg.model.Vegetable;
 
 /**
@@ -47,7 +48,7 @@ public class FragmentKookplaat1pits extends android.support.v4.app.Fragment  {
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
 
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
+        timerHelper1.init(getActivity(), kookplaat1view, 1);
     }
 
     public void tick(){
@@ -55,7 +56,6 @@ public class FragmentKookplaat1pits extends android.support.v4.app.Fragment  {
     }
 
     public void reset(){
-
         timerHelper1.reset();
     }
 
@@ -71,8 +71,8 @@ public class FragmentKookplaat1pits extends android.support.v4.app.Fragment  {
 
     @Override
     public void onResume(){
+        timerHelper1.onResume();
         super.onResume();
-        timerHelper1.resumeExistingTimer();
     }
 
 }

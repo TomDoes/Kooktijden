@@ -44,13 +44,12 @@ public class FragmentKookplaat2pits extends Fragment {
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
-
+        timerHelper1.init(getActivity(),kookplaat1view,1);
 
         //kookplaat 2
         View kookplaat2view = getView().findViewById(R.id.kookplaat2);
         timerHelper2 = new TimerHelper();
-        timerHelper2.init(getActivity(),kookplaat2view,"kookPlaat2");
+        timerHelper2.init(getActivity(),kookplaat2view,2);
 
     }
 
@@ -77,9 +76,9 @@ public class FragmentKookplaat2pits extends Fragment {
 
     @Override
     public void onResume(){
+        timerHelper1.onResume();
+        timerHelper2.onResume();
         super.onResume();
-        timerHelper1.resumeExistingTimer();
-        timerHelper2.resumeExistingTimer();
     }
 
 }

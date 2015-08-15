@@ -25,6 +25,7 @@ public class StateSaver {
         pref = context.getSharedPreferences("StateSaver",0);
         editor = pref.edit();
 
+        /*
         //save state of kookplaat 1
         String kookplaat1State = TimerService.vegID1 + ";" + TimerService.deadline1 + ";" + TimerService.deadline1Add + ";" + TimerService.timer1Running + ";" + TimerService.timer1Finished + ";" + TimerService.vegName1;
         editor.putString("kookplaat1State",kookplaat1State);
@@ -51,19 +52,11 @@ public class StateSaver {
 
         editor.commit();
 
-        /*
-        Log.d(TAG,"StateSaver saveStates()");
-        Log.d(TAG,"Saved state 1:"  + kookplaat1State);
-        Log.d(TAG,"Saved state 2:"  + kookplaat2State);
-        Log.d(TAG,"Saved state 3:"  + kookplaat3State);
-        Log.d(TAG,"Saved state 4:"  + kookplaat4State);
-        Log.d(TAG,"Saved state 5:"  + kookplaat5State);
-        Log.d(TAG,"Saved state 6:"  + kookplaat6State);
         */
-
     }
 
         public void retrieveStates(){
+            /*
             Log.d(TAG,"StateSaver retrieveStates()");
             try {
                 //retrieve state of kookplaat 1
@@ -181,7 +174,7 @@ public class StateSaver {
             }catch(Exception E){
              //   Log.d(TAG,E.toString());
             }
-
+            */
         }
 
 

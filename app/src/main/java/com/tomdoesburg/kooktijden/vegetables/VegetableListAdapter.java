@@ -24,7 +24,7 @@ public class VegetableListAdapter extends ArrayAdapter {
 
     private Context context;
     private boolean useList = true;
-    private String kookPlaatID = "";
+    private int kookPlaatID = 0;
 
     public VegetableListAdapter(Context context, List vegetables) {
         super(context, android.R.layout.simple_list_item_1, vegetables);

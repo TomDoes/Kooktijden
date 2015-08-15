@@ -50,23 +50,23 @@ public class FragmentKookplaat4pits extends Fragment {
         //kookplaat 1
         View kookplaat1view = getView().findViewById(R.id.kookplaat1);
         timerHelper1 = new TimerHelper();
-        timerHelper1.init(getActivity(),kookplaat1view,"kookPlaat1");
+        timerHelper1.init(getActivity(),kookplaat1view,1);
 
         //kookplaat 2
         View kookplaat2view = getView().findViewById(R.id.kookplaat2);
         timerHelper2 = new TimerHelper();
-       timerHelper2.init(getActivity(),kookplaat2view,"kookPlaat2");
+        timerHelper2.init(getActivity(),kookplaat2view,2);
 
         //kookplaat 3
         View kookplaat3view = getView().findViewById(R.id.kookplaat3);
         timerHelper3 = new TimerHelper();
-        timerHelper3.init(getActivity(),kookplaat3view,"kookPlaat3");
+        timerHelper3.init(getActivity(),kookplaat3view,3);
 
 
         //kookplaat 4
         View kookplaat4view = getView().findViewById(R.id.kookplaat4);
         timerHelper4 = new TimerHelper();
-        timerHelper4.init(getActivity(),kookplaat4view,"kookPlaat4");
+        timerHelper4.init(getActivity(),kookplaat4view,4);
     }
 
     public void tick(){
@@ -102,12 +102,11 @@ public class FragmentKookplaat4pits extends Fragment {
 
     @Override
     public void onResume(){
+        timerHelper1.onResume();
+        timerHelper2.onResume();
+        timerHelper3.onResume();
+        timerHelper4.onResume();
         super.onResume();
-        //Log.v(TAG, "onResume()");
-        timerHelper1.resumeExistingTimer();
-        timerHelper2.resumeExistingTimer();
-        timerHelper3.resumeExistingTimer();
-        timerHelper4.resumeExistingTimer();
     }
 
 }

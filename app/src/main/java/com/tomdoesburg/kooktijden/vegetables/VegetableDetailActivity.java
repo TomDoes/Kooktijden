@@ -17,6 +17,7 @@ import com.tomdoesburg.kooktijden.R;
  * more than a {@link VegetableDetailFragment}.
  */
 public class VegetableDetailActivity extends Activity {
+
     private String kookPlaatID = "";
 
     @Override
@@ -58,6 +59,8 @@ public class VegetableDetailActivity extends Activity {
                     .commit();
         }
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

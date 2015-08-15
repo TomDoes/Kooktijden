@@ -23,7 +23,7 @@ import com.tomdoesburg.kooktijden.StateSaver;
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
     private final String TAG = "VegetableActivity";
     private boolean mTwoPane;
-    private String kookPlaatID = "";
+    private int kookPlaatID = 0;
     //private AdView mAdView;
 
     @Override
@@ -36,8 +36,8 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
-            this.kookPlaatID = intent.getStringExtra("kookPlaatID");
-            Log.v(TAG,this.kookPlaatID);
+            this.kookPlaatID = intent.getIntExtra("kookPlaatID",0);
+            Log.v(TAG,String.valueOf(this.kookPlaatID));
         }catch(NullPointerException E){
             //this should not happen ever, but better safe than sorry!
             Log.v(TAG,E.toString());
@@ -56,7 +56,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 VegetableDetailFragment frag = new VegetableDetailFragment();
                 Bundle args = new Bundle();
-                args.putString("kookPlaatID", this.kookPlaatID);
+                args.putInt("kookPlaatID", this.kookPlaatID);
                 args.putInt(VegetableDetailFragment.ARG_ITEM_ID, 1);
 
                 Log.v(TAG,"argument is " + this.kookPlaatID);
@@ -106,7 +106,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         }
     }
 
-    public String getKookPlaatID(){
+    public int getKookPlaatID(){
         return this.kookPlaatID;
     }
 
@@ -148,7 +148,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             // fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID, id);
-            arguments.putString("kookPlaatID", this.kookPlaatID);
+            arguments.putInt("kookPlaatID", this.kookPlaatID);
 
             VegetableDetailFragment fragment = new VegetableDetailFragment();
             fragment.setArguments(arguments);
@@ -178,7 +178,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
             if (resultCode == RESULT_OK) {
                 // The user picked a vegetable
                 int vegId = data.getIntExtra("vegId",0);
-                this.kookPlaatID = data.getStringExtra("kookPlaatID");
+                this.kookPlaatID = data.getIntExtra("kookPlaatID",0);
                 //pass that shit to the main activity!
 
                 //return the result
