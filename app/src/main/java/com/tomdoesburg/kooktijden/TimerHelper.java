@@ -92,6 +92,8 @@ public class TimerHelper {
             case TIMER_PAUSED:
                 if(vegetableState == VegetableStates.VEGETABLE_SELECTED){
                     text.setText(weakContext.get().getString(R.string.start));
+                }else{
+                    text.setText(weakContext.get().getString(R.string.pickfood));
                 }
                break;
             case TIMER_RUNNING:
@@ -121,12 +123,14 @@ public class TimerHelper {
 
     public void reset(){
         this.vegetable = null;
+        firstLetterTV.setText("");
         vegetableState = VegetableStates.NO_VEGETABLE_SELECTED;
         timerState = TimerStates.TIMER_PAUSED;
         progress.setProgress(0);
         if(mService!=null){
             mService.removeTimer(kookPlaatID);
         }
+        updateUI();
     }
 
     public void startVegetableActivity(){
@@ -181,6 +185,8 @@ public class TimerHelper {
                 timerState = TimerStates.TIMER_PAUSED;
                 updateUI();
             }
+        }else{
+            reset();
         }
     }
 

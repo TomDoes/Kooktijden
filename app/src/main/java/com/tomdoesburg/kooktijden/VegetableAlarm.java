@@ -92,7 +92,11 @@ public class VegetableAlarm {
     }
 
     public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
+        if(isRunning && this.timeLeft > 0) {
+            this.isRunning = true;
+        }else{
+            this.isRunning = false;
+        }
     }
 
     public boolean isFinished() {
@@ -113,6 +117,10 @@ public class VegetableAlarm {
 
     public int getAdditionalTime() {
         return additionalTime;
+    }
+
+    public void addAdditionalTime(int time){
+        timeLeft = timeLeft + time;
     }
 
     public void setAdditionalTime(int additionalTime) {

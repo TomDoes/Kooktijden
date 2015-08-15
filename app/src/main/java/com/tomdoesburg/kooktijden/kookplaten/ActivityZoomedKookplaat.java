@@ -28,6 +28,7 @@ import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.kooktijden.StateSaver;
 import com.tomdoesburg.kooktijden.TimerService;
+import com.tomdoesburg.kooktijden.VegetableAlarm;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
 
@@ -40,6 +41,9 @@ import java.util.Timer;
 public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
     private static final String TAG = "ActivityZoomedKookplaat";
+
+    //variable to keep track of current layout state
+    TimerStates timerState = TimerStates.TIMER_RUNNING;
     //used for service connection
     TimerService mService;
     private boolean mServiceBound = false;
@@ -54,6 +58,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
     private Vegetable vegetable;
     private ProgressBar progress;
     private TextView text;
+    private TextView firstLetterTV;
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
     private StateSaver stateSaver;
@@ -85,7 +90,10 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         this.progress = (ProgressBar) view.findViewById(R.id.kookplaat);
         this.text = (TextView) view.findViewById(R.id.kookplaatText);
         this.text.setText("");
+        this.firstLetterTV = (TextView) view.findViewById(R.id.firstLetterTV);
+        firstLetterTV.setText("");
         this.progress.setMax(this.cookingTime*60);
+
 
         //init buttons etc.
         pause = (ImageButton) view.findViewById(R.id.startStopButton);
@@ -121,13 +129,34 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
 
+        if(mService!=null){
+            VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
+            progress.setMax(vegAlarm.getCookingTime()*60);
+            progress.setProgress(progress.getMax()-vegAlarm.getTimeLeft());
 
+            this.vegetable = vegAlarm.getVegetable();
+            String firstLetter = String.valueOf(getVegetableName(vegetable).toUpperCase().charAt(0));
+            firstLetterTV.setText(firstLetter);
+
+
+        }
         //make all the buttons work
 
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mService!=null){
+                    if(!mService.isRunning(kookPlaatID) && mService.getTimeLeft(kookPlaatID) > 0) {
+                        mService.startTimer(kookPlaatID);
+                        timerState = TimerStates.TIMER_RUNNING;
+                        updateUI();
+                    }else{
+                        mService.stopTimer(kookPlaatID);
+                        timerState = TimerStates.TIMER_PAUSED;
+                        updateUI();
+                    }
 
+                }
             }
         });
 
@@ -143,10 +172,13 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(mService!=null){
+                    VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
+                    vegAlarm.addAdditionalTime(30);
+                    text.setText(formatTime(vegAlarm.getTimeLeft()));
+                }
             }
         });
-
 
         Log.v(TAG, "timerRunning = " + timerRunning);
         //set current time
@@ -164,6 +196,23 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
             pause.setImageResource(R.drawable.icon_pause);
         }else{
             pause.setImageResource(R.drawable.icon_play);
+        }
+    }
+
+    public void updateUI(){
+        switch(timerState){
+            case TIMER_PAUSED:
+                pause.setImageResource(R.drawable.icon_play);
+                break;
+            case TIMER_RUNNING:
+                pause.setImageResource(R.drawable.icon_pause);
+                break;
+            case TIMER_FINISHED:
+                text.setText("0:00");
+                pause.setImageResource(R.drawable.icon_play);
+                break;
+            default:
+                break;
         }
     }
 
@@ -275,16 +324,27 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
     }
 
     public void onTick(){
-        //TODO complete function!
-        if(this.timerRunning) {
-            //get time left in seconds
-            this.secondsLeft = 20;
-            //update progress bar value
-            int barVal = progress.getMax()-secondsLeft;
-            progress.setProgress(barVal);
 
-            // format the textview to show the easily readable format
-            text.setText(String.format("%02d", secondsLeft / 60) + ":" + String.format("%02d", secondsLeft % 60));
+        if(mService!=null && mService.hasAlarm(kookPlaatID)){
+            VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
+            progress.setMax(vegAlarm.getCookingTime() * 60);
+            progress.setProgress(progress.getMax() - vegAlarm.getTimeLeft());
+            this.vegetable = vegAlarm.getVegetable();
+            String firstLetter = String.valueOf(getVegetableName(vegetable).toUpperCase().charAt(0));
+            firstLetterTV.setText(firstLetter);
+
+            if(vegAlarm.isRunning()){
+                text.setText(formatTime(vegAlarm.getTimeLeft()));
+                timerState = TimerStates.TIMER_RUNNING;
+                updateUI();
+            }else if(vegAlarm.isFinished()){
+                text.setText("0:00");
+                timerState = TimerStates.TIMER_FINISHED;
+                updateUI();
+            }else  if(!vegAlarm.isRunning()){
+                timerState = TimerStates.TIMER_PAUSED;
+                updateUI();
+            }
         }
     }
 
@@ -295,9 +355,38 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
     }
 
     @Override
-    public void resetDialogYesClicked() {};
+    public void resetDialogYesClicked() {
+        if(mService!=null){
+            mService.removeTimer(kookPlaatID);
+        }
+        onBackPressed();
+    }
 
+    public String formatTime(int secondsLeft){
+        String time = "";
+        int hours = secondsLeft/3600;
+        int minutes = (secondsLeft%3600)/60;
+        int seconds = (secondsLeft % 3600)%60;
 
+        String minutesString = "";
+        String secondsString = "";
+        if(minutes <10){
+            minutesString = "0" + minutes;
+        }else{
+            minutesString = String.valueOf(minutes);
+        }
+        if(seconds < 10){
+            secondsString = "0" + seconds;
+        }else{
+            secondsString = String.valueOf(seconds);
+        }
 
+        if(hours == 0){
+            return minutesString + ":" + secondsString;
+        }else{
+            return hours + ":" + minutesString + ":" + secondsString;
+        }
+    }
 
+    public enum TimerStates{TIMER_RUNNING,TIMER_FINISHED,TIMER_PAUSED}
 }

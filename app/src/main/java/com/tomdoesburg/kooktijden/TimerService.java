@@ -37,8 +37,6 @@ public class TimerService extends Service {
         }
     }
 
-    public final static String KILL_SERVICE = "KILL_SERVICE"; //delayed kill (preferrable)
-    public final static String KILL_SERVICE_IMMEDIATELY = "KILL_SERVICE"; //instant kill
     public final static String TIMER_DONE = "TIMER_DONE"; //timer done.
     public final static String TIMER_TICK = "TIMER_TICK"; //timer done.
 
