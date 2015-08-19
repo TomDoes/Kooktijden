@@ -29,12 +29,14 @@ public class KooktijdenDialogTwoButtons extends Dialog implements
 
     public interface ActivityCommunicator{
 
-       public void resetDialogYesClicked();
+        public void resetDialogYesClicked();
+        public void resetDialogCancelClicked();
 
     }
 
     public KooktijdenDialogTwoButtons(Context mContext, String title, String message) {
         super(mContext);
+        this.setCanceledOnTouchOutside(false);
 
         mCallback = (ActivityCommunicator) mContext;
 
@@ -69,6 +71,7 @@ public class KooktijdenDialogTwoButtons extends Dialog implements
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_no:
+                mCallback.resetDialogCancelClicked();
                 dismiss();
                 break;
             case R.id.btn_yes:

@@ -208,6 +208,19 @@ public class TimerService extends Service {
         return false;
     }
 
+    public boolean anyTimerSet(){
+        if(vegAlarms.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //resets all timers by clearing alarms
+    public void resetAllTimers(){
+        vegAlarms.clear();
+        vegAlarms = new HashMap<Integer, VegetableAlarm>();
+    }
 
     public void killService(){
         //hide notifications from screen

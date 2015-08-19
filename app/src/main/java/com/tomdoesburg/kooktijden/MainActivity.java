@@ -30,7 +30,6 @@ import com.tomdoesburg.sqlite.MySQLiteHelper;
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
-import java.util.Timer;
 
 public class MainActivity extends FragmentActivity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
@@ -38,16 +37,14 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
     //used for service connection
     TimerService mService;
     private boolean mServiceBound = false;
-
+    //DB
     private MySQLiteHelper db;
     private StateSaver stateSaver;
-   // private static AdView mAdView = null;
-    //private AdRequest adRequest;
     private SharedPreferences sharedPrefs;
     private WeakReference<Context> weakContext;
     //create empty frame, needed for overlays
     private static FrameLayout layout;
-    private int curFragment; //0,1,2,3 or 4 depending on FragmentKookplaat type
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +52,17 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
         weakContext = new WeakReference<Context>(this);
 
+        Intent intent = getIntent();
+        if(intent!=null){
+
+        }
+
         // Apprater
         AppRater.setLightTheme();
         AppRater.setNumDaysForRemindLater(7);
         AppRater.app_launched(weakContext.get());
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
 
         //create empty frame, needed for overlays
         layout = new FrameLayout(weakContext.get());
@@ -371,5 +372,9 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
     @Override
     public void resetDialogYesClicked() {
         reset();
+    }
+    @Override
+    public void resetDialogCancelClicked(){
+        //do nothing
     }
 }

@@ -27,7 +27,7 @@ public class KooktijdenDialog extends Dialog implements
 
     public KooktijdenDialog(Context mContext, String title, String message) {
         super(mContext);
-
+        this.setCanceledOnTouchOutside(false);
         //make background transparent
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 

@@ -362,6 +362,11 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         onBackPressed();
     }
 
+    @Override
+    public void resetDialogCancelClicked(){
+        //do nothing
+    }
+
     public String formatTime(int secondsLeft){
         String time = "";
         int hours = secondsLeft/3600;

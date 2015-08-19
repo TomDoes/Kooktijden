@@ -31,8 +31,10 @@
     <string name="dialog_close">Close</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_reset_title">Reset all timers?</string>
-    <string name="dialog_reset_message">This will also reset all running timers, are you sure?</string>
+    <string name="dialog_reset_title">reset all timers?</string>
+    <string name="dialog_reset_message">this will also reset all running timers, are you sure?</string>
+    <string name="dialog_reset_switch_stove_title">switch stove</string>
+    <string name="dialog_reset_switch_stove_message">this will also reset all running timers, are you sure?</string>
 
     <string name="instructional_understand">Got it</string>
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>

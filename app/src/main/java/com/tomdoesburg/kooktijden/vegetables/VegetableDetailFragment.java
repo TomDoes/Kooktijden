@@ -126,10 +126,6 @@ public class VegetableDetailFragment extends Fragment {
             });
         }
 
-        AdView mAdView = (AdView)rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
         return rootView;
     }
 
