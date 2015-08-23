@@ -174,7 +174,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
             public void onClick(View v) {
                 if(mService!=null){
                     VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
-                    vegAlarm.addAdditionalTime(30);
+                    mService.addAdditionalTime(kookPlaatID,30);//add 30 seconds to timer
                     text.setText(formatTime(vegAlarm.getTimeLeft()));
                 }
             }
@@ -183,10 +183,6 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         Log.v(TAG, "timerRunning = " + timerRunning);
         //set current time
 
-
-
-        int barVal = 100;
-        progress.setProgress(barVal);
         // format the textview to show the easily readable format
         Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
         text.setTypeface(typeFace);

@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vegetable_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tomdoesburg.kooktijden.NewRecipeActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Dummy item to prevent EditText from receiving focus -->
+            <LinearLayout
+                android:id="@+id/linearlayout_focus"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:layout_width="0px"
+                android:layout_height="0px" />
+
+            <TextView
+                android:id="@+id/new_recipe_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/teal"
+                android:paddingBottom="50dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="50dp"
+                android:text="@string/new_recipe"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/storeButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/new_recipe_title"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="-40dp"
+                android:background="@drawable/circle"
+                android:src="@drawable/ic_save_white_36dp" />
+
+            <TextView
+                android:id="@+id/minutesTitleTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/storeButton"
+                android:gravity="center_horizontal"
+                android:text="@string/minutes"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="10dp"/>
+
+            <NumberPicker
+                android:id="@+id/numberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/minutesTitleTV"
+                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"/>
+
+            <EditText
+                android:id="@+id/newVegNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/numberPicker"
+                android:hint="@string/new_recipe_hint"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="10dp"
+                android:nextFocusUp="@id/newVegNameET"
+                android:nextFocusLeft="@id/newVegNameET"
+                />
+
+            <EditText
+                android:id="@+id/descriptionET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newVegNameET"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:hint="@string/new_description_hint"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="10dp"
+                android:nextFocusUp="@id/descriptionET"
+                android:nextFocusLeft="@id/descriptionET"/>
+
+        </RelativeLayout>
+        </ScrollView>
+</LinearLayout>

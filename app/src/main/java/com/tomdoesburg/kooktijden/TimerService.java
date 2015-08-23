@@ -62,6 +62,7 @@ public class TimerService extends Service {
         Log.v(TAG,"oncreate()");
         //start handler that ticks every second
         timerHandler.postDelayed(timerRunnable, 1000);
+        timerHandlerActive = true;
         killServiceHandler.postDelayed(killServiceRunnable,5000);
     }
 
@@ -132,14 +133,7 @@ public class TimerService extends Service {
 
         sendBroadcast(broadcastIntent);
 
-        //if timer is done
-        /*
-        *   sendBroadcast(new Intent(TIMER_SERVICE).putExtra(TIMER_DONE,vegName1)); //notify main activity to open a dialog
-                onTimerFinished();
-        * */
-
-
-        if(!runningOnForeground && anyTimerRunning()){
+      if(!runningOnForeground && anyTimerRunning()){
             showNotification(this.notificationID);
         }else{
             hideNotification(this.notificationID);
@@ -147,7 +141,7 @@ public class TimerService extends Service {
     }
 
     public void setTimer(int ID, VegetableAlarm alarm){
-        vegAlarms.put(ID,alarm);
+        vegAlarms.put(ID, alarm);
     }
 
     public VegetableAlarm getTimer(int ID){
@@ -163,6 +157,7 @@ public class TimerService extends Service {
             vegAlarms.get(ID).setIsRunning(true);
             if(!timerHandlerActive){
                 timerHandler.postDelayed(timerRunnable, 1000);
+                timerHandlerActive = true;
             }
         }
     }
@@ -199,6 +194,20 @@ public class TimerService extends Service {
         }
     }
 
+    public void setFinished(int ID,boolean isFinished){
+        if(vegAlarms.containsKey(ID)) {
+            vegAlarms.get(ID).setIsFinished(isFinished);
+        }
+    }
+
+
+    public void addAdditionalTime(int ID,int seconds){
+        if(vegAlarms.containsKey(ID)) {
+            vegAlarms.get(ID).addAdditionalTime(seconds);
+            setFinished(ID,false);
+        }
+    }
+
     public boolean anyTimerRunning(){
         for (HashMap.Entry<Integer, VegetableAlarm> entry : vegAlarms.entrySet()){
             if(entry.getValue().isRunning()){
@@ -228,6 +237,7 @@ public class TimerService extends Service {
 
         //remove handler callbacks
         timerHandler.removeCallbacks(timerRunnable);
+        timerHandlerActive = false;
 
         //release wakelock (if any was held)
         if (wakeLock.isHeld()){
@@ -241,6 +251,7 @@ public class TimerService extends Service {
     public void onDestroy() {
         hideNotification(this.notificationID);
         timerHandler.removeCallbacksAndMessages(null);
+        timerHandlerActive = false;
 
         if (wakeLock.isHeld()){
             wakeLock.release();

@@ -47,7 +47,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         "name_EN TEXT, " + "name_NL TEXT, " + "cooking_time_min INTEGER, " + "cooking_time_max INTEGER, " +"description_EN TEXT, " +"description_NL TEXT)";
 
         db.execSQL(CREATE_VEGETABLE_TABLE);
-
     }
 
     @Override

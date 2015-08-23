@@ -6,6 +6,24 @@
     android:orientation="vertical"
     tools:context="com.tomdoesburg.kooktijden.vegetables.VegetableActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_lighter">
+        <TextView
+            android:id="@+id/customTimerTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_custom_timer"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@drawable/custom_timer_button_selector"
+            />
+
+    </RelativeLayout>
+
     <fragment
         android:id="@+id/vegetable_list"
         android:name="com.tomdoesburg.kooktijden.vegetables.VegetableListFragment"

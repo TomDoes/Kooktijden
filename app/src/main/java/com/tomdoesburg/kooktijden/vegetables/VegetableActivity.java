@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
@@ -13,11 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tomdoesburg.kooktijden.MainActivity;
+import com.tomdoesburg.kooktijden.NewRecipeActivity;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.SettingsActivity;
 import com.tomdoesburg.kooktijden.StateSaver;
 
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
@@ -29,9 +33,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         View view_veg_list = getLayoutInflater().inflate(R.layout.activity_vegetable_list, null);
-
 
         //get intent which contains the ID of the kookPlaat we are using!
         try {
@@ -68,14 +70,6 @@ public class VegetableActivity extends Activity implements VegetableListFragment
 
             }
         }
-        /*
-        if(!mTwoPane) {
-            mAdView = (AdView) view_veg_list.findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
-
-        */
 
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Log.v("firstStart", "Is this the first time the list is launched? - " + sharedPrefs.getBoolean("firstStart_pt2", false));
@@ -104,6 +98,18 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         } else {
             setContentView(view_veg_list);
         }
+
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        TextView setCustomTimerTV = (TextView) findViewById(R.id.customTimerTV);
+        setCustomTimerTV.setTypeface(typeFace);
+        setCustomTimerTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VegetableActivity.this, NewRecipeActivity.class);
+                intent.putExtra("kookPlaatID", kookPlaatID);
+                startActivity(intent);
+            }
+        });
     }
 
     public int getKookPlaatID(){

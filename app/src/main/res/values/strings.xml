@@ -6,9 +6,9 @@
     <string name="start">Start</string>
     <string name="paused">Paused</string>
     <string name="select_cooker">Select the configuration matching your stove.\nYou can change this later on in settings</string>
-    <string name="title_activity_vegetable">Vegetables</string>
+    <string name="title_activity_vegetable">Ingredients</string>
     <string name="title_settings">Settings</string>
-    <string name="title_vegetable_list">Vegetables</string>
+    <string name="title_vegetable_list">Ingredients</string>
     <string name="title_vegetable_detail">Details</string>
     <string name="title_zoomed_kookplaat">Details</string>
     <string name="pickfood">Pick food</string>
@@ -17,6 +17,13 @@
     <string name="rate">Rate this app</string>
     <string name="settings">Settings</string>
     <string name="reset">Reset all timers</string>
+
+    <string name="set_custom_timer">Set custom timer</string>
+    <string name="new_recipe_activity">New timer</string>
+    <string name="new_recipe">Create new timer</string>
+    <string name="minutes">cooking time in minutes</string>
+    <string name="new_recipe_hint">insert food name</string>
+    <string name="new_description_hint">(optional) add a description here</string>
 
     <string name="timer">Timer</string>
     <string name="timer_ready">Timer ready!</string>
@@ -31,10 +38,10 @@
     <string name="dialog_close">Close</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-    <string name="dialog_reset_title">reset all timers?</string>
-    <string name="dialog_reset_message">this will also reset all running timers, are you sure?</string>
-    <string name="dialog_reset_switch_stove_title">switch stove</string>
-    <string name="dialog_reset_switch_stove_message">this will also reset all running timers, are you sure?</string>
+    <string name="dialog_reset_title">Reset all timers?</string>
+    <string name="dialog_reset_message">This will also reset all active timers, are you sure?</string>
+    <string name="dialog_reset_switch_stove_title">Switch stove</string>
+    <string name="dialog_reset_switch_stove_message">This will also reset all running timers, are you sure?</string>
 
     <string name="instructional_understand">Got it</string>
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>

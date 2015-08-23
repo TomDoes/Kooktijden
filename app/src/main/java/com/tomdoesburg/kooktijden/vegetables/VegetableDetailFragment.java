@@ -38,7 +38,7 @@ public class VegetableDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    private String kookPlaatID = "";
+    private int kookPlaatID = 0;
     private Vegetable vegetable;
     private TextView titleView;
     private TextView timeView;
@@ -63,7 +63,7 @@ public class VegetableDetailFragment extends Fragment {
             vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
         }
         if(getArguments().containsKey("kookPlaatID")){
-            this.kookPlaatID = getArguments().getString("kookPlaatID");
+            this.kookPlaatID = getArguments().getInt("kookPlaatID");
         }
     }
 

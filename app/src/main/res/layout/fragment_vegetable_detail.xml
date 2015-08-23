@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/vegetable_detail"
     android:layout_width="match_parent"
@@ -13,23 +12,23 @@
         android:layout_weight="1">
 
         <RelativeLayout
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/vegetable_detail_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:background="@color/teal"
-                android:paddingBottom="50dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="50dp"
-                android:text="title"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/vegetable_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:background="@color/teal"
+            android:paddingBottom="50dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="50dp"
+            android:text="title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
 
             <ImageButton
                 android:id="@+id/timer_button"

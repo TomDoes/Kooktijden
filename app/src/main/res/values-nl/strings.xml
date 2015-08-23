@@ -6,17 +6,24 @@
     <string name="start">Start</string>
     <string name="paused">Pauze</string>
     <string name="select_cooker">Selecteer de kookplaat die het meest lijkt op jouw eigen.\nJe kunt je keuze later wijzigen via de instellingen.</string>
-    <string name="title_activity_vegetable">Groenten</string>
+    <string name="title_activity_vegetable">Ingredi\u00EBnten</string>
     <string name="title_settings">Instellingen</string>
-    <string name="title_vegetable_list">Groenten</string>
+    <string name="title_vegetable_list">Ingredi\u00EBnten</string>
     <string name="title_vegetable_detail">Details</string>
     <string name="title_zoomed_kookplaat">Details</string>
-    <string name="pickfood">Kies groente</string>
+    <string name="pickfood">Kies\ngerecht</string>
     <string name="cookingTime">Kooktijd: </string>
     <string name="descriptionTitle">Beschrijving</string>
     <string name="rate">Rate deze app</string>
     <string name="settings">Instellingen</string>
     <string name="reset">Alle wekkers resetten</string>
+
+    <string name="set_custom_timer">Nieuwe timer maken</string>
+    <string name="new_recipe_activity">Nieuwe timer</string>
+    <string name="new_recipe">Nieuwe timer maken</string>
+    <string name="minutes">kooktijd in minuten</string>
+    <string name="new_recipe_hint">gerecht naam invullen</string>
+    <string name="new_description_hint">(optioneel) voeg een beschrijving toe</string>
 
     <string name="timer">Kookwekker</string>
     <string name="timer_ready">Timer klaar!</string>
@@ -31,10 +38,10 @@
     <string name="dialog_close">Sluiten</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nee</string>
-    <string name="dialog_reset_title">wekkers resetten?</string>
-    <string name="dialog_reset_message">hiermee verwijder je alle lopende wekkers, weet je het zeker?</string>
-    <string name="dialog_reset_switch_stove_title">kookplaat wijzigen</string>
-    <string name="dialog_reset_switch_stove_message">alle lopende wekkers worden verwijderd, weet je het zeker?</string>
+    <string name="dialog_reset_title">Wekkers resetten?</string>
+    <string name="dialog_reset_message">Hiermee verwijder je alle lopende wekkers, weet je het zeker?</string>
+    <string name="dialog_reset_switch_stove_title">Kookplaat wijzigen</string>
+    <string name="dialog_reset_switch_stove_message">Alle actieve wekkers worden verwijderd, weet je het zeker?</string>
 
     <string name="instructional_understand">Ik snap het</string>
     <string name="instructional_pt1_swipe">Veeg naar links/rechts om van kookplaat te wisselen.</string>

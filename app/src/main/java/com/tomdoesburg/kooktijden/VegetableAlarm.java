@@ -24,7 +24,6 @@ public class VegetableAlarm {
 
     private int cookingTime = 0; //cooking time
     private int timeLeft = 0;
-    private int additionalTime = 0;
 
     public VegetableAlarm(Vegetable veg){
         this.vegetable = veg;
@@ -115,16 +114,8 @@ public class VegetableAlarm {
         this.cookingTime = cookingTime;
     }
 
-    public int getAdditionalTime() {
-        return additionalTime;
-    }
-
     public void addAdditionalTime(int time){
         timeLeft = timeLeft + time;
-    }
-
-    public void setAdditionalTime(int additionalTime) {
-        this.additionalTime = additionalTime;
     }
 
     public int getTimeLeft() {

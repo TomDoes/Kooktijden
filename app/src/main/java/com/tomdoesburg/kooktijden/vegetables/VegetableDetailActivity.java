@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import com.tomdoesburg.kooktijden.R;
 
@@ -17,8 +18,8 @@ import com.tomdoesburg.kooktijden.R;
  * more than a {@link VegetableDetailFragment}.
  */
 public class VegetableDetailActivity extends Activity {
-
-    private String kookPlaatID = "";
+    private final String TAG = "VegetableDetailActivity";
+    private int kookPlaatID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +27,12 @@ public class VegetableDetailActivity extends Activity {
         setContentView(R.layout.activity_vegetable_detail);
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
+        Log.v(TAG, "VegetableDetailActivity");
         //let's see if we can get the extra's sent with the intent that got us here
         //get intent which contains the ID of the kookPlaat we are using!
         try {
             Intent intent = getIntent();
-            this.kookPlaatID = intent.getStringExtra("kookPlaatID");
+            this.kookPlaatID = intent.getIntExtra("kookPlaatID",-1);
         }catch(NullPointerException E){
             //this should not happen ever, but better safe than sorry!
         }
@@ -50,7 +51,7 @@ public class VegetableDetailActivity extends Activity {
             Bundle arguments = new Bundle();
             arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID,
                     getIntent().getIntExtra(VegetableDetailFragment.ARG_ITEM_ID,-1));
-            arguments.putString("kookPlaatID",this.kookPlaatID);
+            arguments.putInt("kookPlaatID",this.kookPlaatID);
 
             VegetableDetailFragment fragment = new VegetableDetailFragment();
             fragment.setArguments(arguments);
