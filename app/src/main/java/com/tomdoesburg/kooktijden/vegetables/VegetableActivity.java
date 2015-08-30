@@ -23,6 +23,7 @@ import com.tomdoesburg.kooktijden.NewRecipeActivity;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.kooktijden.SettingsActivity;
 import com.tomdoesburg.kooktijden.StateSaver;
+import com.tomdoesburg.kooktijden.TimerService;
 
 public class VegetableActivity extends Activity implements VegetableListFragment.Callbacks {
     private final String TAG = "VegetableActivity";
@@ -204,6 +205,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         if(!mTwoPane) {
            // mAdView.pause();
         }
+        TimerService.activityWithoutStovesActive = false;
         super.onPause();
     }
 
@@ -212,6 +214,7 @@ public class VegetableActivity extends Activity implements VegetableListFragment
         if(!mTwoPane) {
             //mAdView.resume();
         }
+        TimerService.activityWithoutStovesActive = true;
         super.onResume();
     }
 

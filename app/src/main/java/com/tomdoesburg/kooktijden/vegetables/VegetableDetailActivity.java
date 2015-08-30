@@ -5,8 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+
+import com.tomdoesburg.kooktijden.KooktijdenDialog;
+import com.tomdoesburg.kooktijden.KooktijdenDialogTwoButtons;
+import com.tomdoesburg.kooktijden.MainActivity;
 import com.tomdoesburg.kooktijden.R;
+import com.tomdoesburg.kooktijden.TimerService;
+import com.tomdoesburg.sqlite.MySQLiteHelper;
 
 /**
  * An activity representing a single Vegetable detail screen. This
@@ -17,9 +24,10 @@ import com.tomdoesburg.kooktijden.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link VegetableDetailFragment}.
  */
-public class VegetableDetailActivity extends Activity {
+public class VegetableDetailActivity extends Activity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
     private final String TAG = "VegetableDetailActivity";
     private int kookPlaatID = 0;
+    private int vegID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +56,12 @@ public class VegetableDetailActivity extends Activity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
+            try{
+                this.vegID = getIntent().getIntExtra(VegetableDetailFragment.ARG_ITEM_ID,-1);
+            }catch (Exception E){};
+
             Bundle arguments = new Bundle();
-            arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID,
-                    getIntent().getIntExtra(VegetableDetailFragment.ARG_ITEM_ID,-1));
+            arguments.putInt(VegetableDetailFragment.ARG_ITEM_ID,getIntent().getIntExtra(VegetableDetailFragment.ARG_ITEM_ID,-1));
             arguments.putInt("kookPlaatID",this.kookPlaatID);
 
             VegetableDetailFragment fragment = new VegetableDetailFragment();
@@ -61,7 +72,12 @@ public class VegetableDetailActivity extends Activity {
         }
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.veg_details_menu, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -80,13 +96,48 @@ public class VegetableDetailActivity extends Activity {
             NavUtils.navigateUpTo(this,intent);
             overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
+        }else if(id == R.id.delete_item){
+            KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this,getResources().getString(R.string.dialog_delete_from_db_title),getResources().getString(R.string.dialog_delete_from_db));
+            dialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume(){
+        TimerService.activityWithoutStovesActive = true;
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        TimerService.activityWithoutStovesActive = false;
+        super.onPause();
     }
 
     @Override
     public void onBackPressed() {
         overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
         super.onBackPressed();
+    }
+
+    @Override
+    public void resetDialogYesClicked() {
+        //remove item from db
+        try {
+            MySQLiteHelper db = new MySQLiteHelper(this);
+            db.deleteVegetable(vegID);
+        }catch (Exception E){}
+
+        Intent intent = new Intent(this.getApplicationContext(),MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void resetDialogCancelClicked() {
+        //do not remove item from db
     }
 }

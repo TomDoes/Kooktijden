@@ -17,7 +17,7 @@ import java.util.List;
 * Created by Tom on 27/6/14.
 */
 public class MySQLiteHelper extends SQLiteOpenHelper {
-
+    private static final String TAG = "MySQLiteHelper";
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
@@ -91,16 +91,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
 
         Vegetable vegetable = new Vegetable();
-        vegetable.setId(Integer.parseInt(cursor.getString(0)));
-        vegetable.setNameEN(cursor.getString(1));
-        vegetable.setNameNL(cursor.getString(2));
-        vegetable.setCookingTimeMin(Integer.parseInt(cursor.getString(3)));
-        vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
-        vegetable.setDescriptionEN(cursor.getString(5));
-        vegetable.setDescriptionNL(cursor.getString(6));
+        try {
+            vegetable.setId(Integer.parseInt(cursor.getString(0)));
+            vegetable.setNameEN(cursor.getString(1));
+            vegetable.setNameNL(cursor.getString(2));
+            vegetable.setCookingTimeMin(Integer.parseInt(cursor.getString(3)));
+            vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
+            vegetable.setDescriptionEN(cursor.getString(5));
+            vegetable.setDescriptionNL(cursor.getString(6));
+        }catch (Exception E){
+            Log.v(TAG,"Vegetable doesn't exist");
+        }
 
 
-        Log.d("getVegetable("+id+")", vegetable.toString());
+        Log.d("getVegetable(" + id + ")", vegetable.toString());
         return vegetable;
 
     }
@@ -172,6 +176,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
 
         Log.d("deleteVegetable", vegetable.toString());
+    }
+
+    public void deleteVegetable(int id){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.delete(TABLE_VEGETABLES,
+                    KEY_ID + " = ?",
+                    new String[]{String.valueOf(id)});
+            db.close();
+            Log.v(TAG, "deleted vegID " + id + " from database");
+        }catch(Exception E){
+            Log.v(TAG,E.toString());
+        }
+
     }
 
 

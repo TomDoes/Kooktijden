@@ -43,12 +43,12 @@ public class TimerService extends Service {
     private StateSaver stateSaver;
     private MediaPlayer mediaPlayer;
     public static boolean alarmOn = false;
+    public static boolean activityWithoutStovesActive = false; // if stoves are invisible, but app is running on foreground, don't kill service
     public static boolean runningOnForeground = true; //indicates whether or not app is visible to user (true) or working in background (false)
     public static final int notificationID = 1;
     public static int timerReadyID = 2;
     private  NotificationCompat.Builder mBuilder;
     private boolean firstNotification = true; //lets us know if we can re-use (false) a notification or create a new one (true)
-    private boolean killHandlerCalled = false;
     private boolean alarmHandlerCalled = false;
     //used to keep the service running when phone goes to sleep
     private PowerManager powerManager;
@@ -86,10 +86,8 @@ public class TimerService extends Service {
     Runnable killServiceRunnable = new Runnable() {
         @Override
         public void run() {
-            if(!runningOnForeground && !anyTimerRunning()) {
-                if(!alarmHandlerCalled) {
-                    killService();
-                }
+            if(!runningOnForeground && !activityWithoutStovesActive && !anyTimerRunning() && ! alarmHandlerCalled) {
+                killService();
             }else{
                 killServiceHandler.postDelayed(killServiceRunnable,5000);
             }

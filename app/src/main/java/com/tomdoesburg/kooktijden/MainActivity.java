@@ -30,6 +30,7 @@ import com.tomdoesburg.sqlite.MySQLiteHelper;
 import org.codechimp.apprater.AppRater;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
 
 public class MainActivity extends FragmentActivity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
 
@@ -44,18 +45,13 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
     private WeakReference<Context> weakContext;
     //create empty frame, needed for overlays
     private static FrameLayout layout;
-
+    private Intent receivedIntent; //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         weakContext = new WeakReference<Context>(this);
-
-        Intent intent = getIntent();
-        if(intent!=null){
-
-        }
 
         // Apprater
         AppRater.setLightTheme();
@@ -125,6 +121,13 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         }
         //close any "timer ready" notifications
         hideNotification(TimerService.timerReadyID);
+
+        //get intent
+        Intent intent = getIntent();
+        receivedIntent = intent;
+
+        Intent serviceIntent = new Intent(this.getApplicationContext(), TimerService.class);
+        startService(serviceIntent);
     }
 
     @Override
@@ -175,6 +178,32 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
                 //Vegetable veg = db.getVegetable(vegId);
             }
         }
+    }
+
+    public void setUnknownVegetable(int ID, int timeMinutes){ //ID == kookplaatID
+        Vegetable veg = new Vegetable();
+        veg.setId(-1);
+        veg.setNameEN(getResources().getString(R.string.unknown));
+        veg.setNameNL(getResources().getString(R.string.unknown));
+        veg.setDescriptionNL("");
+        veg.setDescriptionEN("");
+        veg.setCookingTimeMax(timeMinutes);
+        veg.setCookingTimeMin(timeMinutes);
+
+        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (frag instanceof FragmentKookplaat1pits){
+            ((FragmentKookplaat1pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat2pits){
+            ((FragmentKookplaat2pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat4pits){
+            ((FragmentKookplaat4pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat5pits){
+            ((FragmentKookplaat5pits) frag).setVegetable(ID,veg);
+        }else if(frag instanceof FragmentKookplaat6pits){
+            ((FragmentKookplaat6pits) frag).setVegetable(ID,veg);
+        }
+
     }
 
     public void setVegetable(int vegID, int ID){
@@ -230,8 +259,42 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
         this.registerReceiver(bReceiver, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
+        TimerService.activityWithoutStovesActive = false;
+
+        db = new MySQLiteHelper(weakContext.get());
 
         super.onResume();
+    }
+
+    private void processReceivedIntent(){
+        if(receivedIntent!=null){
+            if(receivedIntent!=null){
+                if(receivedIntent.hasExtra(NewRecipeActivity.NEW_VEGETABLE)){ //new vegetable was set
+                    Log.v(TAG,"NEW VEGETABLE");
+                    //there should also be a KOOKPLAATID, NAME, ID, DESCRIPTION, TIMEMINUTES
+                    try{
+                        int kookPlaatId = receivedIntent.getIntExtra("kookPlaatID",-1);
+                        int vegId = receivedIntent.getIntExtra(NewRecipeActivity.ID,-1);
+                        Log.v(TAG, "kookPlaatId " + kookPlaatId + " vegID " + vegId);
+                        setVegetable(vegId, kookPlaatId);
+                    }catch (Exception E){
+                        Log.v(TAG,E.toString());
+                    }
+
+                }else if(receivedIntent.hasExtra(NewRecipeActivity.UNKNOWN_VEGETABLE)) {
+                    //there should also be an KOOKPLAATID, ID, TIMEMINUTES
+                    Log.v(TAG,"UNKNOWN_VEGETABLE");
+                    try{
+                        int kookPlaatId = receivedIntent.getIntExtra("kookPlaatID",-1);
+                        int timeMinutes = receivedIntent.getIntExtra(NewRecipeActivity.TIMEMINUTES,-1);
+                        Log.v(TAG, "kookPlaatId " + kookPlaatId + " timeMinutes " + timeMinutes);
+                        setUnknownVegetable(kookPlaatId,timeMinutes);
+                    }catch (Exception E){
+                        Log.v(TAG,E.toString());
+                    }
+                }
+            }
+        }receivedIntent = null;
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -242,6 +305,8 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
             mService = binder.getService();
             mServiceBound = true;
             setServiceInTimerHelper(mService);
+            Log.v(TAG, "onServiceConnected");
+            processReceivedIntent();
         }
 
         @Override
@@ -254,7 +319,7 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
     @Override
     public void onPause() {
-        Log.d(TAG,"MainActivity onPause() saving state");
+        Log.d(TAG, "MainActivity onPause() saving state");
         stateSaver = new StateSaver(getApplicationContext());
         stateSaver.saveStates();
 
@@ -265,6 +330,8 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
             unbindService(mServiceConnection);
             mServiceBound = false;
         }
+
+        db.close();
 
         TimerService.runningOnForeground = false;
         super.onPause();

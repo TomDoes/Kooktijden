@@ -17,6 +17,8 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -62,6 +64,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
     private StateSaver stateSaver;
+    private Animation highlightNoListener;
 
 
     @Override
@@ -70,7 +73,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         View view = getLayoutInflater().inflate(R.layout.kookplaat_zoom,null);
 
         System.gc();
-
+        highlightNoListener =  AnimationUtils.loadAnimation(this, R.anim.highlight_zoom);
         //get the kookplaat that was selected
         Intent intent = getIntent();
         kookPlaatID = intent.getIntExtra("kookPlaatID",0);
@@ -81,9 +84,21 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         //get vegetable from database
         MySQLiteHelper db = new MySQLiteHelper(this);
         this.vegetable = db.getVegetable(vegID);
-
         //set cooking time
         this.cookingTime = db.getVegetable(vegID).getCookingTimeMin();
+
+        if(vegID < 0) { //custom vegetable
+            Vegetable veg = new Vegetable();
+            veg.setId(-1);
+            veg.setNameEN(getResources().getString(R.string.unknown));
+            veg.setNameNL(getResources().getString(R.string.unknown));
+            veg.setDescriptionNL("");
+            veg.setDescriptionEN("");
+            veg.setCookingTimeMax(10);
+            veg.setCookingTimeMin(10);
+            this.vegetable = veg;
+            this.cookingTime = veg.getCookingTimeMin();
+        }
 
         //init progress bar and kookplaat
         //this.kookplaat1 = view.findViewById(R.id.kookplaat1);
@@ -128,23 +143,24 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         this.registerReceiver(bReceiver, new IntentFilter(TimerService.TIMER_SERVICE));
         Log.i(TAG, "Registered broacast receiver");
         TimerService.runningOnForeground = true;
+        TimerService.activityWithoutStovesActive = false;
 
         if(mService!=null){
             VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
-            progress.setMax(vegAlarm.getCookingTime()*60);
+            progress.setMax(vegAlarm.getCookingTime() * 60);
             progress.setProgress(progress.getMax()-vegAlarm.getTimeLeft());
 
             this.vegetable = vegAlarm.getVegetable();
+            this.cookingTime = vegetable.getCookingTimeMin();
             String firstLetter = String.valueOf(getVegetableName(vegetable).toUpperCase().charAt(0));
             firstLetterTV.setText(firstLetter);
-
-
         }
         //make all the buttons work
 
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(highlightNoListener);
                 if(mService!=null){
                     if(!mService.isRunning(kookPlaatID) && mService.getTimeLeft(kookPlaatID) > 0) {
                         mService.startTimer(kookPlaatID);
@@ -163,6 +179,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(highlightNoListener);
                 KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(ActivityZoomedKookplaat.this,getString(R.string.stop_timer_title),getString(R.string.stop_timer_message));
                 dialog.show();
                 //createStopDialog();
@@ -172,6 +189,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.startAnimation(highlightNoListener);
                 if(mService!=null){
                     VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
                     mService.addAdditionalTime(kookPlaatID,30);//add 30 seconds to timer

@@ -97,6 +97,7 @@ public class SettingsActivity extends Activity implements KooktijdenDialogTwoBut
         startService(intent);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         mServiceBound = true;
+        TimerService.activityWithoutStovesActive = true;
         super.onResume();
     }
 
@@ -106,6 +107,7 @@ public class SettingsActivity extends Activity implements KooktijdenDialogTwoBut
             unbindService(mServiceConnection);
             mServiceBound = false;
         }
+        TimerService.activityWithoutStovesActive = false;
         super.onPause();
     }
 

@@ -43,6 +43,7 @@ public class VegetableDetailFragment extends Fragment {
     private TextView titleView;
     private TextView timeView;
     private TextView descriptionView;
+    private MySQLiteHelper db;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,7 +60,7 @@ public class VegetableDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            MySQLiteHelper db = new MySQLiteHelper(this.getActivity());
+            db = new MySQLiteHelper(this.getActivity());
             vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
         }
         if(getArguments().containsKey("kookPlaatID")){
@@ -127,6 +128,14 @@ public class VegetableDetailFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onPause(){
+        if(db!=null) {
+            db.close();
+        }
+        super.onPause();
     }
 
     @Override

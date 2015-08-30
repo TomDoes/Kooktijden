@@ -38,6 +38,8 @@ public class TimerHelper {
     private static Typeface typeFace;
     //animations
     private Animation highlight;
+    private Animation highlightNoListener;
+
 
     public void init(Context context, final View kookplaatview, final int kookPlaatID) {
         this.weakContext = new WeakReference<Context>(context);
@@ -50,6 +52,7 @@ public class TimerHelper {
         typeFace = Typeface.createFromAsset(weakContext.get().getAssets(),"fonts/Roboto-Light.ttf");
         text.setTypeface(typeFace);
 
+        highlightNoListener = AnimationUtils.loadAnimation(weakContext.get(), R.anim.highlight_zoom); //same as highlight, but without an activity starting after animation
         highlight = AnimationUtils.loadAnimation(weakContext.get(), R.anim.highlight_zoom);
 
         highlight.setAnimationListener(new Animation.AnimationListener() {
@@ -74,9 +77,11 @@ public class TimerHelper {
                     progress.startAnimation(highlight); //calls startVegetableActivity(); after animation
                 }
                 else if (vegetableState == VegetableStates.VEGETABLE_SELECTED && timerState == TimerStates.TIMER_PAUSED) {
+                    progress.startAnimation(highlightNoListener);
                     startTimer();
                     updateUI();
                 } else if (vegetableState == VegetableStates.VEGETABLE_SELECTED) {
+                    progress.startAnimation(highlightNoListener);
                     //open a zoomed-in view of the selected kookplaat
                     Intent intent = new Intent(weakContext.get().getApplicationContext(), ActivityZoomedKookplaat.class);
                     intent.putExtra("kookPlaatID",kookPlaatID);
