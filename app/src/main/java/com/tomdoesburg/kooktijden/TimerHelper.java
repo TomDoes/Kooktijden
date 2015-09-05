@@ -3,6 +3,7 @@ package com.tomdoesburg.kooktijden;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -48,6 +49,7 @@ public class TimerHelper {
         this.firstLetterTV = (TextView) kookplaatview.findViewById(R.id.firstLetterTV);
         firstLetterTV.setText("");
         this.kookPlaatID = kookPlaatID;
+        setProgressBarColor(0);
 
         typeFace = Typeface.createFromAsset(weakContext.get().getAssets(),"fonts/Roboto-Light.ttf");
         text.setTypeface(typeFace);
@@ -74,19 +76,24 @@ public class TimerHelper {
             @Override
             public void onClick(View view) {
                 if(vegetableState == VegetableStates.NO_VEGETABLE_SELECTED) {
+                    Log.v(TAG,"click progress 1");
                     progress.startAnimation(highlight); //calls startVegetableActivity(); after animation
                 }
                 else if (vegetableState == VegetableStates.VEGETABLE_SELECTED && timerState == TimerStates.TIMER_PAUSED) {
+                    Log.v(TAG,"click progress 2");
                     progress.startAnimation(highlightNoListener);
                     startTimer();
                     updateUI();
                 } else if (vegetableState == VegetableStates.VEGETABLE_SELECTED) {
+                    Log.v(TAG,"click progress 3");
                     progress.startAnimation(highlightNoListener);
                     //open a zoomed-in view of the selected kookplaat
                     Intent intent = new Intent(weakContext.get().getApplicationContext(), ActivityZoomedKookplaat.class);
                     intent.putExtra("kookPlaatID",kookPlaatID);
                     intent.putExtra("vegetableID", vegetable.getId());
                     weakContext.get().startActivity(intent);
+                }else{
+                    Log.v(TAG,"click progress 4");
                 }
             }
         });
@@ -96,15 +103,23 @@ public class TimerHelper {
         switch(timerState){
             case TIMER_PAUSED:
                 if(vegetableState == VegetableStates.VEGETABLE_SELECTED){
-                    text.setText(weakContext.get().getString(R.string.start));
+                    if(mService!=null && mService.hasAlarm(kookPlaatID)) {
+                        VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
+                        text.setText(weakContext.get().getString(R.string.start) +"\n"+ formatTime(vegAlarm.getTimeLeft()));//two lines
+                    }else {
+                        text.setText(weakContext.get().getString(R.string.start));
+                    }
+                    setProgressBarColor(kookPlaatID);
                 }else{
+                    setProgressBarColor(0);
                     text.setText(weakContext.get().getString(R.string.pickfood));
                 }
                break;
             case TIMER_RUNNING:
                 break;
             case TIMER_FINISHED:
-                text.setText("0:00");
+                text.setText("00:00");
+                setProgressBarColor(0);
                 break;
             default:
                 break;
@@ -155,7 +170,7 @@ public class TimerHelper {
         this.vegetable = veg;
         this.cookingTime = veg.getCookingTimeMin();
         progress.setMax(this.cookingTime*60);
-        text.setText(weakContext.get().getString(R.string.start));
+        text.setText(weakContext.get().getString(R.string.start) + "\n" + formatTime(this.cookingTime*60));
         setTimerInService();
         updateUI();
     }
@@ -183,6 +198,9 @@ public class TimerHelper {
 
             if(vegAlarm.isRunning()){
                 text.setText(formatTime(vegAlarm.getTimeLeft()));
+                updateUI();
+                setProgressBarColor(kookPlaatID);
+                timerState = TimerStates.TIMER_RUNNING;
             }else if(vegAlarm.isFinished()){
                 timerState = TimerStates.TIMER_FINISHED;
                 updateUI();
@@ -244,6 +262,31 @@ public class TimerHelper {
 
     public static void setService(TimerService service){
         mService = service;
+    }
+
+    //sets progress bar color depending on kookplaatID
+    private void setProgressBarColor(int ID){
+        if(progress!=null){
+            Drawable progressDrawable;
+
+            switch (ID){
+                case 1: progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar0);
+                    break;
+                case 2 : progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar1);
+                    break;
+                case 3 : progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar2);
+                    break;
+                case 4: progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar3);
+                    break;
+                case 5: progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar0);
+                    break;
+                case 6: progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar1);
+                    break;
+                default: progressDrawable = weakContext.get().getResources().getDrawable(R.drawable.customprogressbar);
+                    break;
+           }
+            progress.setProgressDrawable(progressDrawable);
+        }
     }
 
 }

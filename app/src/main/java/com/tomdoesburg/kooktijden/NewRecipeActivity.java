@@ -238,7 +238,10 @@ public class NewRecipeActivity extends Activity{
     }
 
     private String formatName(String name){
-        if(name!=null && name.length()>1) {
+        if(name!=null && name.length()==1) {
+            String formattedName = name.toUpperCase();
+            return formattedName;
+        }else if(name!=null && name.length()>1) {
             String formattedName = name.toLowerCase(); //to lowercase
             formattedName = formattedName.replace("  ", " "); //remove double spaces
             formattedName = formattedName.substring(0, 1).toUpperCase() + formattedName.substring(1); //capitalize first letter

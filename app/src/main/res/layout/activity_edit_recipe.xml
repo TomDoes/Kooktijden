@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vegetable_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tomdoesburg.kooktijden.NewRecipeActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Dummy item to prevent EditText from receiving focus -->
+            <LinearLayout
+                android:id="@+id/linearlayout_focus"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:layout_width="0px"
+                android:layout_height="0px" />
+
+            <TextView
+                android:id="@+id/new_recipe_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/teal"
+                android:paddingBottom="50dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="50dp"
+                android:text="timer name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/storeButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/new_recipe_title"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="-40dp"
+                android:background="@drawable/circle"
+                android:text="@string/save"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"
+                />
+
+            <NumberPicker
+                android:id="@+id/numberPickerHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/storeButton"
+                android:layout_margin="10dp"
+                />
+
+            <TextView
+                android:id="@+id/hoursTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/numberPickerHours"
+                android:layout_alignTop="@+id/numberPickerHours"
+                android:layout_alignBottom="@+id/numberPickerHours"
+                android:gravity="center_vertical"
+                android:text="@string/hours"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="10dp"/>
+
+            <NumberPicker
+                android:id="@+id/numberPickerMinutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/hoursTV"
+                android:layout_below="@+id/storeButton"
+                android:layout_margin="10dp"
+                />
+
+            <TextView
+                android:id="@+id/minutesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/numberPickerMinutes"
+                android:layout_alignTop="@+id/numberPickerMinutes"
+                android:layout_alignBottom="@+id/numberPickerMinutes"
+                android:gravity="center_vertical"
+                android:text="@string/minutes"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="10dp"/>
+
+            <EditText
+                android:id="@+id/descriptionET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/numberPickerHours"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:hint="@string/new_description_hint"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="10dp"
+                android:nextFocusUp="@id/descriptionET"
+                android:nextFocusLeft="@id/descriptionET"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

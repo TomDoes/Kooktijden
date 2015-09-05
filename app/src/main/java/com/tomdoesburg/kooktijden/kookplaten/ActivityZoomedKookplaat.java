@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -64,8 +65,10 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
     private int cookingTime = 0; //cooking time in minutes
     private int secondsLeft; //time left in seconds
     private StateSaver stateSaver;
-    private Animation highlightNoListener;
 
+    private Animation pauseButtonAnimation;
+    private Animation stopButtonAnimation;
+    private Animation plusButtonAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +76,14 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         View view = getLayoutInflater().inflate(R.layout.kookplaat_zoom,null);
 
         System.gc();
-        highlightNoListener =  AnimationUtils.loadAnimation(this, R.anim.highlight_zoom);
+        pauseButtonAnimation =  AnimationUtils.loadAnimation(this, R.anim.highlight_zoom);
+        stopButtonAnimation =  AnimationUtils.loadAnimation(this, R.anim.highlight_zoom);
+        plusButtonAnimation = AnimationUtils.loadAnimation(this, R.anim.highlight_zoom);
+
         //get the kookplaat that was selected
         Intent intent = getIntent();
         kookPlaatID = intent.getIntExtra("kookPlaatID",0);
         vegID = intent.getIntExtra("vegetableID",0);
-
         Typeface typeFace = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Thin.ttf");
 
         //get vegetable from database
@@ -103,6 +108,7 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         //init progress bar and kookplaat
         //this.kookplaat1 = view.findViewById(R.id.kookplaat1);
         this.progress = (ProgressBar) view.findViewById(R.id.kookplaat);
+        setProgressBarColor(kookPlaatID);
         this.text = (TextView) view.findViewById(R.id.kookplaatText);
         this.text.setText("");
         this.firstLetterTV = (TextView) view.findViewById(R.id.firstLetterTV);
@@ -148,7 +154,8 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         if(mService!=null){
             VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
             progress.setMax(vegAlarm.getCookingTime() * 60);
-            progress.setProgress(progress.getMax()-vegAlarm.getTimeLeft());
+            progress.setProgress(progress.getMax() - vegAlarm.getTimeLeft());
+            setProgressBarColor(kookPlaatID);
 
             this.vegetable = vegAlarm.getVegetable();
             this.cookingTime = vegetable.getCookingTimeMin();
@@ -160,16 +167,18 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.startAnimation(highlightNoListener);
+                v.startAnimation(pauseButtonAnimation);
                 if(mService!=null){
                     if(!mService.isRunning(kookPlaatID) && mService.getTimeLeft(kookPlaatID) > 0) {
                         mService.startTimer(kookPlaatID);
                         timerState = TimerStates.TIMER_RUNNING;
                         updateUI();
+                        setProgressBarColor(kookPlaatID);
                     }else{
                         mService.stopTimer(kookPlaatID);
                         timerState = TimerStates.TIMER_PAUSED;
                         updateUI();
+                        setProgressBarColor(kookPlaatID);
                     }
 
                 }
@@ -179,9 +188,10 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.startAnimation(highlightNoListener);
+                v.startAnimation(stopButtonAnimation);
                 KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(ActivityZoomedKookplaat.this,getString(R.string.stop_timer_title),getString(R.string.stop_timer_message));
                 dialog.show();
+                setProgressBarColor(kookPlaatID);
                 //createStopDialog();
             }
         });
@@ -189,11 +199,12 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.startAnimation(highlightNoListener);
+                v.startAnimation(plusButtonAnimation);
                 if(mService!=null){
                     VegetableAlarm vegAlarm = mService.getTimer(kookPlaatID);
                     mService.addAdditionalTime(kookPlaatID,30);//add 30 seconds to timer
                     text.setText(formatTime(vegAlarm.getTimeLeft()));
+                    setProgressBarColor(kookPlaatID);
                 }
             }
         });
@@ -222,8 +233,9 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
                 pause.setImageResource(R.drawable.icon_pause);
                 break;
             case TIMER_FINISHED:
-                text.setText("0:00");
+                text.setText("00:00");
                 pause.setImageResource(R.drawable.icon_play);
+                setProgressBarColor(0);
                 break;
             default:
                 break;
@@ -314,11 +326,6 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
             mServiceBound = false;
         }
 
-
-        Log.d(TAG,"ActivityZoomedKookplaat onPause() saving state");
-        stateSaver =  new StateSaver(this.getApplicationContext());
-        stateSaver.saveStates();
-
         Log.i(TAG, "Unregistered broacast receiver");
         TimerService.runningOnForeground = false;
     }
@@ -404,6 +411,31 @@ public class ActivityZoomedKookplaat extends Activity implements KooktijdenDialo
             return minutesString + ":" + secondsString;
         }else{
             return hours + ":" + minutesString + ":" + secondsString;
+        }
+    }
+
+    //sets progress bar color depending on kookplaatID
+    private void setProgressBarColor(int ID){
+        if(progress!=null){
+            Drawable progressDrawable;
+
+            switch (ID){
+                case 1: progressDrawable = getResources().getDrawable(R.drawable.customprogressbar0);
+                    break;
+                case 2 : progressDrawable = getResources().getDrawable(R.drawable.customprogressbar1);
+                    break;
+                case 3 : progressDrawable = getResources().getDrawable(R.drawable.customprogressbar2);
+                    break;
+                case 4: progressDrawable = getResources().getDrawable(R.drawable.customprogressbar3);
+                    break;
+                case 5: progressDrawable = getResources().getDrawable(R.drawable.customprogressbar0);
+                    break;
+                case 6: progressDrawable = getResources().getDrawable(R.drawable.customprogressbar1);
+                    break;
+                default: progressDrawable = getResources().getDrawable(R.drawable.customprogressbar);
+                    break;
+            }
+            progress.setProgressDrawable(progressDrawable);
         }
     }
 

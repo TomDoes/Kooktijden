@@ -319,9 +319,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
     @Override
     public void onPause() {
-        Log.d(TAG, "MainActivity onPause() saving state");
-        stateSaver = new StateSaver(getApplicationContext());
-        stateSaver.saveStates();
 
         unregisterReceiver(bReceiver);
         Log.i(TAG, "Unregistered broacast receiver");
@@ -341,9 +338,6 @@ public class MainActivity extends FragmentActivity implements KooktijdenDialogTw
 
     @Override
     public void onBackPressed(){
-        Log.d(TAG,"MainActivity onBackPressed() saving state");
-        stateSaver = new StateSaver(getApplicationContext());
-        stateSaver.saveStates();
         super.onBackPressed();
     }
 

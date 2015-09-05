@@ -19,9 +19,11 @@
     <string name="reset">Alle wekkers resetten</string>
     <string name="unknown">Onbekend</string>
     <string name="delete_from_db">verwijderen uit database</string>
+    <string name="edit_in_db">timer bewerken</string>
     <string name="dialog_delete_from_db_title">Item verwijderen?</string>
     <string name="dialog_delete_from_db">Hiermee verwijder je deze kooktijd uit de database, weet je het zeker?</string>
 
+    <string name="edit_recipe_activity">Timer bewerken</string>
     <string name="set_custom_timer">Nieuwe timer maken</string>
     <string name="new_recipe_activity">Nieuwe timer</string>
     <string name="new_recipe">Nieuwe timer maken</string>
@@ -31,12 +33,13 @@
     <string name="new_description_hint">(optioneel) voeg een beschrijving toe</string>
     <string name="store_in_db">timer opslaan</string>
     <string name="set">stel in</string>
+    <string name="save">opslaan</string>
 
     <string name="timer">Kookwekker</string>
     <string name="timer_ready">Timer klaar!</string>
     <string name="the_alarm_for">De wekker voor</string>
     <string name="has_finished">is afgelopen</string>
-    <string name="notification_text">Eerstvolgende wekker</string>
+    <string name="notification_text">Eerstvolgende wekker over</string>
     <string name="ready_in">klaar over</string>
     <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>
@@ -55,6 +58,8 @@
     <string name="dialog_fill_in_name">Voer een naam in</string>
     <string name="dialog_name_in_use_title">Naam al in gebruik</string>
     <string name="dialog_name_in_use">Kies een andere naam</string>
+    <string name="dialog_overwrite_title">Overschrijven</string>
+    <string name="dialog_overwrite">Weet je zeker dat je de bestaande kooktijd wilt overschrijven?</string>
 
     <string name="instructional_understand">Ik snap het</string>
     <string name="instructional_pt1_swipe">Veeg naar links/rechts om van kookplaat te wisselen.</string>

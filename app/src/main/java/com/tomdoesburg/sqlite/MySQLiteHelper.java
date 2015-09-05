@@ -153,7 +153,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("description_EN", vegetable.getDescriptionEN());
         values.put("description_NL", vegetable.getDescriptionNL());
 
-
         // 3. updating row
         int i = db.update(TABLE_VEGETABLES, //table
                 values, // column/value

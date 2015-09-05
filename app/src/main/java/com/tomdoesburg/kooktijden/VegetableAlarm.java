@@ -33,6 +33,28 @@ public class VegetableAlarm {
         this.timeLeft = cookingTime*60;
     }
 
+    public VegetableAlarm(String state){ //state = vegid;vegName;cookingtimeMin;timeleft;isRunning;isFinished
+        String[] parts = state.split(";");
+        this.vegID = Integer.parseInt(parts[0]);
+        this.vegName = parts[1];
+        this.cookingTime = Integer.parseInt(parts[2]);
+        this.timeLeft = Integer.parseInt(parts[3]);
+        this.isRunning = Boolean.valueOf(parts[4]);
+        this.isFinished = Boolean.valueOf(parts[5]);
+
+        Vegetable veg = new Vegetable();
+        veg.setNameNL(vegName);
+        veg.setNameEN(vegName);
+        veg.setId(vegID);
+        veg.setCookingTimeMin(cookingTime);
+        this.vegetable = veg;
+    }
+
+    public String getState(){ //state = vegid;vegName;cookingtimeMin;timeleft;isRunning;isFinished
+        String state = vegetable.getId()+ ";" + getVegetableName(vegetable) + ";" +vegetable.getCookingTimeMin()+ ";" + this.timeLeft + ";" + this.isRunning() + ";" + this.isFinished();
+        return state;
+    }
+
     private String getVegetableName(Vegetable veg){
         String language = Locale.getDefault().getDisplayLanguage();
 

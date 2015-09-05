@@ -66,13 +66,21 @@
         <activity
             android:name=".NewRecipeActivity"
             android:label="@string/new_recipe_activity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".vegetables.VegetableActivity"
             android:screenOrientation="nosensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".vegetables.VegetableActivity" />
         </activity>
-
+        <activity
+            android:name=".EditRecipeActivity"
+            android:label="@string/edit_recipe_activity"
+            android:parentActivityName=".vegetables.VegetableActivity"
+            android:screenOrientation="nosensor">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".vegetables.VegetableActivity" />
+        </activity>
         <!--Include the AdActivity configChanges and theme. -->
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

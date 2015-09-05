@@ -19,9 +19,11 @@
     <string name="reset">Reset all timers</string>
     <string name="unknown">Unknown</string>
     <string name="delete_from_db">delete from database</string>
+    <string name="edit_in_db">edit timer</string>
     <string name="dialog_delete_from_db_title">Delete item?</string>
     <string name="dialog_delete_from_db">This removes this cooking time from the database, are you sure?</string>
 
+    <string name="edit_recipe_activity">Edit timer</string>
     <string name="set_custom_timer">Set custom timer</string>
     <string name="new_recipe_activity">New timer</string>
     <string name="new_recipe">Create new timer</string>
@@ -31,12 +33,13 @@
     <string name="new_description_hint">(optional) add a description here</string>
     <string name="store_in_db">save this timer</string>
     <string name="set">set</string>
+    <string name="save">save</string>
 
     <string name="timer">Timer</string>
     <string name="timer_ready">Timer ready!</string>
     <string name="the_alarm_for">The alarm for</string>
     <string name="has_finished">has finished</string>
-    <string name="notification_text">First timer ready in</string>
+    <string name="notification_text">Next timer ready in</string>
     <string name="ready_in">ready in</string>
     <string name="banner_ad_unit_id_vegetable_details">ca-app-pub-6550849443292807/2519610971</string>
     <string name="banner_ad_unit_id_kookplaat">ca-app-pub-6550849443292807/8147342173</string>
@@ -55,6 +58,8 @@
     <string name="dialog_fill_in_name">Please choose a name</string>
     <string name="dialog_name_in_use_title">Name in use</string>
     <string name="dialog_name_in_use">Please choose a different name</string>
+    <string name="dialog_overwrite_title">Overwrite</string>
+    <string name="dialog_overwrite">Are you sure you want to overwrite this item?</string>
 
     <string name="instructional_understand">Got it</string>
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>

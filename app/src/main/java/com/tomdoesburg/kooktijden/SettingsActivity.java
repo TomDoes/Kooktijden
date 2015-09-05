@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
 import com.tomdoesburg.kooktijden.R;
@@ -61,6 +63,9 @@ public class SettingsActivity extends Activity implements KooktijdenDialogTwoBut
         numberpicker.setValue(curSettingIndex);
 
         Button setButton = (Button) findViewById(R.id.setButton);
+        GradientDrawable circleShape = (GradientDrawable)setButton.getBackground();
+        circleShape.setColor(getResources().getColor(R.color.pink));
+
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

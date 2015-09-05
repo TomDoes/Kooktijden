@@ -89,21 +89,6 @@ public class VegetableDetailFragment extends Fragment {
             titleView.setTypeface(typeFaceLight);
             timeView.setTypeface(typeFace);
             descriptionView.setTypeface(typeFace);
-            String language = Locale.getDefault().getDisplayLanguage();
-            if(language.equals("Nederlands")) {
-                titleView.setText(vegetable.getNameNL());
-                descriptionView.setText(vegetable.getDescriptionNL());
-            } else {
-                titleView.setText(vegetable.getNameEN());
-                descriptionView.setText(vegetable.getDescriptionEN());
-            }
-
-
-            if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
-                timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + " min.");
-            } else {
-                timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
-            }
 
             ImageButton setTimerBtn = (ImageButton)rootView.findViewById(R.id.timer_button);
             GradientDrawable circleShape = (GradientDrawable)setTimerBtn.getBackground();
@@ -128,6 +113,31 @@ public class VegetableDetailFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume(){
+        //vegetable could be edited, so let's reload it from db
+        db = new MySQLiteHelper(this.getActivity());
+        vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
+
+        String language = Locale.getDefault().getDisplayLanguage();
+        if(language.equals("Nederlands")) {
+            titleView.setText(vegetable.getNameNL());
+            descriptionView.setText(vegetable.getDescriptionNL());
+        } else {
+            titleView.setText(vegetable.getNameEN());
+            descriptionView.setText(vegetable.getDescriptionEN());
+        }
+
+        if(vegetable.getCookingTimeMin() == vegetable.getCookingTimeMax()) {
+            timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + " min.");
+        } else {
+            timeView.setText(getString(R.string.cookingTime) + " " + vegetable.getCookingTimeMin() + "-" + vegetable.getCookingTimeMax() + " min.");
+        }
+
+
+        super.onResume();
     }
 
     @Override

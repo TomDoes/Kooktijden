@@ -18,6 +18,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by FrankD on 13-9-2014.
@@ -59,7 +60,7 @@ public class TimerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.v(TAG,"oncreate()");
+        Log.v(TAG, "oncreate()");
         //start handler that ticks every second
         timerHandler.postDelayed(timerRunnable, 1000);
         timerHandlerActive = true;
@@ -202,7 +203,7 @@ public class TimerService extends Service {
     public void addAdditionalTime(int ID,int seconds){
         if(vegAlarms.containsKey(ID)) {
             vegAlarms.get(ID).addAdditionalTime(seconds);
-            setFinished(ID,false);
+            setFinished(ID, false);
         }
     }
 
@@ -245,8 +246,25 @@ public class TimerService extends Service {
         this.stopSelf();
     }
 
+    public void saveState(){
+        //only save state if there is an alarm that isn't finished yet
+        StateSaver stateSaver = new StateSaver(this);
+        stateSaver.saveStates(vegAlarms);
+    }
+
+    public void restoreState(){
+        StateSaver stateSaver = new StateSaver(this);
+        //only retrieve when there are no alarms
+        if(vegAlarms.isEmpty()){ //if vegalarms is currently empty
+            //check if there is a state to restore
+            this.vegAlarms = stateSaver.retrieveStates();
+        }
+        stateSaver.clearStates(); //we only retrieve once, then delete history
+    }
+
     @Override
     public void onDestroy() {
+        saveState();//save current state
         hideNotification(this.notificationID);
         timerHandler.removeCallbacksAndMessages(null);
         timerHandlerActive = false;
@@ -266,6 +284,7 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //a lot of try catch blocks. You never know how many alarms we have running and if they are initialized
+        restoreState();//try to restore state if there is any state to restore from
 
         if(wakeLock== null) {
             powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -294,8 +313,7 @@ public class TimerService extends Service {
                 mBuilder.setSmallIcon(R.drawable.kooktijden_icon)
                         .setOnlyAlertOnce(true)
                         .setContentTitle(getString(R.string.timer))
-                        //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
-                        .setContentText("Text hier")
+                        .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
                         .setContentIntent(pIntent);
             }else{ //create new instance of mBuilder
                 this.firstNotification = false;
@@ -305,8 +323,7 @@ public class TimerService extends Service {
                                 .setOnlyAlertOnce(true)
                                 .setSmallIcon(R.drawable.kooktijden_icon)
                                 .setContentTitle(getString(R.string.timer))
-                                //.setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
-                                .setContentText("Text hier")
+                                .setContentText(getString(R.string.notification_text) + " " + getFirstAlarmTime())
                                 .setContentIntent(pIntent);
             }
 
@@ -327,6 +344,28 @@ public class TimerService extends Service {
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on.
             mNotificationManager.notify(ID, mBuilder.build());
+        }
+    }
+
+    public String getFirstAlarmTime(){
+        int firstAlarm = -1;
+        for (HashMap.Entry<Integer, VegetableAlarm> entry : vegAlarms.entrySet()){
+            VegetableAlarm curAlarm = entry.getValue();
+            if(curAlarm.isRunning()){
+                int timeLeft = curAlarm.getTimeLeft();
+
+                if(firstAlarm == -1){
+                    firstAlarm = timeLeft;
+                }else if(timeLeft < firstAlarm){
+                    firstAlarm = timeLeft;
+                }
+            }
+        }
+
+        if(firstAlarm==-1){
+            return "00:00";
+        }else{
+            return formatTime(firstAlarm);
         }
     }
 
@@ -368,11 +407,6 @@ public class TimerService extends Service {
         // 0 vibrate indefinitely
         vibrator.vibrate(pattern, -1);
 
-        //save state
-        Log.d(TAG,"onTimerFinished() saving state");
-        stateSaver = new StateSaver(getApplicationContext());
-        stateSaver.saveStates();
-
         if(!runningOnForeground){
             alarmHandler.postDelayed(alarmRunnable, 4000);
             alarmHandlerCalled = true;
@@ -397,6 +431,32 @@ public class TimerService extends Service {
     public boolean onUnbind(Intent intent) {
         Log.v(TAG, "in onUnbind");
         return true;
+    }
+
+    public String formatTime(int secondsLeft){
+        String time = "";
+        int hours = secondsLeft/3600;
+        int minutes = (secondsLeft%3600)/60;
+        int seconds = (secondsLeft % 3600)%60;
+
+        String minutesString = "";
+        String secondsString = "";
+        if(minutes <10){
+            minutesString = "0" + minutes;
+        }else{
+            minutesString = String.valueOf(minutes);
+        }
+        if(seconds < 10){
+            secondsString = "0" + seconds;
+        }else{
+            secondsString = String.valueOf(seconds);
+        }
+
+        if(hours == 0){
+            return minutesString + ":" + secondsString;
+        }else{
+            return hours + ":" + minutesString + ":" + secondsString;
+        }
     }
 
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.tomdoesburg.kooktijden.EditRecipeActivity;
 import com.tomdoesburg.kooktijden.KooktijdenDialog;
 import com.tomdoesburg.kooktijden.KooktijdenDialogTwoButtons;
 import com.tomdoesburg.kooktijden.MainActivity;
@@ -100,7 +101,14 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
             KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this,getResources().getString(R.string.dialog_delete_from_db_title),getResources().getString(R.string.dialog_delete_from_db));
             dialog.show();
             return true;
+        }else if(id == R.id.edit_item){
+            Intent intent =  new Intent(this.getApplicationContext(), EditRecipeActivity.class);
+            intent.putExtra("kookPlaatID",this.kookPlaatID);
+            intent.putExtra("vegID",vegID);
+            startActivity(intent);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
