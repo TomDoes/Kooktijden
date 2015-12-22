@@ -179,6 +179,7 @@ public class NewRecipeActivity extends Activity{
             veg.setNameNL(name);
             veg.setDescriptionEN(description);
             veg.setDescriptionNL(description);
+            veg.setIsEditable(true);
 
             db.addVegetable(veg);
             intent.putExtra(NEW_VEGETABLE, NEW_VEGETABLE);
@@ -189,13 +190,11 @@ public class NewRecipeActivity extends Activity{
             intent.putExtra(ID,id);
 
             startActivity(intent);
-            finish();
         }else{
             intent.putExtra(UNKNOWN_VEGETABLE,UNKNOWN_VEGETABLE);
             intent.putExtra(TIMEMINUTES,timeMinutes);
             intent.putExtra(ID,-1);
             startActivity(intent);
-            finish();
         }
     }
 

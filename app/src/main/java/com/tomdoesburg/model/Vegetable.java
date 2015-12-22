@@ -11,7 +11,7 @@ public class Vegetable {
     private int cookingTimeMax;
     private String descriptionEN;
     private String descriptionNL;
-
+    private boolean isEditable;
     public Vegetable() {
 
     }
@@ -23,6 +23,17 @@ public class Vegetable {
         this.cookingTimeMax = cookingTimeMax;
         this.descriptionEN = descriptionEN;
         this.descriptionNL = descriptionNL;
+        this.isEditable = false;
+    }
+
+    public Vegetable(String nameEN, String nameNL, int cookingTimeMin, int cookingTimeMax, String descriptionEN, String descriptionNL,boolean isEditable) {
+        this.nameEN = nameEN;
+        this.nameNL = nameNL;
+        this.cookingTimeMin = cookingTimeMin;
+        this.cookingTimeMax = cookingTimeMax;
+        this.descriptionEN = descriptionEN;
+        this.descriptionNL = descriptionNL;
+        this.isEditable = isEditable;
     }
 
     public int getId() {
@@ -81,6 +92,14 @@ public class Vegetable {
         this.descriptionNL = descriptionNL;
     }
 
+    public boolean isEditable() {
+        return isEditable;
+    }
+
+    public void setIsEditable(boolean isEditable) {
+        this.isEditable = isEditable;
+    }
+
     @Override
     public String toString() {
         return "Vegetable{" +
@@ -91,6 +110,7 @@ public class Vegetable {
                 ", cookingTimeMax=" + cookingTimeMax +
                 ", descriptionEN='" + descriptionEN + '\'' +
                 ", descriptionNL='" + descriptionNL + '\'' +
+                ", isEditable='" + isEditable + '\'' +
                 '}';
     }
 }

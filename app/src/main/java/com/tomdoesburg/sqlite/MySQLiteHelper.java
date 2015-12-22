@@ -19,7 +19,7 @@ import java.util.List;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TAG = "MySQLiteHelper";
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     // Database Name
     private static final String DATABASE_NAME = "VegetableDB";
 
@@ -32,27 +32,33 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_COOKING_TIME_MAX = "cooking_time_max";
     private static final String KEY_DESCRIPTION_EN = "description_EN";
     private static final String KEY_DESCRIPTION_NL = "description_NL";
+    private static final String IS_EDITABLE = "is_editable";
 
-
-    private static final String[] COLUMNS = {KEY_ID, KEY_NAME_EN, KEY_NAME_NL,  KEY_COOKING_TIME_MIN, KEY_COOKING_TIME_MAX, KEY_DESCRIPTION_EN, KEY_DESCRIPTION_NL};
+    private static final String[] COLUMNS = {KEY_ID, KEY_NAME_EN, KEY_NAME_NL,  KEY_COOKING_TIME_MIN, KEY_COOKING_TIME_MAX, KEY_DESCRIPTION_EN, KEY_DESCRIPTION_NL,IS_EDITABLE};
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_VEGETABLE_TABLE = "CREATE TABLE vegetables (" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "name_EN TEXT, " + "name_NL TEXT, " + "cooking_time_min INTEGER, " + "cooking_time_max INTEGER, " +"description_EN TEXT, " +"description_NL TEXT)";
+        "name_EN TEXT, " + "name_NL TEXT, " + "cooking_time_min INTEGER, " + "cooking_time_max INTEGER, " +"description_EN TEXT, " +"description_NL TEXT," + "is_editable INTEGER DEFAULT 0)";
 
         db.execSQL(CREATE_VEGETABLE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int i) {
-        db.execSQL("DROP TABLE IF EXISTS vegetables");
-        this.onCreate(db);
+
+        Log.v(TAG, "upgrading DB from " + oldVersion + " to " + " version " + i);
+        if(oldVersion == 1){
+            //add isEditable column in table
+            String ALTER_TABLE = "ALTER TABLE vegetables ADD COLUMN is_editable INTEGER DEFAULT 0";
+            db.execSQL(ALTER_TABLE);
+        }
+        // db.execSQL("DROP TABLE IF EXISTS vegetables");
+       // this.onCreate(db);
     }
 
 
@@ -68,6 +74,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_COOKING_TIME_MAX, vegetable.getCookingTimeMax());
         values.put(KEY_DESCRIPTION_EN, vegetable.getDescriptionEN());
         values.put(KEY_DESCRIPTION_NL, vegetable.getDescriptionNL());
+        if(vegetable.isEditable()) {
+            values.put(IS_EDITABLE, 1);
+        }else{
+            values.put(IS_EDITABLE, 0);
+        }
 
         db.insert(TABLE_VEGETABLES, null, values);
 
@@ -99,6 +110,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
             vegetable.setDescriptionEN(cursor.getString(5));
             vegetable.setDescriptionNL(cursor.getString(6));
+            vegetable.setIsEditable(Integer.parseInt(cursor.getString(7))==1); //returns true if is_editable == 1, otherwise false
         }catch (Exception E){
             Log.v(TAG,"Vegetable doesn't exist");
         }
@@ -129,7 +141,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 vegetable.setCookingTimeMax(Integer.parseInt(cursor.getString(4)));
                 vegetable.setDescriptionEN(cursor.getString(5));
                 vegetable.setDescriptionNL(cursor.getString(6));
-
+                vegetable.setIsEditable(Integer.parseInt(cursor.getString(7)) == 1); //returns true if is_editable == 1, otherwise false
                 vegetables.add(vegetable);
             } while (cursor.moveToNext());
         }
@@ -152,7 +164,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("cooking_time_max", Integer.toString(vegetable.getCookingTimeMax())); // get cookingtime
         values.put("description_EN", vegetable.getDescriptionEN());
         values.put("description_NL", vegetable.getDescriptionNL());
-
+        if(vegetable.isEditable()) {
+            values.put("is_editable", 1);
+        }else{
+            values.put("is_editable", 0);
+        }
         // 3. updating row
         int i = db.update(TABLE_VEGETABLES, //table
                 values, // column/value

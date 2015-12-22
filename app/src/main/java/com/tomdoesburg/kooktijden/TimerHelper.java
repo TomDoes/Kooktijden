@@ -76,24 +76,19 @@ public class TimerHelper {
             @Override
             public void onClick(View view) {
                 if(vegetableState == VegetableStates.NO_VEGETABLE_SELECTED) {
-                    Log.v(TAG,"click progress 1");
                     progress.startAnimation(highlight); //calls startVegetableActivity(); after animation
                 }
                 else if (vegetableState == VegetableStates.VEGETABLE_SELECTED && timerState == TimerStates.TIMER_PAUSED) {
-                    Log.v(TAG,"click progress 2");
                     progress.startAnimation(highlightNoListener);
                     startTimer();
                     updateUI();
                 } else if (vegetableState == VegetableStates.VEGETABLE_SELECTED) {
-                    Log.v(TAG,"click progress 3");
                     progress.startAnimation(highlightNoListener);
                     //open a zoomed-in view of the selected kookplaat
                     Intent intent = new Intent(weakContext.get().getApplicationContext(), ActivityZoomedKookplaat.class);
                     intent.putExtra("kookPlaatID",kookPlaatID);
                     intent.putExtra("vegetableID", vegetable.getId());
                     weakContext.get().startActivity(intent);
-                }else{
-                    Log.v(TAG,"click progress 4");
                 }
             }
         });

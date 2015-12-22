@@ -60,10 +60,14 @@
     <string name="dialog_name_in_use">Please choose a different name</string>
     <string name="dialog_overwrite_title">Overwrite</string>
     <string name="dialog_overwrite">Are you sure you want to overwrite this item?</string>
+    <string name="dialog_cannot_edit_title">Oops!</string>
+    <string name="dialog_cannot_edit">You can only edit your own custom cooking times</string>
+    <string name="dialog_cannot_delete_title">Oops!</string>
+    <string name="dialog_cannot_delete">You can only delete your own custom cooking times</string>
 
     <string name="instructional_understand">Got it</string>
     <string name="instructional_pt1_swipe">Swipe to change stove tops.</string>
-    <string name="instructional_pt1_lock">Toggle the lock to set the current layout as default.</string>
+    <string name="instructional_pt1">tap on a stove to set up a timer</string>
     <string name="instructional_pt2_timericon">Clicking a timer icon initializes the vegetable\'s cooking time on the last selected stove top.</string>
     <string name="instructional_pt3_unlockwarning">Confirm unlock.\n\nUnlocking the layout will reset all running timers.\nAre you sure?</string>
     <string name="instructional_pt3_cancel">No, cancel.</string>

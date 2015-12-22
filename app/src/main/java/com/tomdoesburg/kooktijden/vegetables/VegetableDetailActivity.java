@@ -29,6 +29,7 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
     private final String TAG = "VegetableDetailActivity";
     private int kookPlaatID = 0;
     private int vegID;
+    private boolean isEditable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,10 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
                     .add(R.id.vegetable_detail_container, fragment)
                     .commit();
         }
+        try{
+            MySQLiteHelper db = new MySQLiteHelper(this);
+            isEditable = db.getVegetable(vegID).isEditable();
+        }catch (NullPointerException E){}
     }
 
     @Override
@@ -98,14 +103,24 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
             overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
         }else if(id == R.id.delete_item){
-            KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this,getResources().getString(R.string.dialog_delete_from_db_title),getResources().getString(R.string.dialog_delete_from_db));
-            dialog.show();
+            if(isEditable) { //iser is allowed to make changed to this db item
+                KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this, getResources().getString(R.string.dialog_delete_from_db_title), getResources().getString(R.string.dialog_delete_from_db));
+                dialog.show();
+            }else{
+                KooktijdenDialog dialog = new KooktijdenDialog(this,getResources().getString(R.string.dialog_cannot_delete_title),getResources().getString(R.string.dialog_cannot_delete));
+                dialog.show();
+            }
             return true;
         }else if(id == R.id.edit_item){
-            Intent intent =  new Intent(this.getApplicationContext(), EditRecipeActivity.class);
-            intent.putExtra("kookPlaatID",this.kookPlaatID);
-            intent.putExtra("vegID",vegID);
-            startActivity(intent);
+            if(isEditable) { //iser is allowed to make changed to this db item
+                Intent intent = new Intent(this.getApplicationContext(), EditRecipeActivity.class);
+                intent.putExtra("kookPlaatID", this.kookPlaatID);
+                intent.putExtra("vegID", vegID);
+                startActivity(intent);
+            }else{
+                KooktijdenDialog dialog = new KooktijdenDialog(this,getResources().getString(R.string.dialog_cannot_edit_title),getResources().getString(R.string.dialog_cannot_edit));
+                dialog.show();
+            }
             return true;
         }
 

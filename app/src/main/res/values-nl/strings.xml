@@ -60,10 +60,14 @@
     <string name="dialog_name_in_use">Kies een andere naam</string>
     <string name="dialog_overwrite_title">Overschrijven</string>
     <string name="dialog_overwrite">Weet je zeker dat je de bestaande kooktijd wilt overschrijven?</string>
+    <string name="dialog_cannot_edit_title">Oeps!</string>
+    <string name="dialog_cannot_edit">Je mag alleen zelfgemaakte kooktijden aanpassen</string>
+    <string name="dialog_cannot_delete_title">Oeps!</string>
+    <string name="dialog_cannot_delete">Je mag alleen zelfgemaakte kooktijden verwijderen</string>
 
     <string name="instructional_understand">Ik snap het</string>
     <string name="instructional_pt1_swipe">Veeg naar links/rechts om van kookplaat te wisselen.</string>
-    <string name="instructional_pt1_lock">klik op het slotje om de huidige layout als standaard in te stellen.</string>
+    <string name="instructional_pt1">tik op een gaspitje om een kooktijd in te stellen</string>
     <string name="instructional_pt2_timericon">door op een timer-icoontje te klikken plaats je de groente\'s kooktijd op de laatst geselecteerde kookplaat.</string>
     <string name="instructional_pt3_unlockwarning">bevestig ontgrendeling.\n\nHet ontgrendelen van de layout zal\nalle bestaande timers resetten.\nWeet je het zeker?</string>
     <string name="instructional_pt3_cancel">Nee, annuleer.</string>
