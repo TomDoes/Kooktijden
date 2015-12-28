@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tomdoesburg.kooktijden" >
+    package="com.tomdoesburg.kooktijden">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,8 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:versionCode="2"
-        android:versionName="Cooking Times"
+
         android:icon="@drawable/kooktijden_icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.Kooktijden"
