@@ -90,7 +90,7 @@
                 android:layout_alignBottom="@+id/numberPickerMinutes"
                 android:gravity="center_vertical"
                 android:text="@string/minutes"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_margin="10dp"/>
 
             <CheckBox
