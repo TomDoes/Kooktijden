@@ -106,6 +106,17 @@
                 android:nextFocusUp="@id/descriptionET"
                 android:nextFocusLeft="@id/descriptionET"/>
 
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_below="@+id/descriptionET"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle_teal"
+                android:src="@drawable/ic_delete_white_24dp"/>
+
         </RelativeLayout>
     </ScrollView>
 

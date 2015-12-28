@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.tomdoesburg.kooktijden.EditRecipeActivity;
 import com.tomdoesburg.kooktijden.KooktijdenApplication;
+import com.tomdoesburg.kooktijden.KooktijdenDialog;
 import com.tomdoesburg.kooktijden.R;
 import com.tomdoesburg.model.Vegetable;
 import com.tomdoesburg.sqlite.MySQLiteHelper;
@@ -44,6 +47,9 @@ public class VegetableDetailFragment extends Fragment {
     private TextView timeView;
     private TextView descriptionView;
     private MySQLiteHelper db;
+    private ImageButton editButton;
+    private int vegID;
+    private boolean isEditable = false;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,8 +66,11 @@ public class VegetableDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
+            this.vegID = getArguments().getInt(ARG_ITEM_ID);
             db = new MySQLiteHelper(this.getActivity());
-            vegetable = db.getVegetable(getArguments().getInt(ARG_ITEM_ID));
+            vegetable = db.getVegetable(this.vegID);
+
+            this.isEditable = vegetable.isEditable();
         }
         if(getArguments().containsKey("kookPlaatID")){
             this.kookPlaatID = getArguments().getInt("kookPlaatID");
@@ -102,12 +111,20 @@ public class VegetableDetailFragment extends Fragment {
 
                     //return the result
                     Intent intent = new Intent();
-                    intent.putExtra("vegId",vegId);
-                    intent.putExtra("kookPlaatID",kookPlaatID);
+                    intent.putExtra("vegId", vegId);
+                    intent.putExtra("kookPlaatID", kookPlaatID);
                     getActivity().setResult(Activity.RESULT_OK, intent);
 
                     //finish the details activity
                     getActivity().finish();
+                }
+            });
+
+            editButton = (ImageButton) rootView.findViewById(R.id.editButton);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editButtonClicked();
                 }
             });
         }
@@ -181,4 +198,17 @@ public class VegetableDetailFragment extends Fragment {
         titleView.startAnimation(titleAnimation);
 
     }
+
+    private void editButtonClicked(){
+        if(isEditable) { //iser is allowed to make changed to this db item
+            Intent intent = new Intent(getActivity().getApplicationContext(), EditRecipeActivity.class);
+            intent.putExtra("kookPlaatID", this.kookPlaatID);
+            intent.putExtra("vegID", vegID);
+            startActivity(intent);
+        }else{
+            KooktijdenDialog dialog = new KooktijdenDialog(getActivity(),getResources().getString(R.string.dialog_cannot_edit_title),getResources().getString(R.string.dialog_cannot_edit));
+            dialog.show();
+        }
+    }
+
 }

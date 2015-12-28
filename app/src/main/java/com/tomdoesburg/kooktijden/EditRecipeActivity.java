@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
@@ -25,7 +26,7 @@ import java.util.Locale;
  */
 
 
-public class EditRecipeActivity extends Activity implements KooktijdenDialogTwoButtons.ActivityCommunicator{
+public class EditRecipeActivity extends Activity implements KooktijdenDialogTwoButtons.ActivityCommunicator, DeleteDialog.ActivityCommunicator{
     private final static String TAG = "NewRecipeActivity";
     public final static String UNKNOWN_VEGETABLE = "UNKNOWN_VEGETABLE";
     public final static String NEW_VEGETABLE = "NEW_VEGETABLE";
@@ -44,6 +45,7 @@ public class EditRecipeActivity extends Activity implements KooktijdenDialogTwoB
     private NumberPicker numberPickerHours;
     private NumberPicker numberPickerMin;
     private Button storeButton;
+    private ImageButton deleteButton;
     private LinearLayout linearLayoutFocus;
     private MySQLiteHelper db;
     private List<Vegetable> vegetables;
@@ -137,7 +139,20 @@ public class EditRecipeActivity extends Activity implements KooktijdenDialogTwoB
             }
         });
 
+        deleteButton = (ImageButton) findViewById(R.id.deleteButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteButtonClicked();
+            }
+        });
     }
+
+    private void deleteButtonClicked(){
+        DeleteDialog dialog = new DeleteDialog(this, getResources().getString(R.string.dialog_delete_from_db_title), getResources().getString(R.string.dialog_delete_from_db));
+        dialog.show();
+    }
+
 
     private void storeButtonClicked(){
         clearFocus();
@@ -229,6 +244,24 @@ public class EditRecipeActivity extends Activity implements KooktijdenDialogTwoB
 
     @Override
     public void resetDialogCancelClicked() {
+
+    }
+
+    @Override
+    public void deleteDialogYesClicked() {
+        try {
+            MySQLiteHelper db = new MySQLiteHelper(this);
+            db.deleteVegetable(vegID);
+        }catch (Exception E){}
+
+        Intent intent = new Intent(this.getApplicationContext(),MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void deleteDialogCancelClicked() {
 
     }
 }

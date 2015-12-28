@@ -102,7 +102,9 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
             NavUtils.navigateUpTo(this,intent);
             overridePendingTransition(R.anim.fade_in, R.anim.slide_left2right);
             return true;
-        }else if(id == R.id.delete_item){
+        }
+        /*
+        else if(id == R.id.delete_item){
             if(isEditable) { //iser is allowed to make changed to this db item
                 KooktijdenDialogTwoButtons dialog = new KooktijdenDialogTwoButtons(this, getResources().getString(R.string.dialog_delete_from_db_title), getResources().getString(R.string.dialog_delete_from_db));
                 dialog.show();
@@ -120,10 +122,10 @@ public class VegetableDetailActivity extends Activity implements KooktijdenDialo
             }else{
                 KooktijdenDialog dialog = new KooktijdenDialog(this,getResources().getString(R.string.dialog_cannot_edit_title),getResources().getString(R.string.dialog_cannot_edit));
                 dialog.show();
-            }
+
             return true;
         }
-
+ }*/
         return super.onOptionsItemSelected(item);
     }
 
